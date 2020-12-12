@@ -3,8 +3,9 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version Dependencies.Versions.kotlin
-    id("org.jetbrains.compose") version Dependencies.Versions.composePlugin
+    kotlin(Dependencies.Plugins.kotlinJvm) version Dependencies.Versions.kotlin
+    id(Dependencies.Plugins.compose) version Dependencies.Versions.composePlugin
+    id(Dependencies.Plugins.sqlDelight) version Dependencies.Versions.sqlDelightPlugin
 }
 
 group = "de.uaux"
