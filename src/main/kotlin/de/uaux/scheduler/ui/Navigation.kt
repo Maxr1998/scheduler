@@ -29,6 +29,7 @@ fun Sidebar(
 ) {
     Surface(
         modifier = Modifier.width(64.dp).fillMaxHeight(),
+        elevation = 4.dp,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
