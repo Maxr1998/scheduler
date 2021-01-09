@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin(Dependencies.Plugins.kotlinJvm) version Dependencies.Versions.kotlin
     id(Dependencies.Plugins.compose) version Dependencies.Versions.composePlugin
-    id(Dependencies.Plugins.sqlDelight) version Dependencies.Versions.sqlDelightPlugin
+    id(Dependencies.Plugins.sqlDelight) version Dependencies.Versions.sqlDelight
     id(Dependencies.Plugins.dependencyUpdates) version Dependencies.Versions.dependencyUpdatesPlugin
 }
 
@@ -26,6 +26,9 @@ dependencies {
 
     // UI
     implementation(compose.desktop.currentOs)
+
+    // Persistence
+    implementation(Dependencies.Persistence.sqlDelightSqliteDriver)
 
     // Tests
     testImplementation(kotlin("test-junit5"))
