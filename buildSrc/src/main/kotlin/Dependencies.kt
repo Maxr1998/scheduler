@@ -10,7 +10,7 @@ object Dependencies {
         const val coroutines = "1.4.2"
 
         // Testing
-        const val junit = "5.6.0"
+        const val junit = "5.7.0"
     }
 
     object Plugins {
