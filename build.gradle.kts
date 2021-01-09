@@ -6,6 +6,7 @@ plugins {
     kotlin(Dependencies.Plugins.kotlinJvm) version Dependencies.Versions.kotlin
     id(Dependencies.Plugins.compose) version Dependencies.Versions.composePlugin
     id(Dependencies.Plugins.sqlDelight) version Dependencies.Versions.sqlDelightPlugin
+    id(Dependencies.Plugins.dependencyUpdates) version Dependencies.Versions.dependencyUpdatesPlugin
 }
 
 group = "de.uaux"
@@ -39,12 +40,18 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_14.toString()
 }
 
+sqldelight {
+    database("Database") {
+        packageName = "$group.${project.name}.model"
+    }
+}
+
 compose.desktop {
     application {
         mainClass = "MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = rootProject.name
+            packageName = project.name
         }
     }
 }

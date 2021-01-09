@@ -3,6 +3,7 @@ object Dependencies {
         const val kotlin = "1.4.20"
         const val composePlugin = "0.2.0-build132"
         const val sqlDelightPlugin = "1.4.4"
+        const val dependencyUpdatesPlugin = "0.36.0"
 
         // Core
         const val koin = "2.2.1"
@@ -16,6 +17,7 @@ object Dependencies {
         const val kotlinJvm = "jvm"
         const val compose = "org.jetbrains.compose"
         const val sqlDelight = "com.squareup.sqldelight"
+        const val dependencyUpdates = "com.github.ben-manes.versions"
     }
 
     object Core {
