@@ -1,3 +1,4 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -53,5 +54,15 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = project.name
         }
+    }
+}
+
+fun isStable(version: String): Boolean {
+    return listOf("alpha", "beta", "dev", "rc").none { version.toLowerCase().contains(it) }
+}
+
+tasks.withType<DependencyUpdatesTask> {
+    rejectVersionIf {
+        !isStable(candidate.version) && isStable(currentVersion)
     }
 }
