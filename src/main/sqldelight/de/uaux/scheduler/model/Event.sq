@@ -1,0 +1,6 @@
+CREATE TABLE Event (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    module TEXT NOT NULL,
+    participants INTEGER AS Int NOT NULL DEFAULT 0 CHECK (participants > 0)
+);

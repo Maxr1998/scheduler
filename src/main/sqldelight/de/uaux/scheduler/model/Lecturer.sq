@@ -1,0 +1,4 @@
+CREATE TABLE Lecturer (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL
+);

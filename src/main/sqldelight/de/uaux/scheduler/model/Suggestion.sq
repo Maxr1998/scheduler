@@ -1,0 +1,6 @@
+CREATE TABLE Suggestion (
+    id INTEGER PRIMARY KEY,
+    event INTEGER NOT NULL REFERENCES Event(id),
+    required_sessions INTEGER AS Int,
+    buffer_time INTEGER AS Int
+);

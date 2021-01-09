@@ -1,0 +1,5 @@
+CREATE TABLE Room (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    capacity INTEGER AS Int NOT NULL
+);
