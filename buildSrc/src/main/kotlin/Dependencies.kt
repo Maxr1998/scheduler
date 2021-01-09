@@ -6,7 +6,7 @@ object Dependencies {
         const val dependencyUpdatesPlugin = "0.36.0"
 
         // Core
-        const val koin = "2.2.1"
+        const val koin = "2.2.2"
         const val coroutines = "1.4.2"
 
         // Testing
