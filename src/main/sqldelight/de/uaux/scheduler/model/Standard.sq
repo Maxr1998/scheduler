@@ -1,0 +1,5 @@
+changes:
+SELECT changes();
+
+lastInsertRowId:
+SELECT last_insert_rowid();
