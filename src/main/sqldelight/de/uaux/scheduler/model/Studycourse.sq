@@ -3,3 +3,9 @@ CREATE TABLE Studycourse (
     name TEXT NOT NULL,
     revision TEXT
 );
+
+insert:
+INSERT INTO Studycourse (name, revision) VALUES (?, ?);
+
+queryAll:
+SELECT * FROM Studycourse ORDER BY name;
