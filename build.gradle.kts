@@ -29,6 +29,7 @@ dependencies {
 
     // Persistence
     implementation(Dependencies.Persistence.sqlDelightSqliteDriver)
+    implementation(Dependencies.Persistence.sqlDelightCoroutinesExtension)
 
     // Logging
     implementation(Dependencies.Logging.kotlinLogging)

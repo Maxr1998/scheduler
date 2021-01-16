@@ -31,6 +31,7 @@ object Dependencies {
 
     object Persistence {
         const val sqlDelightSqliteDriver = "com.squareup.sqldelight:sqlite-driver:${Versions.sqlDelight}"
+        const val sqlDelightCoroutinesExtension = "com.squareup.sqldelight:coroutines-extensions-jvm:${Versions.sqlDelight}"
     }
 
     object Logging {
