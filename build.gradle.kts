@@ -30,6 +30,10 @@ dependencies {
     // Persistence
     implementation(Dependencies.Persistence.sqlDelightSqliteDriver)
 
+    // Logging
+    implementation(Dependencies.Logging.kotlinLogging)
+    implementation(Dependencies.Logging.logback)
+
     // Tests
     testImplementation(kotlin("test-junit5"))
     testImplementation(Dependencies.Testing.junit)

@@ -9,6 +9,10 @@ object Dependencies {
         const val koin = "2.2.2"
         const val coroutines = "1.4.2"
 
+        // Logging
+        const val kotlinLogging = "2.0.4"
+        const val logback = "1.2.3"
+
         // Testing
         const val junit = "5.7.0"
     }
@@ -27,6 +31,11 @@ object Dependencies {
 
     object Persistence {
         const val sqlDelightSqliteDriver = "com.squareup.sqldelight:sqlite-driver:${Versions.sqlDelight}"
+    }
+
+    object Logging {
+        const val kotlinLogging = "io.github.microutils:kotlin-logging:${Versions.kotlinLogging}"
+        const val logback = "ch.qos.logback:logback-classic:${Versions.logback}"
     }
 
     object Testing {
