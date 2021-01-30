@@ -2,6 +2,7 @@ package de.uaux.scheduler.ui
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.darkColors
 import androidx.compose.runtime.Composable
 import de.uaux.scheduler.controller.NavigationController
 import de.uaux.scheduler.ui.screens.EventManagementScreen
@@ -12,7 +13,9 @@ import org.koin.androidx.compose.get
 
 @Composable
 fun AppContent() {
-    MaterialTheme {
+    MaterialTheme(
+        colors = darkColors()
+    ) {
         Row {
             val navigationController: NavigationController = get()
             Sidebar(
