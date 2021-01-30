@@ -11,19 +11,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Toolbar(modifier: Modifier, title: String) {
+fun Toolbar(
+    modifier: Modifier,
+    title: String,
+    actions: @Composable () -> Unit
+) {
     Surface(
         modifier = modifier,
         elevation = 4.dp,
     ) {
         Box(
             modifier = Modifier.padding(horizontal = 8.dp),
-            contentAlignment = Alignment.CenterStart,
+            contentAlignment = Alignment.CenterEnd,
         ) {
             Text(
                 text = title,
+                modifier = Modifier.align(Alignment.CenterStart),
                 style = MaterialTheme.typography.subtitle1,
             )
+            actions()
         }
     }
 }

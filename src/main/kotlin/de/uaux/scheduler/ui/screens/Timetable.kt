@@ -14,5 +14,5 @@ fun TimetableScreen() = Column {
     Toolbar(
         modifier = Modifier.fillMaxWidth().height(56.dp),
         title = AmbientLocalization.current["screen_timetable"],
-    )
+    ) {}
 }
