@@ -84,6 +84,7 @@ private fun SidebarButton(
     ) {
         Icon(
             imageVector = icon,
+            contentDescription = "",
             tint = if (active) MaterialTheme.colors.secondary else MaterialTheme.colors.onSurface,
         )
     }
