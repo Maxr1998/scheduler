@@ -23,8 +23,8 @@ fun AppContent() {
             )
             when (navigationController.currentScreen.value) {
                 NavigationController.Screen.Home -> HomeScreen()
-                NavigationController.Screen.Timetable -> TimetableScreen()
                 NavigationController.Screen.Events -> EventManagementScreen()
+                NavigationController.Screen.Timetable -> TimetableScreen()
                 NavigationController.Screen.Settings -> SettingsScreen()
             }
         }
