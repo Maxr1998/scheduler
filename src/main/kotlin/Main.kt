@@ -1,3 +1,5 @@
+@file:JvmName("scheduler")
+
 import androidx.compose.desktop.Window
 import androidx.compose.runtime.Providers
 import androidx.compose.runtime.getValue

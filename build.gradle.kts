@@ -56,7 +56,7 @@ sqldelight {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "scheduler"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = project.name
