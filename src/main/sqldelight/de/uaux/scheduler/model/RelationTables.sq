@@ -2,10 +2,12 @@ CREATE TABLE StudycourseEvents (
     studycourse INTEGER NOT NULL REFERENCES Studycourse(id),
     event INTEGER NOT NULL REFERENCES Event(id),
     semester INTEGER AS Int,
-    required INTEGER AS Boolean NOT NULL
+    required INTEGER AS Boolean NOT NULL,
+    UNIQUE (studycourse, event)
 );
 
 CREATE TABLE EventLecturers (
     event INTEGER NOT NULL REFERENCES Event(id),
-    lecturer INTEGER NOT NULL REFERENCES Lecturer(id)
+    lecturer INTEGER NOT NULL REFERENCES Lecturer(id),
+    UNIQUE (event, lecturer)
 );
