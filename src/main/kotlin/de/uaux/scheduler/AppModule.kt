@@ -5,6 +5,7 @@ import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import de.uaux.scheduler.controller.NavigationController
 import de.uaux.scheduler.controller.StartupController
 import de.uaux.scheduler.model.Database
+import de.uaux.scheduler.viewmodel.EventManagementViewModel
 import de.uaux.scheduler.repository.EventRepository
 import de.uaux.scheduler.repository.StudycourseRepository
 import de.uaux.scheduler.util.Constants
@@ -15,6 +16,9 @@ val appModule = module {
     // Controllers
     single { StartupController(get()) }
     single { NavigationController() }
+
+    // Viewmodels
+    single { EventManagementViewModel(get(), get()) }
 
     // Repositories
     single { StudycourseRepository(get()) }
