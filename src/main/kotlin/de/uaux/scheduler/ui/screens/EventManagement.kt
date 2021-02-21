@@ -56,12 +56,10 @@ private fun EventManagementScreenContent() {
     val eventManagementViewModel: EventManagementViewModel = get()
     val studycourseSelection by eventManagementViewModel.studycourseSelection
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Row {
-            StudycoursesPane(studycourseSelection)
-            VerticalDivider()
-            EventsPane(studycourseSelection)
-        }
+    Row {
+        StudycoursesPane(studycourseSelection)
+        VerticalDivider()
+        EventsPane(studycourseSelection)
     }
 }
 

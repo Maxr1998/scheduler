@@ -1,9 +1,12 @@
 package de.uaux.scheduler.ui
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.darkColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import de.uaux.scheduler.controller.NavigationController
 import de.uaux.scheduler.ui.screens.EventManagementScreen
@@ -34,11 +37,13 @@ fun AppContent() {
             Sidebar(
                 screenState = navigationController.currentScreen,
             )
-            when (navigationController.currentScreen.value) {
-                NavigationController.Screen.Home -> HomeScreen()
-                NavigationController.Screen.Events -> EventManagementScreen()
-                NavigationController.Screen.Timetable -> TimetableScreen()
-                NavigationController.Screen.Settings -> SettingsScreen()
+            Surface(modifier = Modifier.fillMaxSize()) {
+                when (navigationController.currentScreen.value) {
+                    NavigationController.Screen.Home -> HomeScreen()
+                    NavigationController.Screen.Events -> EventManagementScreen()
+                    NavigationController.Screen.Timetable -> TimetableScreen()
+                    NavigationController.Screen.Settings -> SettingsScreen()
+                }
             }
         }
     }
