@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.selection.DisableSelection
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -24,11 +25,13 @@ fun Toolbar(
             modifier = Modifier.padding(horizontal = 8.dp),
             contentAlignment = Alignment.CenterEnd,
         ) {
-            Text(
-                text = title,
-                modifier = Modifier.align(Alignment.CenterStart),
-                style = MaterialTheme.typography.subtitle1,
-            )
+            DisableSelection {
+                Text(
+                    text = title,
+                    modifier = Modifier.align(Alignment.CenterStart),
+                    style = MaterialTheme.typography.subtitle1,
+                )
+            }
             actions()
         }
     }
