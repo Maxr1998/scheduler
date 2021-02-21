@@ -5,9 +5,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import com.squareup.sqldelight.db.SqlDriver
 import de.uaux.scheduler.model.Database
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import mu.KLoggable
-
 
 class StartupController(
     private val sqlDriver: SqlDriver,

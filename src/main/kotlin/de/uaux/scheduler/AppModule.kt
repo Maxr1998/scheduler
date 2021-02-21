@@ -5,11 +5,11 @@ import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import de.uaux.scheduler.controller.NavigationController
 import de.uaux.scheduler.controller.StartupController
 import de.uaux.scheduler.model.Database
-import de.uaux.scheduler.viewmodel.EventManagementViewModel
 import de.uaux.scheduler.repository.EventRepository
 import de.uaux.scheduler.repository.StudycourseRepository
 import de.uaux.scheduler.util.Constants
 import de.uaux.scheduler.util.LocalizationUtil
+import de.uaux.scheduler.viewmodel.EventManagementViewModel
 import org.koin.dsl.module
 
 val appModule = module {
