@@ -7,12 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.ui.util.Toolbar
-import de.uaux.scheduler.util.AmbientLocalization
+import de.uaux.scheduler.ui.util.l
 
 @Composable
 fun EventManagementScreen() = Column {
     Toolbar(
         modifier = Modifier.fillMaxWidth().height(56.dp),
-        title = AmbientLocalization.current["screen_event_management"],
+        title = l("screen_event_management"),
     ) {}
 }

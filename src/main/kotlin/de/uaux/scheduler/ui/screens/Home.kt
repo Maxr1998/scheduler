@@ -7,12 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.ui.util.Toolbar
-import de.uaux.scheduler.util.AmbientLocalization
+import de.uaux.scheduler.ui.util.l
 
 @Composable
 fun HomeScreen() = Column {
     Toolbar(
         modifier = Modifier.fillMaxWidth().height(56.dp),
-        title = AmbientLocalization.current["screen_home"],
+        title = l("screen_home"),
     ) {}
 }

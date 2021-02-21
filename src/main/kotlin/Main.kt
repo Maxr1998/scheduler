@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.IntSize
 import de.uaux.scheduler.appModule
 import de.uaux.scheduler.controller.StartupController
 import de.uaux.scheduler.ui.AppContent
-import de.uaux.scheduler.util.AmbientLocalization
+import de.uaux.scheduler.ui.util.AmbientLocalization
 import de.uaux.scheduler.util.LocalizationUtil
 import mu.KotlinLogging
 import org.koin.core.context.startKoin

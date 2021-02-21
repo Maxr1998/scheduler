@@ -1,6 +1,5 @@
 package de.uaux.scheduler.util
 
-import androidx.compose.runtime.staticAmbientOf
 import java.util.*
 
 class LocalizationUtil(bundleName: String) {
@@ -12,5 +11,3 @@ class LocalizationUtil(bundleName: String) {
         key
     }
 }
-
-val AmbientLocalization = staticAmbientOf<LocalizationUtil>()
