@@ -5,5 +5,5 @@ CREATE TABLE Event (
     participants INTEGER AS Int DEFAULT NULL CHECK (participants > 0)
 );
 
-queryAll:
+queryAllInStudycourse:
 SELECT e.*, s.semester, s.required FROM Event e JOIN StudycourseEvents s ON e.id = s.event WHERE s.studycourse = ? ORDER BY name;

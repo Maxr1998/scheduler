@@ -33,7 +33,7 @@ class EventManagementViewModel(
     }
 
     fun load(studycourse: Studycourse) {
-        val events = eventRepository.queryAllForStudycourseAsFlow(studycourse)
+        val events = eventRepository.queryAllInStudycourseAsFlow(studycourse)
         _studycourseSelection.value = StudycourseSelection.Selected(studycourse, events)
     }
 }

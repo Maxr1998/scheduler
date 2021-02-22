@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.Flow
 class EventRepository(database: Database) {
     private val eventQueries = database.eventQueries
 
-    fun queryAllForStudycourseAsFlow(studycourse: Studycourse): Flow<List<StudycourseEvent>> =
+    fun queryAllInStudycourseAsFlow(studycourse: Studycourse): Flow<List<StudycourseEvent>> =
         eventQueries
-            .queryAll(studycourse.id) { id, name, module, participants, semester, required ->
+            .queryAllInStudycourse(studycourse.id) { id, name, module, participants, semester, required ->
                 StudycourseEvent(Event(id, name, module, participants), semester, required)
             }
             .asFlow()
