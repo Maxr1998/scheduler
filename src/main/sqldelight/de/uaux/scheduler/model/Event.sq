@@ -7,3 +7,8 @@ CREATE TABLE Event (
 
 queryAllInStudycourse:
 SELECT e.*, s.semester, s.required FROM Event e JOIN StudycourseEvents s ON e.id = s.event WHERE s.studycourse = ? ORDER BY name;
+
+queryScheduledEvents:
+SELECT e.*, s.start_time, s.end_time, s.room
+FROM StudycourseEvents se JOIN Event e JOIN Schedule s ON se.event = e.id AND e.id = s.event
+WHERE se.studycourse = ? AND s.day = ?;
