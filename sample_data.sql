@@ -62,3 +62,18 @@ VALUES
     (2, 20, 2, true),
     (2, 7, 4, true),
     (2, 8, 4, true);
+
+INSERT OR
+REPLACE INTO Schedule (event, day, start_time, end_time, room)
+VALUES
+    /* Informatik II Mon. & Wed. */
+    (1, 1, 600, 690, -1),
+    (1, 3, 735, 825, -1);
+
+INSERT OR
+REPLACE INTO Suggestion (id, event, required_sessions, buffer_time)
+VALUES
+    /* TI, two sessions */
+    (0, 3, 2, 15),
+    /* SI, two sessions */
+    (1, 7, 2, 15),
