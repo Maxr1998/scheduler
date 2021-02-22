@@ -1,13 +1,13 @@
 CREATE TABLE Schedule (
-    studycourse INTEGER NOT NULL REFERENCES Studycourse(id),
     event INTEGER NOT NULL REFERENCES Event(id),
     day INTEGER AS Int CHECK (day BETWEEN 1 AND 7),
     start_time INTEGER AS Int CHECK (start_time BETWEEN 0 AND 1439),
     end_time INTEGER AS Int CHECK (end_time BETWEEN 0 AND 1439),
     -- No enforced reference on table Room to allow 'meta'-rooms like online lectures
-    room INTEGER NOT NULL
+    room INTEGER NOT NULL,
+    UNIQUE (event, day, start_time, end_time)
 );
 
-CREATE INDEX idx_schedule_studycourse ON Schedule (studycourse);
+CREATE INDEX idx_schedule_event ON Schedule (event);
 CREATE INDEX idx_schedule_day ON Schedule (day);
 CREATE INDEX idx_schedule_room ON Schedule (room);
