@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "de.uaux"
-version = "1.0"
+version = "1.0.0"
 
 repositories {
     jcenter()
@@ -46,7 +46,11 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_14.toString()
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_14.toString()
+        @Suppress("SuspiciousCollectionReassignment")
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
 }
 
 sqldelight {

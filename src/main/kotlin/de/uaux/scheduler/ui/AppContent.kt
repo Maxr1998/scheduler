@@ -8,7 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.darkColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Providers
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
@@ -39,7 +39,7 @@ fun AppContent() {
         val scrollbarColor = with(MaterialTheme.colors) {
             onSurface.copy(alpha = 0.2f).compositeOver(surface)
         }
-        Providers(
+        CompositionLocalProvider(
             ScrollbarStyleAmbient provides defaultScrollbarStyle().copy(
                 hoverColor = scrollbarColor,
                 unhoverColor = scrollbarColor,

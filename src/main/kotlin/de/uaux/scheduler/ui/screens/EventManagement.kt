@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.DisableSelection
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
@@ -27,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.selection.DisableSelection
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Studycourse
@@ -67,7 +68,7 @@ private fun EventManagementScreenContent() {
 private fun StudycoursesPane(studycourseSelection: StudycourseSelection) {
     val eventManagementViewModel: EventManagementViewModel = get()
     Column(
-        modifier = Modifier.preferredWidth(280.dp).fillMaxHeight()
+        modifier = Modifier.width(280.dp).fillMaxHeight()
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth().weight(1f),
@@ -175,6 +176,7 @@ private fun EventListHeader() {
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun EventListItem(
     modifier: Modifier = Modifier,
