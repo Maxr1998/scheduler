@@ -9,6 +9,7 @@ import de.uaux.scheduler.repository.EventRepository
 import de.uaux.scheduler.repository.StudycourseRepository
 import de.uaux.scheduler.util.Constants
 import de.uaux.scheduler.util.LocalizationUtil
+import de.uaux.scheduler.util.SuggestionParser
 import de.uaux.scheduler.viewmodel.EventManagementViewModel
 import org.koin.dsl.module
 
@@ -22,7 +23,7 @@ val appModule = module {
 
     // Repositories
     single { StudycourseRepository(get()) }
-    single { EventRepository(get()) }
+    single { EventRepository(get(), get()) }
 
     // Database
     single<SqlDriver> { JdbcSqliteDriver(Constants.DB_URL) }
@@ -30,4 +31,5 @@ val appModule = module {
 
     // Utils
     single { LocalizationUtil("strings") }
+    single { SuggestionParser() }
 }

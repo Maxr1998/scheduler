@@ -3,3 +3,6 @@ CREATE TABLE SuggestionConstraint (
     type INTEGER AS Int NOT NULL,
     value BLOB AS ByteArray NOT NULL
 );
+
+queryAllSuggestionConstraints:
+SELECT sc.type, sc.value FROM SuggestionConstraint sc WHERE suggestion = ?;

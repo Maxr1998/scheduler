@@ -3,3 +3,8 @@ CREATE TABLE Suggestion (
     event INTEGER NOT NULL REFERENCES Event(id),
     UNIQUE (id, event)
 );
+
+queryAllSuggestionsInStudycourse:
+SELECT s.id, e.*
+FROM StudycourseEvents se JOIN Event e JOIN Suggestion s ON se.event = e.id AND e.id = s.event
+WHERE se.studycourse = ?;
