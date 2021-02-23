@@ -71,9 +71,9 @@ VALUES
     (1, 3, 735, 825, -1);
 
 INSERT OR
-REPLACE INTO Suggestion (id, event, required_sessions, buffer_time)
+REPLACE INTO Suggestion (id, event)
 VALUES
-    /* TI, two sessions */
-    (0, 3, 2, 15),
-    /* SI, two sessions */
-    (1, 7, 2, 15),
+    /* TI */
+    (0, 3),
+    /* SI */
+    (1, 7);

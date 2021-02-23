@@ -1,5 +1,5 @@
 CREATE TABLE SuggestionConstraint (
     suggestion INTEGER NOT NULL REFERENCES Suggestion(id),
     type INTEGER AS Int NOT NULL,
-    value TEXT AS ByteArray NOT NULL
+    value BLOB AS ByteArray NOT NULL
 );
