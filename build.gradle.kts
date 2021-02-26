@@ -50,6 +50,7 @@ tasks.withType<KotlinCompile> {
         jvmTarget = JavaVersion.VERSION_14.toString()
         @Suppress("SuspiciousCollectionReassignment")
         freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+        useIR = true
     }
 }
 
