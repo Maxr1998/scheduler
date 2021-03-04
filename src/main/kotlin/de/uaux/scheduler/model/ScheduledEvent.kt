@@ -8,7 +8,7 @@ data class ScheduledEvent(
     val studycourse: Studycourse,
     val event: Event,
     val day: DayOfWeek,
-    val startTime: Int?,
-    val endTime: Int?,
+    val startTime: Int,
+    val endTime: Int,
     val room: Long,
 )
