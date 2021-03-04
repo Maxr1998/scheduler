@@ -1,6 +1,6 @@
 object Dependencies {
     object Versions {
-        const val kotlin = "1.4.31"
+        const val kotlin = "1.4.30"
         const val composePlugin = "0.3.0"
         const val sqlDelight = "1.4.4"
         const val dependencyUpdatesPlugin = "0.36.0"
