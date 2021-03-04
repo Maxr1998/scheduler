@@ -23,7 +23,7 @@ fun main() {
 
     Window(
         title = koin.get<LocalizationUtil>()["app_name"],
-        size = IntSize(1200, 820),
+        size = IntSize(1600, 900),
     ) {
         val initialized by startupController.initialize()
         if (initialized) {
