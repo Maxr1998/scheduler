@@ -21,15 +21,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import de.uaux.scheduler.controller.NavigationController
+import de.uaux.scheduler.ui.util.ZIndex
 
 @Composable
 fun Sidebar(
     screenState: MutableState<NavigationController.Screen>
 ) {
     Surface(
-        modifier = Modifier.width(64.dp).fillMaxHeight(),
-        elevation = 4.dp,
+        modifier = Modifier.width(64.dp).fillMaxHeight().zIndex(ZIndex.NAVIGATION),
+        elevation = 1.dp,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

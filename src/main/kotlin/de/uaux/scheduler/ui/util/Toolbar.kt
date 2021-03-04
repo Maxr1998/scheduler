@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 
 @Composable
 fun Toolbar(
@@ -18,8 +19,8 @@ fun Toolbar(
     actions: @Composable () -> Unit
 ) {
     Surface(
-        modifier = modifier,
-        elevation = 4.dp,
+        modifier = modifier.zIndex(ZIndex.TOOLBAR),
+        elevation = 1.dp,
     ) {
         Box(
             modifier = Modifier.padding(horizontal = 8.dp),
