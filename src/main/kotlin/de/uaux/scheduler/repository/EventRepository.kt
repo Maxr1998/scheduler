@@ -6,6 +6,7 @@ import de.uaux.scheduler.model.Database
 import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.EventSuggestion
 import de.uaux.scheduler.model.ScheduledEvent
+import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.StudycourseEvent
 import de.uaux.scheduler.util.SuggestionParser
@@ -29,8 +30,8 @@ class EventRepository(
             .asFlow()
             .mapToList(Dispatchers.IO)
 
-    fun queryScheduledEvents(studycourse: Studycourse, day: DayOfWeek): List<ScheduledEvent> =
-        eventQueries.queryScheduledEvents(studycourse.id, day.value) { id, name, module, participants, startTime, endTime, room ->
+    fun queryScheduledEvents(studycourse: Studycourse, semester: Semester, day: DayOfWeek): List<ScheduledEvent> =
+        eventQueries.queryScheduledEvents(studycourse.id, semester.code, day.value) { id, name, module, participants, startTime, endTime, room ->
             ScheduledEvent(studycourse, Event(id, name, module, participants), day, startTime, endTime, room)
         }.executeAsList()
 

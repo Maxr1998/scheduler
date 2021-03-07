@@ -64,17 +64,17 @@ VALUES
     (2, 8, 4, true);
 
 INSERT OR
-REPLACE INTO Schedule (event, day, start_time, end_time, room)
+REPLACE INTO Schedule (semester, event, day, start_time, end_time, room)
 VALUES
     /* Informatik II Tue & Thu */
-    (1, 2, 615, 705, -1),
-    (1, 4, 615, 705, -1),
+    (20211, 1, 2, 615, 705, -1),
+    (20211, 1, 4, 615, 705, -1),
     /* TI Mon & Thu */
-    (3, 1, 975, 1065, -1),
-    (3, 4, 975, 1065, -1),
+    (20211, 3, 1, 975, 1065, -1),
+    (20211, 3, 4, 975, 1065, -1),
     /* MFI II Mon & Tue */
-    (4, 1, 615, 705, -1),
-    (4, 2, 855, 945, -1);
+    (20211, 4, 1, 615, 705, -1),
+    (20211, 4, 2, 855, 945, -1);
 
 INSERT OR
 REPLACE INTO Suggestion (id, event)

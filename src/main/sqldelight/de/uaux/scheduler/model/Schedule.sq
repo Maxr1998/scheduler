@@ -1,17 +1,22 @@
 CREATE TABLE Schedule (
+    -- Contains semester in the format <year><1>/<2>
+    -- e.g. 20211 for SS2021 and 20212 for WS21/22
+    semester INTEGER AS Int NOT NULL,
     event INTEGER NOT NULL REFERENCES Event(id),
     day INTEGER AS Int NOT NULL,
     start_time INTEGER AS Int NOT NULL,
     end_time INTEGER AS Int NOT NULL,
     -- No enforced reference on table Room to allow 'meta'-rooms like online lectures
     room INTEGER NOT NULL,
-    UNIQUE (event, day, start_time, end_time),
+    UNIQUE (semester, event, day, start_time, end_time),
+    CHECK (semester % 10 = 1 OR semester % 10 = 2),
     CHECK (day BETWEEN 1 AND 7),
     CHECK (start_time BETWEEN 0 AND 1439),
     CHECK (end_time BETWEEN 0 AND 1439),
     CHECK (start_time <= end_time)
 );
 
+CREATE INDEX idx_schedule_semester ON Schedule (semester);
 CREATE INDEX idx_schedule_event ON Schedule (event);
 CREATE INDEX idx_schedule_day ON Schedule (day);
 CREATE INDEX idx_schedule_room ON Schedule (room);
