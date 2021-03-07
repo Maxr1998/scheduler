@@ -12,3 +12,6 @@ CREATE TABLE Timeslot (
 );
 
 CREATE INDEX idx_timeslot_semester ON Timeslot (semester);
+
+queryTimeslotsForSemester:
+SELECT * FROM Timeslot WHERE semester = ?;

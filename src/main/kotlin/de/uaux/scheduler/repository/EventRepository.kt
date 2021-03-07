@@ -9,6 +9,7 @@ import de.uaux.scheduler.model.ScheduledEvent
 import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.StudycourseEvent
+import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.util.SuggestionParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +20,7 @@ class EventRepository(
     private val suggestionParser: SuggestionParser,
 ) {
     private val eventQueries = database.eventQueries
+    private val timeslotQueries = database.timeslotQueries
     private val suggestionQueries = database.suggestionQueries
     private val constraintQueries = database.suggestionConstraintQueries
 
@@ -34,6 +36,9 @@ class EventRepository(
         eventQueries.queryScheduledEvents(studycourse.id, semester.code, day.value) { id, name, module, participants, startTime, endTime, room ->
             ScheduledEvent(studycourse, Event(id, name, module, participants), day, startTime, endTime, room)
         }.executeAsList()
+
+    fun queryTimeslots(semester: Semester): List<Timeslot> =
+        timeslotQueries.queryTimeslotsForSemester(semester.code).executeAsList()
 
     fun queryEventSuggestions(studycourse: Studycourse): List<EventSuggestion> =
         suggestionQueries.queryAllSuggestionsInStudycourse(studycourse.id) { id, eventId, name, module, participants ->
