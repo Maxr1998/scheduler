@@ -64,6 +64,26 @@ VALUES
     (2, 8, 4, true);
 
 INSERT OR
+REPLACE INTO Timeslot (semester, start_time, end_time)
+VALUES
+    /* SS2021 */
+    (20211, 495, 585),
+    (20211, 615, 705),
+    (20211, 735, 825),
+    (20211, 735, 825),
+    (20211, 855, 945),
+    (20211, 975, 1065),
+    (20211, 1095, 1185),
+    /* WS2021/22 */
+    (20212, 495, 585),
+    (20212, 615, 705),
+    (20212, 735, 825),
+    (20212, 735, 825),
+    (20212, 855, 945),
+    (20212, 975, 1065),
+    (20212, 1095, 1185);
+
+INSERT OR
 REPLACE INTO Schedule (semester, event, day, start_time, end_time, room)
 VALUES
     /* Informatik II Tue & Thu */

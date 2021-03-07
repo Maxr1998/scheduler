@@ -1,0 +1,14 @@
+CREATE TABLE Timeslot (
+    -- Contains semester in the format <year><1>/<2>
+    -- e.g. 20211 for SS2021 and 20212 for WS21/22
+    semester INTEGER AS Int NOT NULL,
+    start_time INTEGER AS Int NOT NULL,
+    end_time INTEGER AS Int NOT NULL,
+    UNIQUE (semester, start_time, end_time),
+    CHECK (semester % 10 = 1 OR semester % 10 = 2),
+    CHECK (start_time BETWEEN 0 AND 1439),
+    CHECK (end_time BETWEEN 0 AND 1439),
+    CHECK (start_time <= end_time)
+);
+
+CREATE INDEX idx_timeslot_semester ON Timeslot (semester);
