@@ -11,8 +11,11 @@ import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.StudycourseEvent
 import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.util.SuggestionParser
+import de.uaux.scheduler.util.executeAsMappedList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import java.time.DayOfWeek
 
 class EventRepository(
@@ -20,9 +23,20 @@ class EventRepository(
     private val suggestionParser: SuggestionParser,
 ) {
     private val eventQueries = database.eventQueries
+    private val scheduleQueries = database.scheduleQueries
     private val timeslotQueries = database.timeslotQueries
     private val suggestionQueries = database.suggestionQueries
     private val constraintQueries = database.suggestionConstraintQueries
+
+    val allSemestersFlow: Flow<List<Semester>> =
+        scheduleQueries
+            .queryAllSemesters()
+            .asFlow()
+            .map { query ->
+                withContext(Dispatchers.IO) {
+                    query.executeAsMappedList { semester -> Semester(semester) }
+                }
+            }
 
     fun queryAllInStudycourseAsFlow(studycourse: Studycourse): Flow<List<StudycourseEvent>> =
         eventQueries

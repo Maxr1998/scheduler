@@ -20,3 +20,6 @@ CREATE INDEX idx_schedule_semester ON Schedule (semester);
 CREATE INDEX idx_schedule_event ON Schedule (event);
 CREATE INDEX idx_schedule_day ON Schedule (day);
 CREATE INDEX idx_schedule_room ON Schedule (room);
+
+queryAllSemesters:
+SELECT DISTINCT s.semester FROM Schedule s ORDER BY s.semester DESC;

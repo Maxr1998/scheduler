@@ -1,6 +1,6 @@
 package de.uaux.scheduler.model
 
-inline class Semester /*private*/ constructor(val code: Int) {
+inline class Semester constructor(val code: Int) {
     constructor(type: Type, year: Int) : this(year * 10 + type.code)
 
     override fun toString(): String {
