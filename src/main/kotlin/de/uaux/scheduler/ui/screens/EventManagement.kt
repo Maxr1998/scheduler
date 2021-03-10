@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.DisableSelection
@@ -73,19 +74,15 @@ private fun StudycoursesPane(studycourseSelection: StudycourseSelection) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth().weight(1f),
         ) {
-            eventManagementViewModel.studycourses.let { studycourses ->
-                val count = studycourses.size
-                items(count) { i ->
-                    val studycourse = studycourses[i]
-                    val selected = studycourseSelection.isSelected(studycourse)
-                    StudycourseListItem(
-                        modifier = Modifier.selectable(selected) {
-                            eventManagementViewModel.load(studycourse)
-                        },
-                        studycourse = studycourse,
-                        selected = selected,
-                    )
-                }
+            items(eventManagementViewModel.studycourses) { studycourse ->
+                val selected = studycourseSelection.isSelected(studycourse)
+                StudycourseListItem(
+                    modifier = Modifier.selectable(selected) {
+                        eventManagementViewModel.load(studycourse)
+                    },
+                    studycourse = studycourse,
+                    selected = selected,
+                )
             }
         }
         Surface(
@@ -143,17 +140,17 @@ private fun EventsPane(studycourseSelection: StudycourseSelection) {
             )
         }
         is StudycourseSelection.Selected -> {
-            val items = studycourseSelection.events.collectAsState(emptyList()).value
-            if (items.isNotEmpty()) {
+            val events by studycourseSelection.events.collectAsState(emptyList())
+            if (events.isNotEmpty()) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     item {
                         EventListHeader()
                     }
-                    items(items.size) {
+                    items(events) { event ->
                         EventListItem(
-                            studycourseEvent = items[it],
+                            studycourseEvent = event,
                         )
                     }
                 }
