@@ -1,6 +1,6 @@
 package de.uaux.scheduler.ui.util
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material.MaterialTheme
@@ -22,14 +22,14 @@ fun Toolbar(
         modifier = modifier.zIndex(ZIndex.TOOLBAR),
         elevation = 1.dp,
     ) {
-        Box(
+        Row(
             modifier = Modifier.padding(horizontal = 8.dp),
-            contentAlignment = Alignment.CenterEnd,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             DisableSelection {
                 Text(
                     text = title,
-                    modifier = Modifier.align(Alignment.CenterStart),
+                    modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.subtitle1,
                 )
             }
