@@ -64,9 +64,9 @@ class EventRepository(
             .asFlow()
             .mapToList(Dispatchers.IO)
 
-    fun queryScheduledEvents(studycourse: Studycourse, semester: Semester, day: DayOfWeek): List<ScheduledEvent> =
-        eventQueries.queryScheduledEvents(studycourse.id, semester.code, day.value) { id, name, module, participants, startTime, endTime, room ->
-            ScheduledEvent(studycourse, Event(id, name, module, participants), day, startTime, endTime, room)
+    fun queryScheduledEvents(studycourse: Studycourse, semester: Semester): List<ScheduledEvent> =
+        eventQueries.queryScheduledEvents(studycourse.id, semester.code) { id, name, module, participants, day, startTime, endTime, room ->
+            ScheduledEvent(studycourse, Event(id, name, module, participants), DayOfWeek.of(day), startTime, endTime, room)
         }.executeAsList()
 
     fun queryTimeslots(semester: Semester): List<Timeslot> =
