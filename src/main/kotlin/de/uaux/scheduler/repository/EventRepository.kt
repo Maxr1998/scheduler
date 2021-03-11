@@ -7,6 +7,8 @@ import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.EventSuggestion
 import de.uaux.scheduler.model.ScheduledEvent
 import de.uaux.scheduler.model.Semester
+import de.uaux.scheduler.model.Semester.Type.SS
+import de.uaux.scheduler.model.Semester.Type.WS
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.StudycourseEvent
 import de.uaux.scheduler.model.Timeslot
@@ -17,6 +19,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.Month.DECEMBER
+import java.time.Month.JANUARY
+import java.time.Month.JUNE
+import java.time.Month.MAY
+import java.time.Month.NOVEMBER
 
 class EventRepository(
     database: Database,
@@ -37,6 +45,16 @@ class EventRepository(
                     query.executeAsMappedList { semester -> Semester(semester) }
                 }
             }
+
+    fun computeNextSemester(): Semester {
+        val now = LocalDate.now()
+        return when (now.month) {
+            in JANUARY..MAY -> Semester(SS, now.year)
+            in JUNE..NOVEMBER -> Semester(WS, now.year)
+            DECEMBER -> Semester(SS, now.year + 1)
+            else -> throw IllegalStateException("Month outside of possible range")
+        }
+    }
 
     fun queryAllInStudycourseAsFlow(studycourse: Studycourse): Flow<List<StudycourseEvent>> =
         eventQueries
