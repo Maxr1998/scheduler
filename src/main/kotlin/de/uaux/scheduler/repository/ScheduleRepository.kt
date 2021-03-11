@@ -3,12 +3,14 @@ package de.uaux.scheduler.repository
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import de.uaux.scheduler.model.Database
 import de.uaux.scheduler.model.Event
+import de.uaux.scheduler.model.Room
 import de.uaux.scheduler.model.ScheduledEvent
 import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.model.Semester.Type.SS
 import de.uaux.scheduler.model.Semester.Type.WS
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.Timeslot
+import de.uaux.scheduler.util.LocalizationUtil
 import de.uaux.scheduler.util.executeAsMappedList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -24,10 +26,12 @@ import java.time.Month.NOVEMBER
 
 class ScheduleRepository(
     database: Database,
+    private val localizationUtil: LocalizationUtil,
 ) {
     private val eventQueries = database.eventQueries
     private val timeslotQueries = database.timeslotQueries
     private val scheduleQueries = database.scheduleQueries
+    private val roomQueries = database.roomQueries
 
     val allSemestersFlow: Flow<List<Semester>> =
         scheduleQueries
@@ -52,8 +56,19 @@ class ScheduleRepository(
     fun queryTimeslots(semester: Semester): List<Timeslot> =
         timeslotQueries.queryTimeslotsForSemester(semester.code).executeAsList()
 
-    fun queryScheduledEvents(studycourse: Studycourse, semester: Semester): List<ScheduledEvent> =
-        eventQueries.queryScheduledEvents(studycourse.id, semester.code) { id, name, module, participants, day, startTime, endTime, room ->
+    fun queryScheduledEvents(studycourse: Studycourse, semester: Semester): List<ScheduledEvent> {
+        val roomCache = HashMap<Long, Room>()
+        return eventQueries.queryScheduledEvents(studycourse.id, semester.code) { id, name, module, participants, day, startTime, endTime, roomId ->
+            val room = queryRoom(roomId, roomCache)?.also { room ->
+                roomCache.putIfAbsent(roomId, room)
+            }
             ScheduledEvent(studycourse, Event(id, name, module, participants), DayOfWeek.of(day), startTime, endTime, room)
         }.executeAsList()
+    }
+
+    fun queryRoom(id: Long, cache: Map<Long, Room> = emptyMap()): Room? = when (id) {
+        in cache -> cache[id]
+        -1L -> Room(-1, localizationUtil["room_digital"], Int.MAX_VALUE)
+        else -> roomQueries.queryRoomById(id).executeAsOneOrNull()
+    }
 }

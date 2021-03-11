@@ -3,3 +3,7 @@ CREATE TABLE Room (
     name TEXT NOT NULL,
     capacity INTEGER AS Int NOT NULL
 );
+
+
+queryRoomById:
+SELECT * FROM Room WHERE id = ?;

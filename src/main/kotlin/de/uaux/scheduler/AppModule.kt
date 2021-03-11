@@ -25,7 +25,7 @@ val appModule = module {
     // Repositories
     single { StudycourseRepository(get()) }
     single { EventRepository(get(), get()) }
-    single { ScheduleRepository(get()) }
+    single { ScheduleRepository(get(), get()) }
 
     // Database
     single<SqlDriver> { JdbcSqliteDriver(Constants.DB_URL) }

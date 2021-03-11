@@ -10,5 +10,5 @@ data class ScheduledEvent(
     val day: DayOfWeek,
     val startTime: Int,
     val endTime: Int,
-    val room: Long,
+    val room: Room?,
 )
