@@ -6,6 +6,7 @@ import de.uaux.scheduler.controller.NavigationController
 import de.uaux.scheduler.controller.StartupController
 import de.uaux.scheduler.model.Database
 import de.uaux.scheduler.repository.EventRepository
+import de.uaux.scheduler.repository.ScheduleRepository
 import de.uaux.scheduler.repository.StudycourseRepository
 import de.uaux.scheduler.util.Constants
 import de.uaux.scheduler.util.LocalizationUtil
@@ -24,6 +25,7 @@ val appModule = module {
     // Repositories
     single { StudycourseRepository(get()) }
     single { EventRepository(get(), get()) }
+    single { ScheduleRepository(get()) }
 
     // Database
     single<SqlDriver> { JdbcSqliteDriver(Constants.DB_URL) }
