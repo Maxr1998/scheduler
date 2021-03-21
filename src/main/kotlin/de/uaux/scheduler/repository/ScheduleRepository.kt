@@ -62,7 +62,7 @@ class ScheduleRepository(
             val room = queryRoom(roomId, roomCache)?.also { room ->
                 roomCache.putIfAbsent(roomId, room)
             }
-            ScheduledEvent(studycourse, Event(id, name, module, participants), DayOfWeek.of(day), startTime, endTime, room)
+            ScheduledEvent(semester, Event(id, name, module, participants), DayOfWeek.of(day), startTime, endTime, room)
         }.executeAsList()
     }
 

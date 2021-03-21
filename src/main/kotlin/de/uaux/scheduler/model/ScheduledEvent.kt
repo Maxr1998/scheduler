@@ -5,7 +5,7 @@ import java.time.DayOfWeek
 
 @Immutable
 data class ScheduledEvent(
-    val studycourse: Studycourse,
+    val semester: Semester,
     val event: Event,
     val day: DayOfWeek,
     val startTime: Int,
