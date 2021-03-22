@@ -1,16 +1,16 @@
 object Dependencies {
     object Versions {
-        const val kotlin = "1.4.30"
-        const val composePlugin = "0.3.0"
+        const val kotlin = "1.4.31"
+        const val composePlugin = "0.4.0-build174"
         const val sqlDelight = "1.4.4"
-        const val dependencyUpdatesPlugin = "0.36.0"
+        const val dependencyUpdatesPlugin = "0.38.0"
 
         // Core
         const val koin = "2.2.2"
-        const val coroutines = "1.4.2"
+        const val coroutines = "1.4.3"
 
         // Logging
-        const val kotlinLogging = "2.0.4"
+        const val kotlinLogging = "2.0.6"
         const val logback = "1.2.3"
 
         // Testing
