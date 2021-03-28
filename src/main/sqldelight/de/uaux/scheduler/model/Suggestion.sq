@@ -1,10 +1,11 @@
 CREATE TABLE Suggestion (
     id INTEGER PRIMARY KEY,
     event INTEGER NOT NULL REFERENCES Event(id),
+    text TEXT NOT NULL DEFAULT '',
     UNIQUE (id, event)
 );
 
 queryAllSuggestionsInStudycourse:
-SELECT s.id, e.*
+SELECT s.id, e.*, s.text
 FROM StudycourseEvents se JOIN Event e JOIN Suggestion s ON se.event = e.id AND e.id = s.event
 WHERE se.studycourse = ?;

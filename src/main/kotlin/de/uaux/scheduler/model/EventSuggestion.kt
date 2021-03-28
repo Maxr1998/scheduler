@@ -6,6 +6,10 @@ import androidx.compose.runtime.Immutable
 data class EventSuggestion(
     val id: Long,
     val event: Event,
+    /**
+     * A free-form text to contain the original request from the lecturer
+     */
+    val text: String,
     val constraints: List<Constraint>,
 ) {
     sealed class Constraint {
