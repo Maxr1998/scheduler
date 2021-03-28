@@ -22,3 +22,8 @@ CREATE INDEX idx_schedule_room ON Schedule (room);
 
 queryAllSemesters:
 SELECT DISTINCT s.semester FROM Schedule s ORDER BY s.semester DESC;
+
+rescheduleEvent:
+UPDATE Schedule
+SET day = :newDay, start_time = :newStart, end_time = :newEnd
+WHERE semester = ? AND event = ? AND day = ? AND start_time = ? AND end_time = ?;

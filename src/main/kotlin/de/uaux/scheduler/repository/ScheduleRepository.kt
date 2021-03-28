@@ -28,6 +28,7 @@ class ScheduleRepository(
     database: Database,
     private val localizationUtil: LocalizationUtil,
 ) {
+    private val standardQueries = database.standardQueries
     private val eventQueries = database.eventQueries
     private val timeslotQueries = database.timeslotQueries
     private val scheduleQueries = database.scheduleQueries
@@ -70,5 +71,13 @@ class ScheduleRepository(
         in cache -> cache[id]
         -1L -> Room(-1, localizationUtil["room_digital"], Int.MAX_VALUE)
         else -> roomQueries.queryRoomById(id).executeAsOneOrNull()
+    }
+
+    fun rescheduleEvent(event: ScheduledEvent, day: DayOfWeek, startTime: Int, endTime: Int): Boolean {
+        scheduleQueries.rescheduleEvent(
+            day.value, startTime, endTime,
+            event.semester.code, event.event.id, event.day.value, event.startTime, event.endTime
+        )
+        return standardQueries.changes().executeAsOne() == 1L
     }
 }

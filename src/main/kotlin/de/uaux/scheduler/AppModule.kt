@@ -12,6 +12,7 @@ import de.uaux.scheduler.util.Constants
 import de.uaux.scheduler.util.LocalizationUtil
 import de.uaux.scheduler.util.SuggestionParser
 import de.uaux.scheduler.viewmodel.EventManagementViewModel
+import de.uaux.scheduler.viewmodel.TimetableViewModel
 import org.koin.dsl.module
 
 val appModule = module {
@@ -21,6 +22,7 @@ val appModule = module {
 
     // Viewmodels
     single { EventManagementViewModel(get(), get()) }
+    single { TimetableViewModel(get(), get(), get()) }
 
     // Repositories
     single { StudycourseRepository(get()) }
