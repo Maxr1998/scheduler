@@ -28,8 +28,8 @@ class EventRepository(
             .mapToList(Dispatchers.IO)
 
     fun queryEventSuggestions(studycourse: Studycourse): List<EventSuggestion> =
-        suggestionQueries.queryAllSuggestionsInStudycourse(studycourse.id) { id, eventId, name, module, participants, text ->
+        suggestionQueries.queryAllSuggestionsInStudycourse(studycourse.id) { id, eventId, name, module, participants, duration, text ->
             val constraints = constraintQueries.queryAllSuggestionConstraints(id, suggestionParser::parseConstraint).executeAsList()
-            EventSuggestion(id, Event(eventId, name, module, participants), text, constraints)
+            EventSuggestion(id, Event(eventId, name, module, participants), duration, text, constraints)
         }.executeAsList()
 }
