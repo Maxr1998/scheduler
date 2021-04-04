@@ -50,13 +50,13 @@ fun PopupDialog(
                 }
 
                 Box(
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+                    modifier = Modifier.padding(horizontal = 24.dp),
                 ) {
                     content()
                 }
 
                 Row(
-                    modifier = Modifier.padding(8.dp).fillMaxWidth(),
+                    modifier = Modifier.height(52.dp).fillMaxWidth().padding(8.dp),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {

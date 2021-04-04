@@ -27,6 +27,8 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,16 +59,36 @@ fun EventManagementScreen() = Column {
 private fun EventManagementScreenContent() {
     val eventManagementViewModel: EventManagementViewModel = get()
     val studycourseSelection by eventManagementViewModel.studycourseSelection
+    val (dialogState, setDialogState) = remember { mutableStateOf<StudycourseDialogState>(StudycourseDialogState.Closed) }
 
-    Row {
-        StudycoursesPane(studycourseSelection)
-        VerticalDivider()
-        EventsPane(studycourseSelection)
+    Box(modifier = Modifier.fillMaxSize()) {
+        Row {
+            StudycoursesPane(
+                studycourseSelection = studycourseSelection,
+                openDialog = { studycourse ->
+                    setDialogState(StudycourseDialogState.Open(studycourse))
+                },
+            )
+            VerticalDivider()
+            EventsPane(studycourseSelection)
+        }
+
+        if (dialogState is StudycourseDialogState.Open) {
+            StudycourseDialog(
+                studycourse = dialogState.studycourse,
+                onDismissRequest = {
+                    setDialogState(StudycourseDialogState.Closed)
+                },
+            )
+        }
     }
 }
 
 @Composable
-private fun StudycoursesPane(studycourseSelection: StudycourseSelection) {
+private fun StudycoursesPane(
+    studycourseSelection: StudycourseSelection,
+    openDialog: (Studycourse?) -> Unit,
+) {
     val eventManagementViewModel: EventManagementViewModel = get()
     Column(
         modifier = Modifier.width(280.dp).fillMaxHeight()
@@ -89,9 +111,7 @@ private fun StudycoursesPane(studycourseSelection: StudycourseSelection) {
             modifier = Modifier.fillMaxWidth().height(48.dp)
         ) {
             IconButton(
-                onClick = {
-                    // TODO: open dialog to add a studycourse
-                },
+                onClick = { openDialog(null) },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Add,
@@ -100,7 +120,6 @@ private fun StudycoursesPane(studycourseSelection: StudycourseSelection) {
                 )
             }
         }
-
     }
 }
 
