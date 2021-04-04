@@ -123,6 +123,7 @@ private fun StudycoursesPane(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun StudycourseListItem(
     modifier: Modifier = Modifier,
@@ -131,23 +132,25 @@ private fun StudycourseListItem(
 ) {
     val background = if (selected) Modifier.background(MaterialTheme.colors.primaryVariant.copy(alpha = 0.12f)) else Modifier
     val textColor = if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
-    Box(
+
+    val secondaryTextContent: @Composable (() -> Unit) = {
+        Text(text = studycourse.revision.orEmpty())
+    }
+    ListItem(
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp)
             .padding(4.dp)
             .clip(RoundedCornerShape(4.dp))
             .then(modifier)
-            .then(background)
-            .padding(horizontal = 12.dp),
-        contentAlignment = Alignment.CenterStart,
-    ) {
-        Text(
-            text = studycourse.name,
-            color = textColor,
-            style = MaterialTheme.typography.body2,
-        )
-    }
+            .then(background),
+        text = {
+            Text(
+                text = studycourse.name,
+                color = textColor,
+            )
+        },
+        secondaryText = if (!studycourse.revision.isNullOrBlank()) secondaryTextContent else null,
+    )
 }
 
 @Composable
