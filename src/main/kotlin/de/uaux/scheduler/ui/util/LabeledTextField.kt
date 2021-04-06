@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 
 @Composable
-fun LabelledTextField(
+fun LabeledTextField(
     text: MutableState<TextFieldValue>,
     label: String,
     placeholder: String,

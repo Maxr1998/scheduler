@@ -14,7 +14,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.repository.StudycourseRepository
-import de.uaux.scheduler.ui.util.LabelledTextField
+import de.uaux.scheduler.ui.util.LabeledTextField
 import de.uaux.scheduler.ui.util.PopupDialog
 import de.uaux.scheduler.ui.util.l
 import kotlinx.coroutines.launch
@@ -54,7 +54,7 @@ fun StudycourseDialog(studycourse: Studycourse?, onDismissRequest: () -> Unit) {
         }
     ) {
         Column {
-            LabelledTextField(
+            LabeledTextField(
                 studycourseName,
                 l("input_label_studycourse_name"),
                 l("input_hint_studycourse_name"),
@@ -62,7 +62,7 @@ fun StudycourseDialog(studycourse: Studycourse?, onDismissRequest: () -> Unit) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            LabelledTextField(
+            LabeledTextField(
                 studycourseRevision,
                 l("input_label_studycourse_revision"),
                 l("input_hint_studycourse_revision"),
