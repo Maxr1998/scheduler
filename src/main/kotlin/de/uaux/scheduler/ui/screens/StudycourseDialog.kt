@@ -48,9 +48,12 @@ fun StudycourseDialog(studycourse: Studycourse?, onDismissRequest: () -> Unit) {
                 enabled = studycourseName.value.text.isNotBlank(),
                 onSave = {
                     coroutineScope.launch {
-                        val name = studycourseName.value.text
-                        val revision = studycourseRevision.value.text
-                        studycourseRepository.insert(name, revision.takeIf(String::isNotBlank))
+                        val updated = Studycourse(
+                            studycourse?.id ?: -1L,
+                            studycourseName.value.text,
+                            studycourseRevision.value.text.takeIf(String::isNotBlank),
+                        )
+                        studycourseRepository.insertOrUpdate(updated)
                         onDismissRequest()
                     }
                 }

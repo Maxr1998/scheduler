@@ -16,11 +16,13 @@ inline fun <RowType : Any, T> Query<RowType>.executeAsMappedList(mapper: (RowTyp
 }
 
 /**
+ * Checks if changes from last insert/update were applied successfully
+ */
+fun StandardQueries.changedOne(): Boolean =
+    changes().executeAsOneOrNull() == 1L
+
+/**
  * Checks if changes from last insert were applied successfully and returns the inserted id
  */
-fun StandardQueries.checkAndGetId(): Long {
-    val changes = changes().executeAsOneOrNull()
-    return if (changes != null && changes > 0) {
-        lastInsertRowId().executeAsOneOrNull() ?: -1
-    } else -1
-}
+fun StandardQueries.checkAndGetId(): Long =
+    if (changedOne()) lastInsertRowId().executeAsOneOrNull() ?: -1 else -1

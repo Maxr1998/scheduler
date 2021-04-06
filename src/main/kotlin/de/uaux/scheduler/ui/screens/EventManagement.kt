@@ -15,16 +15,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.DisableSelection
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
+import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -104,6 +108,7 @@ private fun StudycoursesPane(
                     },
                     studycourse = studycourse,
                     selected = selected,
+                    openDialog = openDialog,
                 )
             }
         }
@@ -129,6 +134,7 @@ private fun StudycourseListItem(
     modifier: Modifier = Modifier,
     studycourse: Studycourse,
     selected: Boolean,
+    openDialog: (Studycourse?) -> Unit,
 ) {
     val background = if (selected) Modifier.background(MaterialTheme.colors.primaryVariant.copy(alpha = 0.12f)) else Modifier
     val textColor = if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
@@ -150,6 +156,20 @@ private fun StudycourseListItem(
             )
         },
         secondaryText = if (!studycourse.revision.isNullOrBlank()) secondaryTextContent else null,
+        trailing = {
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                IconButton(
+                    onClick = {
+                        openDialog(studycourse)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Edit,
+                        contentDescription = null,
+                    )
+                }
+            }
+        },
     )
 }
 

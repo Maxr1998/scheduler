@@ -4,6 +4,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import de.uaux.scheduler.model.Database
 import de.uaux.scheduler.model.Studycourse
+import de.uaux.scheduler.util.changedOne
 import de.uaux.scheduler.util.checkAndGetId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -19,18 +20,23 @@ class StudycourseRepository(database: Database) {
             .asFlow()
             .mapToList(Dispatchers.IO)
 
-    suspend fun insert(name: String, revision: String? = null): Long {
-        return withContext(Dispatchers.IO) {
-            studycourseQueries.transactionWithResult {
-                studycourseQueries.insert(name, revision)
-                standardQueries.checkAndGetId()
+    suspend fun insertOrUpdate(studycourse: Studycourse): Long = withContext(Dispatchers.IO) {
+        studycourseQueries.transactionWithResult {
+            if (studycourse.id > 0) {
+                // Existing object, attempt to update
+                studycourseQueries.update(studycourse.name, studycourse.revision, studycourse.id)
+                if (standardQueries.changedOne()) {
+                    return@transactionWithResult studycourse.id
+                }
             }
+
+            // Failed update or new object, insert
+            studycourseQueries.insert(studycourse.name, studycourse.revision)
+            standardQueries.checkAndGetId()
         }
     }
 
-    suspend fun queryAll(): List<Studycourse> {
-        return withContext(Dispatchers.IO) {
-            studycourseQueries.queryAll().executeAsList()
-        }
+    suspend fun queryAll(): List<Studycourse> = withContext(Dispatchers.IO) {
+        studycourseQueries.queryAll().executeAsList()
     }
 }
