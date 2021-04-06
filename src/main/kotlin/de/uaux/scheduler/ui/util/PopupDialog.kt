@@ -15,8 +15,16 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 
@@ -29,10 +37,22 @@ fun PopupDialog(
 ) {
     Popup(
         alignment = Alignment.Center,
+        isFocusable = true,
         onDismissRequest = onDismissRequest,
     ) {
+        val dialogFocusRequester = remember { FocusRequester() }
         Surface(
-            modifier = Modifier.width(560.dp),
+            modifier = Modifier
+                .width(560.dp)
+                .focusRequester(dialogFocusRequester)
+                .focusModifier()
+                .onKeyEvent { keyEvent ->
+                    val isEscape = keyEvent.key == Key.Escape
+                    if (isEscape) {
+                        onDismissRequest?.invoke()
+                    }
+                    isEscape
+                },
             shape = RoundedCornerShape(8.dp),
             elevation = 2.dp,
         ) {
@@ -63,6 +83,10 @@ fun PopupDialog(
                     actions()
                 }
             }
+        }
+
+        SideEffect {
+            dialogFocusRequester.requestFocus()
         }
     }
 }
