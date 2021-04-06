@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.Constraints
  */
 object FixUnsupportedIntrinsicMeasurementsLayoutModifier : LayoutModifier {
     override fun MeasureScope.measure(measurable: Measurable, constraints: Constraints): MeasureResult {
-        val placeable = measurable.measure(constraints.copy(minHeight = 0, maxHeight = /* MaxNonFocusMask */ 0x1FFF))
+        val placeable = measurable.measure(constraints)
         return layout(placeable.width, placeable.height) {
             placeable.place(0, 0)
         }
