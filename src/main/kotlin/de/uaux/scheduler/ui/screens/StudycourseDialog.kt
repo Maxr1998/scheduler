@@ -20,11 +20,6 @@ import de.uaux.scheduler.ui.util.l
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
-sealed class StudycourseDialogState {
-    object Closed : StudycourseDialogState()
-    data class Open(val studycourse: Studycourse?) : StudycourseDialogState()
-}
-
 @Composable
 fun StudycourseDialog(studycourse: Studycourse?, onDismissRequest: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()

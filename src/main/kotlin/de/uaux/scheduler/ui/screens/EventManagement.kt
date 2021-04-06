@@ -47,6 +47,11 @@ import de.uaux.scheduler.ui.util.l
 import de.uaux.scheduler.viewmodel.EventManagementViewModel
 import org.koin.androidx.compose.get
 
+sealed class EventManagementDialogState {
+    object Closed : EventManagementDialogState()
+    data class StudycourseOpened(val studycourse: Studycourse?) : EventManagementDialogState()
+}
+
 @Composable
 fun EventManagementScreen() = Column {
     Toolbar(
@@ -63,27 +68,30 @@ fun EventManagementScreen() = Column {
 private fun EventManagementScreenContent() {
     val eventManagementViewModel: EventManagementViewModel = get()
     val studycourseSelection by eventManagementViewModel.studycourseSelection
-    val (dialogState, setDialogState) = remember { mutableStateOf<StudycourseDialogState>(StudycourseDialogState.Closed) }
+    val (dialogState, setDialogState) = remember { mutableStateOf<EventManagementDialogState>(EventManagementDialogState.Closed) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Row {
             StudycoursesPane(
                 studycourseSelection = studycourseSelection,
                 openDialog = { studycourse ->
-                    setDialogState(StudycourseDialogState.Open(studycourse))
+                    setDialogState(EventManagementDialogState.StudycourseOpened(studycourse))
                 },
             )
             VerticalDivider()
             EventsPane(studycourseSelection)
         }
 
-        if (dialogState is StudycourseDialogState.Open) {
-            StudycourseDialog(
-                studycourse = dialogState.studycourse,
-                onDismissRequest = {
-                    setDialogState(StudycourseDialogState.Closed)
-                },
-            )
+        when (dialogState) {
+            is EventManagementDialogState.StudycourseOpened -> {
+                StudycourseDialog(
+                    studycourse = dialogState.studycourse,
+                    onDismissRequest = {
+                        setDialogState(EventManagementDialogState.Closed)
+                    },
+                )
+            }
+            EventManagementDialogState.Closed -> Unit
         }
     }
 }
