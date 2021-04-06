@@ -2,13 +2,10 @@ package de.uaux.scheduler.ui.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -17,6 +14,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.repository.StudycourseRepository
+import de.uaux.scheduler.ui.util.LabelledTextField
 import de.uaux.scheduler.ui.util.PopupDialog
 import de.uaux.scheduler.ui.util.l
 import kotlinx.coroutines.launch
@@ -61,53 +59,23 @@ fun StudycourseDialog(studycourse: Studycourse?, onDismissRequest: () -> Unit) {
         }
     ) {
         Column {
-            NameInput(studycourseName)
+            LabelledTextField(
+                studycourseName,
+                l("input_label_studycourse_name"),
+                l("input_hint_studycourse_name"),
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            RevisionInput(studycourseRevision)
+            LabelledTextField(
+                studycourseRevision,
+                l("input_label_studycourse_revision"),
+                l("input_hint_studycourse_revision"),
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
-}
-
-@Composable
-private fun NameInput(name: MutableState<TextFieldValue>) {
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = name.value,
-        onValueChange = { value ->
-            if (!value.text.contains('\n')) {
-                name.value = value
-            }
-        },
-        label = {
-            Text(text = l("input_label_studycourse_name"))
-        },
-        placeholder = {
-            Text(text = l("input_hint_studycourse_name"))
-        },
-    )
-}
-
-@Composable
-private fun RevisionInput(revision: MutableState<TextFieldValue>) {
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = revision.value,
-        onValueChange = { value ->
-            if (!value.text.contains('\n')) {
-                revision.value = value
-            }
-        },
-        label = {
-            Text(text = l("input_label_studycourse_revision"))
-        },
-        placeholder = {
-            Text(text = l("input_hint_studycourse_revision"))
-        },
-    )
 }
 
 @Composable
