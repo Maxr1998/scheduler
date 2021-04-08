@@ -26,6 +26,7 @@ dependencies {
 
     // UI
     implementation(compose.desktop.currentOs)
+    implementation(compose("org.jetbrains.compose.material:material-icons-extended"))
 
     // Persistence
     implementation(Dependencies.Persistence.sqlDelightSqliteDriver)
