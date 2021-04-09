@@ -16,6 +16,7 @@ import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.repository.StudycourseRepository
 import de.uaux.scheduler.ui.util.LabeledTextField
 import de.uaux.scheduler.ui.util.PopupDialog
+import de.uaux.scheduler.ui.util.SaveButton
 import de.uaux.scheduler.ui.util.l
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
@@ -70,18 +71,5 @@ fun StudycourseDialog(studycourse: Studycourse?, onDismissRequest: () -> Unit) {
 
             Spacer(modifier = Modifier.height(8.dp))
         }
-    }
-}
-
-@Composable
-private fun SaveButton(
-    enabled: Boolean = true,
-    onSave: () -> Unit,
-) {
-    TextButton(
-        enabled = enabled,
-        onClick = onSave,
-    ) {
-        Text(text = l("button_text_save"))
     }
 }
