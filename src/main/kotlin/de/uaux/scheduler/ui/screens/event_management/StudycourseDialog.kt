@@ -1,4 +1,4 @@
-package de.uaux.scheduler.ui.screens
+package de.uaux.scheduler.ui.screens.event_management
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
