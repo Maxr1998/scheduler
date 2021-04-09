@@ -1,9 +1,10 @@
-package de.uaux.scheduler.model
+package de.uaux.scheduler.model.dto
 
 import androidx.compose.runtime.Immutable
+import de.uaux.scheduler.model.Event
 
 @Immutable
-data class EventSuggestion(
+data class Suggestion(
     val id: Long,
     val event: Event,
     val duration: Int,

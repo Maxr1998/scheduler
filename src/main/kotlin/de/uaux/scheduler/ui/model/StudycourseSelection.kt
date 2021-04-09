@@ -1,7 +1,7 @@
 package de.uaux.scheduler.ui.model
 
 import de.uaux.scheduler.model.Studycourse
-import de.uaux.scheduler.model.StudycourseEvent
+import de.uaux.scheduler.model.dto.StudycourseEvent
 import kotlinx.coroutines.flow.Flow
 
 sealed class StudycourseSelection {

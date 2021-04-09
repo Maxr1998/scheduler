@@ -1,6 +1,9 @@
-package de.uaux.scheduler.model
+package de.uaux.scheduler.model.dto
 
 import androidx.compose.runtime.Immutable
+import de.uaux.scheduler.model.Event
+import de.uaux.scheduler.model.Room
+import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.util.formatMinutesOfDay
 import java.time.DayOfWeek
 

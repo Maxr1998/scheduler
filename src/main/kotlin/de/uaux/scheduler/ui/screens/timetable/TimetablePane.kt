@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import de.uaux.scheduler.model.ScheduledEvent
+import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.model.duration
 import de.uaux.scheduler.ui.model.ShowWeekend

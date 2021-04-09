@@ -1,6 +1,7 @@
-package de.uaux.scheduler.model
+package de.uaux.scheduler.model.dto
 
 import androidx.compose.runtime.Immutable
+import de.uaux.scheduler.model.Event
 
 @Immutable
 data class StudycourseEvent(

@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import de.uaux.scheduler.model.Event
-import de.uaux.scheduler.model.EventSuggestion
-import de.uaux.scheduler.model.ScheduledEvent
+import de.uaux.scheduler.model.dto.Suggestion
+import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.Timeslot
@@ -67,9 +67,9 @@ class TimetableViewModel(
     private val _timeslots: MutableState<List<Timeslot>> = mutableStateOf(emptyList())
 
     /**
-     * Contains [EventSuggestion]s which are displayed in the timetable sidebar
+     * Contains [Suggestion]s which are displayed in the timetable sidebar
      */
-    val eventSuggestions: SnapshotStateList<EventSuggestion> = SnapshotStateList()
+    val suggestions: SnapshotStateList<Suggestion> = SnapshotStateList()
 
     init {
         coroutineScope.launch {
@@ -111,8 +111,8 @@ class TimetableViewModel(
                 eventRepository.queryEventSuggestions(studycourse)
             }
 
-            eventSuggestions.clear()
-            eventSuggestions.addAll(suggestions)
+            this@TimetableViewModel.suggestions.clear()
+            this@TimetableViewModel.suggestions.addAll(suggestions)
         }
 
         joinAll(eventsJob, timeslotsJob, suggestionsJob)

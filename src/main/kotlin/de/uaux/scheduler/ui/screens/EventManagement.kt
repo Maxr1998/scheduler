@@ -39,7 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Studycourse
-import de.uaux.scheduler.model.StudycourseEvent
+import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.ui.model.StudycourseSelection
 import de.uaux.scheduler.ui.util.Toolbar
 import de.uaux.scheduler.ui.util.VerticalDivider

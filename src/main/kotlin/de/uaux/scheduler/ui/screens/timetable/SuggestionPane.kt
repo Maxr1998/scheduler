@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import de.uaux.scheduler.model.EventSuggestion
+import de.uaux.scheduler.model.dto.Suggestion
 import de.uaux.scheduler.ui.util.DraggableCard
 import de.uaux.scheduler.ui.util.ZIndex
 import de.uaux.scheduler.viewmodel.TimetableViewModel
@@ -29,7 +29,7 @@ fun SuggestionsPane(modifier: Modifier = Modifier) {
         LazyColumn(
             modifier = modifier,
         ) {
-            val suggestions = timetableViewModel.eventSuggestions
+            val suggestions = timetableViewModel.suggestions
             items(suggestions) { suggestion ->
                 SuggestionCard(suggestion = suggestion)
             }
@@ -38,7 +38,7 @@ fun SuggestionsPane(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun SuggestionCard(suggestion: EventSuggestion) {
+private fun SuggestionCard(suggestion: Suggestion) {
     DraggableCard(
         modifier = Modifier.fillMaxWidth(),
     ) {
