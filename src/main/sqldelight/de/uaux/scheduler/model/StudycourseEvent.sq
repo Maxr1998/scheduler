@@ -5,3 +5,9 @@ CREATE TABLE StudycourseEvent (
     required INTEGER AS Boolean NOT NULL,
     UNIQUE (studycourse, event)
 );
+
+insertOrReplace:
+INSERT OR REPLACE INTO StudycourseEvent VALUES ?;
+
+delete:
+DELETE FROM StudycourseEvent WHERE studycourse = ? AND event = ?;
