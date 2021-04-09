@@ -1,0 +1,5 @@
+CREATE TABLE EventLecturer (
+    event INTEGER NOT NULL REFERENCES Event(id),
+    lecturer INTEGER NOT NULL REFERENCES Lecturer(id),
+    UNIQUE (event, lecturer)
+);

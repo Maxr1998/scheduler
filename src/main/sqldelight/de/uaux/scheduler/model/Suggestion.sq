@@ -8,5 +8,5 @@ CREATE TABLE Suggestion (
 
 queryAllSuggestionsInStudycourse:
 SELECT s.id, e.*, s.duration, s.text
-FROM StudycourseEvents se JOIN Event e JOIN Suggestion s ON se.event = e.id AND e.id = s.event
+FROM StudycourseEvent se JOIN Event e JOIN Suggestion s ON se.event = e.id AND e.id = s.event
 WHERE se.studycourse = ?;

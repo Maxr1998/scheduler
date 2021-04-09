@@ -31,7 +31,7 @@ VALUES (1, 'Informatik 2', ''),
 
 
 INSERT OR
-REPLACE INTO StudycourseEvents (studycourse, event, semester, required)
+REPLACE INTO StudycourseEvent (studycourse, event, semester, required)
 VALUES
     /* B.Sc. Informatik */
     (1, 1, 2, true),
