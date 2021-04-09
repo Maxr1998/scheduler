@@ -35,8 +35,4 @@ class StudycourseRepository(database: Database) {
             standardQueries.checkAndGetId()
         }
     }
-
-    suspend fun queryAll(): List<Studycourse> = withContext(Dispatchers.IO) {
-        studycourseQueries.queryAll().executeAsList()
-    }
 }
