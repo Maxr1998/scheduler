@@ -4,12 +4,13 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import de.uaux.scheduler.model.Database
 import de.uaux.scheduler.model.Event
-import de.uaux.scheduler.model.dto.Suggestion
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.dto.StudycourseEvent
+import de.uaux.scheduler.model.dto.Suggestion
 import de.uaux.scheduler.util.SuggestionParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 
 class EventRepository(
     database: Database,
@@ -18,6 +19,13 @@ class EventRepository(
     private val eventQueries = database.eventQueries
     private val suggestionQueries = database.suggestionQueries
     private val constraintQueries = database.suggestionConstraintQueries
+
+    suspend fun searchByName(query: String): List<Event> = withContext(Dispatchers.IO) {
+        when {
+            query.isBlank() -> eventQueries.queryAll()
+            else -> eventQueries.queryAllByName("%${query.trim()}%")
+        }.executeAsList()
+    }
 
     fun queryAllInStudycourseAsFlow(studycourse: Studycourse): Flow<List<StudycourseEvent>> =
         eventQueries

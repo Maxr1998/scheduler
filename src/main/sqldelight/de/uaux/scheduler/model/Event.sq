@@ -5,6 +5,12 @@ CREATE TABLE Event (
     participants INTEGER AS Int DEFAULT NULL CHECK (participants > 0)
 );
 
+queryAll:
+SELECT * FROM Event ORDER BY name;
+
+queryAllByName:
+SELECT * FROM Event WHERE LOWER(name) LIKE LOWER(:name) ORDER BY name;
+
 queryAllInStudycourse:
 SELECT e.*, s.semester, s.required FROM Event e JOIN StudycourseEvent s ON e.id = s.event WHERE s.studycourse = ? ORDER BY name;
 
