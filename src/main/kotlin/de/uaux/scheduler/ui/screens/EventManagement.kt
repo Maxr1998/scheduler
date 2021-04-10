@@ -14,8 +14,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Studycourse
+import de.uaux.scheduler.model.dto.StudycourseEvent
+import de.uaux.scheduler.ui.model.StudycourseSelection
 import de.uaux.scheduler.ui.screens.event_management.EventsPane
 import de.uaux.scheduler.ui.screens.event_management.StudycourseDialog
+import de.uaux.scheduler.ui.screens.event_management.StudycourseEventDialog
 import de.uaux.scheduler.ui.screens.event_management.StudycoursesPane
 import de.uaux.scheduler.ui.util.Toolbar
 import de.uaux.scheduler.ui.util.VerticalDivider
@@ -26,6 +29,7 @@ import org.koin.androidx.compose.get
 sealed class EventManagementDialogState {
     object Closed : EventManagementDialogState()
     data class StudycourseOpened(val studycourse: Studycourse?) : EventManagementDialogState()
+    data class StudycourseEventOpened(val studycourseEvent: StudycourseEvent?) : EventManagementDialogState()
 }
 
 @Composable
@@ -55,13 +59,28 @@ private fun EventManagementScreenContent() {
                 },
             )
             VerticalDivider()
-            EventsPane(studycourseSelection)
+            EventsPane(
+                studycourseSelection = studycourseSelection,
+                openDialog = { event ->
+                    setDialogState(EventManagementDialogState.StudycourseEventOpened(event))
+                },
+            )
         }
 
         when (dialogState) {
             is EventManagementDialogState.StudycourseOpened -> {
                 StudycourseDialog(
                     studycourse = dialogState.studycourse,
+                    onDismissRequest = {
+                        setDialogState(EventManagementDialogState.Closed)
+                    },
+                )
+            }
+            is EventManagementDialogState.StudycourseEventOpened -> {
+                val studycourse = (studycourseSelection as StudycourseSelection.Selected).studycourse
+                StudycourseEventDialog(
+                    studycourse = studycourse,
+                    studycourseEvent = dialogState.studycourseEvent,
                     onDismissRequest = {
                         setDialogState(EventManagementDialogState.Closed)
                     },
