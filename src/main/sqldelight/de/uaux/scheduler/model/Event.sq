@@ -14,6 +14,26 @@ SELECT * FROM Event WHERE LOWER(name) LIKE LOWER(:name) ORDER BY name;
 queryAllInStudycourse:
 SELECT e.*, s.semester, s.required FROM Event e JOIN StudycourseEvent s ON e.id = s.event WHERE s.studycourse = ? ORDER BY name;
 
+queryAllNotInStudycourse:
+SELECT *
+FROM Event
+WHERE id NOT IN (
+    SELECT e.id
+    FROM Event e JOIN StudycourseEvent s ON e.id = s.event
+    WHERE s.studycourse = ?
+)
+ORDER BY name;
+
+queryAllNotInStudycourseByName:
+SELECT *
+FROM Event
+WHERE id NOT IN (
+     SELECT e.id
+     FROM Event e JOIN StudycourseEvent s ON e.id = s.event
+     WHERE s.studycourse = ?
+) AND LOWER(name) LIKE LOWER(:name)
+ORDER BY name;
+
 queryScheduledEvents:
 SELECT e.*, s.day, s.start_time, s.end_time, s.room
 FROM StudycourseEvent se JOIN Event e JOIN Schedule s ON se.event = e.id AND e.id = s.event

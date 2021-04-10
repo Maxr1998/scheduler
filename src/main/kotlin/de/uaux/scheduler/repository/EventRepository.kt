@@ -20,10 +20,17 @@ class EventRepository(
     private val suggestionQueries = database.suggestionQueries
     private val constraintQueries = database.suggestionConstraintQueries
 
-    suspend fun searchByName(query: String): List<Event> = withContext(Dispatchers.IO) {
+    suspend fun searchByName(query: String, exclude: Studycourse? = null): List<Event> = withContext(Dispatchers.IO) {
         when {
-            query.isBlank() -> eventQueries.queryAll()
-            else -> eventQueries.queryAllByName("%${query.trim()}%")
+            query.isBlank() -> {
+                if (exclude != null) eventQueries.queryAllNotInStudycourse(exclude.id)
+                else eventQueries.queryAll()
+            }
+            else -> {
+                val queryString = "%${query.trim()}%"
+                if (exclude != null) eventQueries.queryAllNotInStudycourseByName(exclude.id, queryString)
+                else eventQueries.queryAllByName(queryString)
+            }
         }.executeAsList()
     }
 
