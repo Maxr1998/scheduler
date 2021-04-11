@@ -5,6 +5,12 @@ CREATE TABLE Event (
     participants INTEGER AS Int DEFAULT NULL CHECK (participants > 0)
 );
 
+insert:
+INSERT INTO Event (name, module, participants) VALUES (?, ?, ?);
+
+update:
+UPDATE Event SET name = ?, module = ?, participants = ? WHERE id = ?;
+
 queryAll:
 SELECT * FROM Event ORDER BY name;
 

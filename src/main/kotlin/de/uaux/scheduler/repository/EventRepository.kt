@@ -8,6 +8,8 @@ import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.model.dto.Suggestion
 import de.uaux.scheduler.util.SuggestionParser
+import de.uaux.scheduler.util.changedOne
+import de.uaux.scheduler.util.checkAndGetId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -16,9 +18,26 @@ class EventRepository(
     database: Database,
     private val suggestionParser: SuggestionParser,
 ) {
+    private val standardQueries = database.standardQueries
     private val eventQueries = database.eventQueries
     private val suggestionQueries = database.suggestionQueries
     private val constraintQueries = database.suggestionConstraintQueries
+
+    suspend fun insertOrUpdate(event: Event): Long = withContext(Dispatchers.IO) {
+        eventQueries.transactionWithResult {
+            if (event.id > 0) {
+                // Existing object, attempt to update
+                eventQueries.update(event.name, event.module, event.participants, event.id)
+                if (standardQueries.changedOne()) {
+                    return@transactionWithResult event.id
+                }
+            }
+
+            // Failed update or new object, insert
+            eventQueries.insert(event.name, event.module, event.participants)
+            standardQueries.checkAndGetId()
+        }
+    }
 
     suspend fun searchByName(query: String, exclude: Studycourse? = null): List<Event> = withContext(Dispatchers.IO) {
         when {

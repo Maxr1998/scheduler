@@ -13,9 +13,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.ui.model.StudycourseSelection
+import de.uaux.scheduler.ui.screens.event_management.EventDialog
 import de.uaux.scheduler.ui.screens.event_management.EventsPane
 import de.uaux.scheduler.ui.screens.event_management.StudycourseDialog
 import de.uaux.scheduler.ui.screens.event_management.StudycourseEventDialog
@@ -30,6 +32,7 @@ sealed class EventManagementDialogState {
     object Closed : EventManagementDialogState()
     data class StudycourseOpened(val studycourse: Studycourse?) : EventManagementDialogState()
     data class StudycourseEventOpened(val studycourseEvent: StudycourseEvent?) : EventManagementDialogState()
+    data class EventOpened(val event: Event?) : EventManagementDialogState()
 }
 
 @Composable
@@ -82,11 +85,19 @@ private fun EventManagementScreenContent() {
                     studycourse = studycourse,
                     studycourseEvent = dialogState.studycourseEvent,
                     onCreateEventRequest = {
-                        setDialogState(EventManagementDialogState.Closed)
+                        setDialogState(EventManagementDialogState.EventOpened(null))
                     },
                     onDismissRequest = {
                         setDialogState(EventManagementDialogState.Closed)
                     },
+                )
+            }
+            is EventManagementDialogState.EventOpened -> {
+                EventDialog(
+                    event = dialogState.event,
+                    onDismissRequest = {
+                        setDialogState(EventManagementDialogState.Closed)
+                    }
                 )
             }
             EventManagementDialogState.Closed -> Unit
