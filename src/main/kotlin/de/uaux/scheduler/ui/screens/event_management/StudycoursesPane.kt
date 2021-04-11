@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -56,6 +57,7 @@ fun StudycoursesPane(
                         )
                     },
                 )
+                Divider()
             }
             items(studycourses) { studycourse ->
                 val selected = studycourseSelection.isSelected(studycourse)
