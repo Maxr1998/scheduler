@@ -104,10 +104,12 @@ private fun EventListItem(
             Text(text = event.name)
         },
         secondaryText = {
-            val semester = l("event_panel_event_summary_semester").format(studycourseEvent.semester)
-            val domain = if (studycourseEvent.required) l("studycourse_domain_required") else l("studycourse_domain_voluntary")
-            val lecturers = "-" // TODO: list lecturers
-            Text(text = "$semester • $domain • $lecturers")
+            val fields = listOfNotNull(
+                studycourseEvent.semester?.let { semester -> l("event_panel_event_summary_semester").format(semester) },
+                if (studycourseEvent.required) l("studycourse_domain_required") else l("studycourse_domain_voluntary"),
+                "-", // TODO: list lecturers
+            )
+            Text(text = fields.joinToString(" • "))
         },
         trailing = {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
