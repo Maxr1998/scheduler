@@ -4,12 +4,12 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import de.uaux.scheduler.model.Database
 import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.Room
-import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.model.Semester.Type.SS
 import de.uaux.scheduler.model.Semester.Type.WS
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.Timeslot
+import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.util.LocalizationUtil
 import de.uaux.scheduler.util.executeAsMappedList
 import kotlinx.coroutines.Dispatchers

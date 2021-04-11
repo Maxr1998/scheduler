@@ -38,8 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.Timeslot
+import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.duration
 import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.util.DraggableCard
@@ -70,7 +70,7 @@ fun TimetablePane(modifier: Modifier = Modifier) {
     val timeslots by timetableViewModel.timeslots
 
     var pointerOffset by remember { mutableStateOf(Offset.Zero) }
-    var draggedEvent = remember { mutableStateOf<ScheduledEvent?>(null) }
+    val draggedEvent = remember { mutableStateOf<ScheduledEvent?>(null) }
     var dropLocation by remember { mutableStateOf<DropLocation?>(null) }
 
     Column(

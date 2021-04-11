@@ -6,11 +6,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import de.uaux.scheduler.model.Event
-import de.uaux.scheduler.model.dto.Suggestion
-import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.Timeslot
+import de.uaux.scheduler.model.dto.ScheduledEvent
+import de.uaux.scheduler.model.dto.Suggestion
 import de.uaux.scheduler.repository.EventRepository
 import de.uaux.scheduler.repository.ScheduleRepository
 import de.uaux.scheduler.repository.StudycourseRepository
