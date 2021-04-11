@@ -6,20 +6,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
-import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.ui.model.StudycourseSelection
+import de.uaux.scheduler.ui.util.EditButton
 import de.uaux.scheduler.ui.util.l
 
 @Composable
@@ -112,18 +108,9 @@ private fun EventListItem(
             Text(text = fields.joinToString(" • "))
         },
         trailing = {
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                IconButton(
-                    onClick = {
-                        openDialog(studycourseEvent)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Edit,
-                        contentDescription = null,
-                    )
-                }
-            }
+            EditButton(
+                onClick = { openDialog(studycourseEvent) },
+            )
         },
     )
 }
