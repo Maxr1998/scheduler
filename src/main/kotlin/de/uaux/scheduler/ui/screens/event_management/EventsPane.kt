@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.ui.model.StudycourseSelection
 import de.uaux.scheduler.ui.util.EditButton
@@ -29,49 +30,65 @@ import de.uaux.scheduler.ui.util.l
 @Composable
 fun EventsPane(
     studycourseSelection: StudycourseSelection,
-    openDialog: (StudycourseEvent?) -> Unit,
+    openEventDialog: (Event?) -> Unit,
+    openStudycourseEventDialog: (StudycourseEvent?) -> Unit,
 ) {
     when (studycourseSelection) {
         is StudycourseSelection.None -> {
-            CenteredTextMessage(
-                text = l("event_panel_no_studycourse_selected"),
-            )
+            val events by studycourseSelection.allEvents.collectAsState(emptyList())
+            EventListContent(
+                events = events,
+                onAdd = { openEventDialog(null) },
+            ) { event ->
+                EventListItem(
+                    event = event,
+                    openDialog = openEventDialog,
+                )
+            }
         }
         is StudycourseSelection.Selected -> {
-            Box(modifier = Modifier.fillMaxSize()) {
-                val events by studycourseSelection.events.collectAsState(emptyList())
-                if (events.isNotEmpty()) {
-                    LazyColumn(
-                        contentPadding = PaddingValues(bottom = 88.dp)
-                    ) {
-                        item {
-                            EventListHeader()
-                        }
-                        items(events) { event ->
-                            EventListItem(
-                                studycourseEvent = event,
-                                openDialog = openDialog,
-                            )
-                        }
-                    }
-                } else {
-                    CenteredTextMessage(
-                        text = l("event_panel_no_events"),
-                    )
-                }
+            val events by studycourseSelection.events.collectAsState(emptyList())
+            EventListContent(
+                events = events,
+                onAdd = { openStudycourseEventDialog(null) },
+            ) { event ->
+                StudycourseEventListItem(
+                    studycourseEvent = event,
+                    openDialog = openStudycourseEventDialog,
+                )
+            }
+        }
+    }
+}
 
-                FloatingActionButton(
-                    modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = 16.dp),
-                    onClick = {
-                        openDialog(null)
-                    },
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Add,
-                        contentDescription = null,
-                    )
+@Composable
+private fun <T> EventListContent(events: List<T>, onAdd: () -> Unit, eventContent: @Composable (T) -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (events.isNotEmpty()) {
+            LazyColumn(
+                contentPadding = PaddingValues(bottom = 88.dp)
+            ) {
+                item {
+                    EventListHeader()
+                }
+                items(events) { event ->
+                    eventContent(event)
                 }
             }
+        } else {
+            CenteredTextMessage(
+                text = l("event_panel_no_events"),
+            )
+        }
+
+        FloatingActionButton(
+            modifier = Modifier.align(Alignment.BottomEnd).padding(end = 16.dp, bottom = 16.dp),
+            onClick = { onAdd() },
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Add,
+                contentDescription = null,
+            )
         }
     }
 }
@@ -89,6 +106,26 @@ private fun EventListHeader() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun EventListItem(
+    modifier: Modifier = Modifier,
+    event: Event,
+    openDialog: (Event?) -> Unit,
+) {
+    ListItem(
+        modifier = modifier,
+        text = {
+            Text(text = event.name)
+        },
+        trailing = {
+            EditButton(
+                onClick = { openDialog(event) },
+            )
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun StudycourseEventListItem(
     modifier: Modifier = Modifier,
     studycourseEvent: StudycourseEvent,
     openDialog: (StudycourseEvent?) -> Unit,

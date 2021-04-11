@@ -23,6 +23,12 @@ class EventRepository(
     private val suggestionQueries = database.suggestionQueries
     private val constraintQueries = database.suggestionConstraintQueries
 
+    val allEventsFlow: Flow<List<Event>> =
+        eventQueries
+            .queryAll()
+            .asFlow()
+            .mapToList(Dispatchers.IO)
+
     suspend fun insertOrUpdate(event: Event): Long = withContext(Dispatchers.IO) {
         eventQueries.transactionWithResult {
             if (event.id > 0) {

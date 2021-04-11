@@ -64,8 +64,11 @@ private fun EventManagementScreenContent() {
             VerticalDivider()
             EventsPane(
                 studycourseSelection = studycourseSelection,
-                openDialog = { event ->
-                    setDialogState(EventManagementDialogState.StudycourseEventOpened(event))
+                openEventDialog = { event ->
+                    setDialogState(EventManagementDialogState.EventOpened(event))
+                },
+                openStudycourseEventDialog = { studycourseEvent ->
+                    setDialogState(EventManagementDialogState.StudycourseEventOpened(studycourseEvent))
                 },
             )
         }

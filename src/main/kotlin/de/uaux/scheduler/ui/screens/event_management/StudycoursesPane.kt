@@ -25,9 +25,11 @@ import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.ui.model.StudycourseSelection
 import de.uaux.scheduler.ui.util.EditButton
 import de.uaux.scheduler.ui.util.SelectableListItem
+import de.uaux.scheduler.ui.util.l
 import de.uaux.scheduler.viewmodel.EventManagementViewModel
 import org.koin.androidx.compose.get
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun StudycoursesPane(
     studycourseSelection: StudycourseSelection,
@@ -41,6 +43,20 @@ fun StudycoursesPane(
         LazyColumn(
             modifier = Modifier.fillMaxWidth().weight(1f),
         ) {
+            item {
+                val selected = studycourseSelection is StudycourseSelection.None
+                SelectableListItem(
+                    modifier = Modifier.selectable(selected) {
+                        eventManagementViewModel.showAll()
+                    },
+                    selected = selected,
+                    text = {
+                        Text(
+                            text = l("item_all_events"),
+                        )
+                    },
+                )
+            }
             items(studycourses) { studycourse ->
                 val selected = studycourseSelection.isSelected(studycourse)
                 StudycourseListItem(

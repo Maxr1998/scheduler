@@ -13,9 +13,15 @@ class EventManagementViewModel(
     private val studycourseRepository: StudycourseRepository,
     private val eventRepository: EventRepository,
 ) {
+    private val defaultSelection = StudycourseSelection.None(eventRepository.allEventsFlow)
+
     val studycoursesFlow: Flow<List<Studycourse>> get() = studycourseRepository.allStudycoursesFlow
-    private val _studycourseSelection: MutableState<StudycourseSelection> = mutableStateOf(StudycourseSelection.None)
+    private val _studycourseSelection: MutableState<StudycourseSelection> = mutableStateOf(defaultSelection)
     val studycourseSelection: State<StudycourseSelection> = _studycourseSelection
+
+    fun showAll() {
+        _studycourseSelection.value = defaultSelection
+    }
 
     fun load(studycourse: Studycourse) {
         val events = eventRepository.queryAllInStudycourseAsFlow(studycourse)
