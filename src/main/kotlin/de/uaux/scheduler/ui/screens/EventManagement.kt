@@ -81,6 +81,9 @@ private fun EventManagementScreenContent() {
                 StudycourseEventDialog(
                     studycourse = studycourse,
                     studycourseEvent = dialogState.studycourseEvent,
+                    onCreateEventRequest = {
+                        setDialogState(EventManagementDialogState.Closed)
+                    },
                     onDismissRequest = {
                         setDialogState(EventManagementDialogState.Closed)
                     },

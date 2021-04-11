@@ -43,7 +43,12 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
 @Composable
-fun StudycourseEventDialog(studycourse: Studycourse, studycourseEvent: StudycourseEvent?, onDismissRequest: () -> Unit) {
+fun StudycourseEventDialog(
+    studycourse: Studycourse,
+    studycourseEvent: StudycourseEvent?,
+    onCreateEventRequest: () -> Unit,
+    onDismissRequest: () -> Unit,
+) {
     val studycourseRepository: StudycourseRepository = get()
     val eventRepository: EventRepository = get()
     val event = remember { mutableStateOf(studycourseEvent?.event) }
@@ -105,8 +110,9 @@ fun StudycourseEventDialog(studycourse: Studycourse, studycourseEvent: Studycour
             if (studycourseEvent == null) { // Select new event
                 val searchQuery = remember { mutableStateOf("") }
 
+                val createNewPseudoEvent = Event(-1, l("event_title_add_event"), "", null)
                 val events: List<Event> by produceState(emptyList(), searchQuery.value) {
-                    value = eventRepository.searchByName(searchQuery.value, studycourse)
+                    value = eventRepository.searchByName(searchQuery.value, studycourse) + createNewPseudoEvent
                 }
 
                 SearchableSelectionDropdown(
@@ -117,7 +123,10 @@ fun StudycourseEventDialog(studycourse: Studycourse, studycourseEvent: Studycour
                     },
                     searchResults = events,
                     onSelect = { selectedEvent ->
-                        event.value = selectedEvent
+                        when (selectedEvent) {
+                            createNewPseudoEvent -> onCreateEventRequest()
+                            else -> event.value = selectedEvent
+                        }
                     },
                     selected = event.value,
                     itemLabel = Event::name
