@@ -25,6 +25,8 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -39,13 +41,14 @@ fun StudycoursesPane(
     openDialog: (Studycourse?) -> Unit,
 ) {
     val eventManagementViewModel: EventManagementViewModel = get()
+    val studycourses by eventManagementViewModel.studycoursesFlow.collectAsState(emptyList())
     Column(
         modifier = Modifier.width(280.dp).fillMaxHeight()
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth().weight(1f),
         ) {
-            items(eventManagementViewModel.studycourses) { studycourse ->
+            items(studycourses) { studycourse ->
                 val selected = studycourseSelection.isSelected(studycourse)
                 StudycourseListItem(
                     modifier = Modifier.selectable(selected) {

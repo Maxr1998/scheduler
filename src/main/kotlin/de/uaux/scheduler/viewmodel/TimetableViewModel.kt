@@ -73,7 +73,7 @@ class TimetableViewModel(
 
     init {
         coroutineScope.launch {
-            val studycourse = studycourseRepository.allStudycoursesFlow.first().firstOrNull() ?: return@launch
+            val studycourse = studycoursesFlow.first().firstOrNull() ?: return@launch
             loadContent(scheduleRepository.computeNextSemester(), studycourse)
         }
     }
