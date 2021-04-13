@@ -4,6 +4,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import de.uaux.scheduler.model.Database
 import de.uaux.scheduler.model.Event
+import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.model.dto.Suggestion
@@ -67,9 +68,9 @@ class EventRepository(
             .asFlow()
             .mapToList(Dispatchers.IO)
 
-    fun queryEventSuggestions(studycourse: Studycourse): List<Suggestion> =
-        suggestionQueries.queryAllSuggestionsInStudycourse(studycourse.id) { id, eventId, name, module, participants, duration, text ->
+    fun queryEventSuggestions(studycourse: Studycourse, semester: Semester): List<Suggestion> =
+        suggestionQueries.queryAllSuggestionsInStudycourse(studycourse.id, semester.code) { id, eventId, name, module, participants, duration, text ->
             val constraints = constraintQueries.queryAllSuggestionConstraints(id, suggestionParser::parseConstraint).executeAsList()
-            Suggestion(id, Event(eventId, name, module, participants), duration, text, constraints)
+            Suggestion(id, semester, Event(eventId, name, module, participants), duration, text, constraints)
         }.executeAsList()
 }

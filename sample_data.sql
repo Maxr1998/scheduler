@@ -97,9 +97,9 @@ VALUES
     (20211, 4, 2, 855, 945, -1);
 
 INSERT OR
-REPLACE INTO Suggestion (id, event, duration)
+REPLACE INTO Suggestion (id, semester, event, duration)
 VALUES
     /* TI */
-    (0, 3, 90),
+    (0, 20211, 3, 90),
     /* SI */
-    (1, 7, 90);
+    (1, 20211, 7, 90);

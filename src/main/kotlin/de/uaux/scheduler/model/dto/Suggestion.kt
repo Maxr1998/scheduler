@@ -2,10 +2,12 @@ package de.uaux.scheduler.model.dto
 
 import androidx.compose.runtime.Immutable
 import de.uaux.scheduler.model.Event
+import de.uaux.scheduler.model.Semester
 
 @Immutable
 data class Suggestion(
     val id: Long,
+    val semester: Semester,
     val event: Event,
     val duration: Int,
     /**
