@@ -4,6 +4,5 @@ CREATE TABLE Room (
     capacity INTEGER AS Int NOT NULL
 );
 
-
 queryRoomById:
 SELECT * FROM Room WHERE id = ?;

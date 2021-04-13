@@ -2,7 +2,7 @@ CREATE TABLE Schedule (
     -- Contains semester in the format <year><1>/<2>
     -- e.g. 20211 for SS2021 and 20212 for WS21/22
     semester INTEGER AS Int NOT NULL,
-    event INTEGER NOT NULL REFERENCES Event(id),
+    event INTEGER NOT NULL REFERENCES Event(id) ON DELETE CASCADE,
     day INTEGER AS Int NOT NULL,
     start_time INTEGER AS Int NOT NULL,
     end_time INTEGER AS Int NOT NULL,

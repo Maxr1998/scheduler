@@ -1,5 +1,5 @@
 CREATE TABLE SuggestionConstraint (
-    suggestion INTEGER NOT NULL REFERENCES Suggestion(id),
+    suggestion INTEGER NOT NULL REFERENCES Suggestion(id) ON DELETE CASCADE,
     type INTEGER AS Int NOT NULL,
     value BLOB AS ByteArray NOT NULL
 );

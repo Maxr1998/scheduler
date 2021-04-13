@@ -1,7 +1,7 @@
 CREATE TABLE Suggestion (
     id INTEGER PRIMARY KEY,
     semester INTEGER AS Int NOT NULL,
-    event INTEGER NOT NULL REFERENCES Event(id),
+    event INTEGER NOT NULL REFERENCES Event(id) ON DELETE CASCADE,
     duration INTEGER AS Int NOT NULL,
     text TEXT NOT NULL DEFAULT '',
     UNIQUE (id, event)

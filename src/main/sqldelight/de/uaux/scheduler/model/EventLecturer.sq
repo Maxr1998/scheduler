@@ -1,5 +1,5 @@
 CREATE TABLE EventLecturer (
-    event INTEGER NOT NULL REFERENCES Event(id),
-    lecturer INTEGER NOT NULL REFERENCES Lecturer(id),
+    event INTEGER NOT NULL REFERENCES Event(id) ON DELETE CASCADE,
+    lecturer INTEGER NOT NULL REFERENCES Lecturer(id) ON DELETE CASCADE,
     UNIQUE (event, lecturer)
 );
