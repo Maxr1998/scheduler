@@ -23,7 +23,7 @@ CREATE INDEX idx_schedule_room ON Schedule (room);
 queryAllSemesters:
 SELECT DISTINCT s.semester FROM Schedule s ORDER BY s.semester DESC;
 
-queryScheduledEvents:
+queryScheduledEventsInStudycourseBySemester:
 SELECT e.*, s.day, s.start_time, s.end_time, s.room
 FROM StudycourseEvent se JOIN Event e JOIN Schedule s ON se.event = e.id AND e.id = s.event
 WHERE se.studycourse = ? AND s.semester = ?;

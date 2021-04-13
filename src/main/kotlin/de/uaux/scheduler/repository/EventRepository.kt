@@ -68,9 +68,9 @@ class EventRepository(
             .asFlow()
             .mapToList(Dispatchers.IO)
 
-    fun queryEventSuggestions(studycourse: Studycourse, semester: Semester): List<Suggestion> =
-        suggestionQueries.queryAllSuggestionsInStudycourse(studycourse.id, semester.code) { id, eventId, name, module, participants, duration, text ->
-            val constraints = constraintQueries.queryAllSuggestionConstraints(id, suggestionParser::parseConstraint).executeAsList()
+    fun querySuggestions(studycourse: Studycourse, semester: Semester): List<Suggestion> =
+        suggestionQueries.querySuggestionsInStudycourseBySemester(studycourse.id, semester.code) { id, eventId, name, module, participants, duration, text ->
+            val constraints = constraintQueries.querySuggestionConstraintsBySuggestion(id, suggestionParser::parseConstraint).executeAsList()
             Suggestion(id, semester, Event(eventId, name, module, participants), duration, text, constraints)
         }.executeAsList()
 }

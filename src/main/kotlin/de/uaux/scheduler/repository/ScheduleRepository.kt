@@ -62,7 +62,7 @@ class ScheduleRepository(
 
     fun queryScheduledEvents(studycourse: Studycourse, semester: Semester): List<ScheduledEvent> {
         val roomCache = HashMap<Long, Room>()
-        return scheduleQueries.queryScheduledEvents(studycourse.id, semester.code) { id, name, module, participants, day, startTime, endTime, roomId ->
+        return scheduleQueries.queryScheduledEventsInStudycourseBySemester(studycourse.id, semester.code) { id, name, module, participants, day, startTime, endTime, roomId ->
             val room = queryRoom(roomId, roomCache)?.also { room ->
                 roomCache.putIfAbsent(roomId, room)
             }

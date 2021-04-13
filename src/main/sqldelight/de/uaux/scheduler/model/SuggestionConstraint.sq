@@ -4,5 +4,5 @@ CREATE TABLE SuggestionConstraint (
     value BLOB AS ByteArray NOT NULL
 );
 
-queryAllSuggestionConstraints:
+querySuggestionConstraintsBySuggestion:
 SELECT sc.type, sc.value FROM SuggestionConstraint sc WHERE suggestion = ?;

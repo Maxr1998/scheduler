@@ -7,7 +7,7 @@ CREATE TABLE Suggestion (
     UNIQUE (id, event)
 );
 
-queryAllSuggestionsInStudycourse:
+querySuggestionsInStudycourseBySemester:
 SELECT s.id, e.*, s.duration, s.text
 FROM StudycourseEvent se JOIN Event e JOIN Suggestion s ON se.event = e.id AND e.id = s.event
 WHERE se.studycourse = ? AND s.semester = ?;

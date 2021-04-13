@@ -113,7 +113,7 @@ class TimetableViewModel(
         val suggestionsJob = launch {
             // Refresh suggestions
             val suggestions = withContext(Dispatchers.IO) {
-                eventRepository.queryEventSuggestions(studycourse, semester)
+                eventRepository.querySuggestions(studycourse, semester)
             }
 
             this@TimetableViewModel.suggestions.clear()
