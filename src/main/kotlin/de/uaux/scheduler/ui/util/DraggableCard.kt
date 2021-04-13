@@ -5,14 +5,12 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
@@ -39,7 +37,6 @@ fun DraggableCard(
             .then(modifier)
             .offset { offset.round() }
             .padding(4.dp)
-            .clip(MaterialTheme.shapes.medium)
             .clickable {}
             .pointerInput(POINTER_KEY_DRAGGABLE) {
                 detectDragGestures(
@@ -61,7 +58,8 @@ fun DraggableCard(
                         offset = Offset.Zero
                     },
                 )
-            }
+            },
+        elevation = if (offset != Offset.Zero) 6.dp else 2.dp,
     ) {
         content()
     }
