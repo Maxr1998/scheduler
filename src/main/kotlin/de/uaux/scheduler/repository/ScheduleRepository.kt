@@ -29,9 +29,8 @@ class ScheduleRepository(
     private val localizationUtil: LocalizationUtil,
 ) {
     private val standardQueries = database.standardQueries
-    private val eventQueries = database.eventQueries
-    private val timeslotQueries = database.timeslotQueries
     private val scheduleQueries = database.scheduleQueries
+    private val timeslotQueries = database.timeslotQueries
     private val roomQueries = database.roomQueries
 
     val allSemestersFlow: Flow<List<Semester>> =
@@ -59,7 +58,7 @@ class ScheduleRepository(
 
     fun queryScheduledEvents(studycourse: Studycourse, semester: Semester): List<ScheduledEvent> {
         val roomCache = HashMap<Long, Room>()
-        return eventQueries.queryScheduledEvents(studycourse.id, semester.code) { id, name, module, participants, day, startTime, endTime, roomId ->
+        return scheduleQueries.queryScheduledEvents(studycourse.id, semester.code) { id, name, module, participants, day, startTime, endTime, roomId ->
             val room = queryRoom(roomId, roomCache)?.also { room ->
                 roomCache.putIfAbsent(roomId, room)
             }

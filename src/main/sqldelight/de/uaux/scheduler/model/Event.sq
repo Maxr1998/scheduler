@@ -39,8 +39,3 @@ WHERE id NOT IN (
      WHERE s.studycourse = ?
 ) AND LOWER(name) LIKE LOWER(:name)
 ORDER BY name;
-
-queryScheduledEvents:
-SELECT e.*, s.day, s.start_time, s.end_time, s.room
-FROM StudycourseEvent se JOIN Event e JOIN Schedule s ON se.event = e.id AND e.id = s.event
-WHERE se.studycourse = ? AND s.semester = ?;
