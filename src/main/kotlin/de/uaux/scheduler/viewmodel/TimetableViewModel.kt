@@ -18,8 +18,9 @@ import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.model.TimetableSelection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -73,8 +74,12 @@ class TimetableViewModel(
 
     init {
         coroutineScope.launch {
-            val studycourse = studycoursesFlow.first().firstOrNull() ?: return@launch
-            loadContent(scheduleRepository.computeNextSemester(), studycourse)
+            studycoursesFlow.collect { studycourses ->
+                if (studycourses.isNotEmpty()) {
+                    loadContent(scheduleRepository.computeNextSemester(), studycourses[0])
+                    cancel()
+                }
+            }
         }
     }
 
