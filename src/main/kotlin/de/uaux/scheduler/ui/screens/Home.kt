@@ -139,7 +139,7 @@ private fun Progress(progress: Pair<Long, Long>) {
 
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth().align(Alignment.BottomStart),
-                progress = progress.first.toFloat() / progress.second,
+                progress = if (progress.second > 0) progress.first.toFloat() / progress.second else 1f,
                 color = MaterialTheme.colors.onPrimary,
             )
         }
