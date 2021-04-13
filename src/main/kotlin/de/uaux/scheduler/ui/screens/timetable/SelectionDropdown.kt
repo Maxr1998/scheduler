@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
@@ -38,7 +37,7 @@ import org.koin.androidx.compose.get
 @Composable
 fun StudycourseAndSemesterSelectionDropdown(selection: TimetableSelection.Loaded) {
     var expanded by remember { mutableStateOf(false) }
-    val shape = RoundedCornerShape(8.dp)
+    val shape = MaterialTheme.shapes.medium
     Row(
         modifier = Modifier
             .height(42.dp)

@@ -3,7 +3,6 @@ package de.uaux.scheduler.ui.util
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
 import androidx.compose.material.LocalContentColor
@@ -30,7 +29,7 @@ fun SelectableListItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
-            .clip(RoundedCornerShape(4.dp))
+            .clip(MaterialTheme.shapes.medium)
             .then(modifier)
             .then(background),
         text = {
