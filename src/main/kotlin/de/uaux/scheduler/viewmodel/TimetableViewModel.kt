@@ -11,9 +11,9 @@ import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.dto.Suggestion
-import de.uaux.scheduler.repository.EventRepository
 import de.uaux.scheduler.repository.ScheduleRepository
 import de.uaux.scheduler.repository.StudycourseRepository
+import de.uaux.scheduler.repository.SuggestionRepository
 import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.model.TimetableSelection
 import kotlinx.coroutines.Dispatchers
@@ -31,8 +31,8 @@ private val logger = KotlinLogging.logger {}
 
 class TimetableViewModel(
     private val studycourseRepository: StudycourseRepository,
-    private val eventRepository: EventRepository,
     private val scheduleRepository: ScheduleRepository,
+    private val suggestionRepository: SuggestionRepository,
 ) {
     private val coroutineScope = MainScope()
 
@@ -113,7 +113,7 @@ class TimetableViewModel(
         val suggestionsJob = launch {
             // Refresh suggestions
             val suggestions = withContext(Dispatchers.IO) {
-                eventRepository.querySuggestions(studycourse, semester)
+                suggestionRepository.querySuggestions(studycourse, semester)
             }
 
             this@TimetableViewModel.suggestions.clear()
