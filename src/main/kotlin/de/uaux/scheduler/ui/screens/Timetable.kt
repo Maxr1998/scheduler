@@ -1,14 +1,17 @@
 package de.uaux.scheduler.ui.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.DisableSelection
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
@@ -76,7 +79,7 @@ fun TimetableScreen() = Column {
     DisableSelection {
         when (selection) {
             TimetableSelection.None -> Unit // TODO
-            TimetableSelection.Loading -> Unit // TODO
+            TimetableSelection.Loading -> LoadingBox()
             is TimetableSelection.Loaded -> TimetableScreenContent()
         }
     }
@@ -92,5 +95,15 @@ private fun TimetableScreenContent() {
         SuggestionsPane(
             modifier = Modifier.width(240.dp).fillMaxHeight(),
         )
+    }
+}
+
+@Composable
+private fun LoadingBox() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator()
     }
 }
