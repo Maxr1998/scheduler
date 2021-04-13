@@ -44,7 +44,7 @@ import de.uaux.scheduler.model.duration
 import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.util.DraggableCard
 import de.uaux.scheduler.ui.util.ZIndex
-import de.uaux.scheduler.ui.util.highlight
+import de.uaux.scheduler.ui.util.lightenedBackground
 import de.uaux.scheduler.ui.util.l
 import de.uaux.scheduler.util.formatMinutesOfDay
 import de.uaux.scheduler.viewmodel.TimetableViewModel
@@ -108,7 +108,7 @@ fun TimetablePane(modifier: Modifier = Modifier) {
             val minuteHeight = columnHeight / (dayRange.last - dayRange.first)
 
             // Draw timeslots
-            val checkerboardColor = MaterialTheme.colors.highlight
+            val checkerboardColor = MaterialTheme.colors.lightenedBackground
             for (timeslot in timeslots) {
                 if (timeslot !in dayRange) continue
                 val offset = Offset(0f, minuteHeight * (timeslot.start_time - dayRange.first))

@@ -6,11 +6,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.unit.Dp
 
-val Colors.highlight
-    get() = onSurface.copy(alpha = 0.02f).compositeOver(surface)
+val Colors.lightenedBackground
+    get() = if (isLight) Color(0xFFFEFEFE) else Color(0xFF202020)
 
 fun Modifier.debugBorder(): Modifier =
     border(Dp.Hairline, SolidColor(Color.Red), RectangleShape)
