@@ -1,18 +1,14 @@
 package de.uaux.scheduler.ui.screens.event_management
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
@@ -23,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
@@ -38,6 +33,7 @@ import de.uaux.scheduler.ui.util.LabeledTextField
 import de.uaux.scheduler.ui.util.PopupDialog
 import de.uaux.scheduler.ui.util.SaveButton
 import de.uaux.scheduler.ui.util.SearchableSelectionDropdown
+import de.uaux.scheduler.ui.util.ToggleableText
 import de.uaux.scheduler.ui.util.l
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
@@ -164,30 +160,16 @@ fun StudycourseEventDialog(
             Spacer(modifier = Modifier.height(12.dp))
 
             val borderColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
-            Row(
+            ToggleableText(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
                     .border(1.dp, SolidColor(borderColor), MaterialTheme.shapes.medium)
-                    .clip(MaterialTheme.shapes.medium)
-                    .clickable {
-                        required.value = !required.value
-                    }
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = l(if (required.value) "studycourse_domain_required" else "studycourse_domain_voluntary"),
-                )
-
-                Switch(
-                    checked = required.value,
-                    onCheckedChange = { checked ->
-                        required.value = checked
-                    }
-                )
-            }
+                    .clip(MaterialTheme.shapes.medium),
+                state = required,
+                text = l("studycourse_domain_voluntary"),
+                checkedText = l("studycourse_domain_required")
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
         }
