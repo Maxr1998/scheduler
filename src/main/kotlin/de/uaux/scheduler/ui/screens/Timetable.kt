@@ -1,5 +1,6 @@
 package de.uaux.scheduler.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -14,7 +15,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import de.uaux.scheduler.ui.model.ShowWeekend
@@ -37,21 +40,34 @@ fun TimetableScreen() = Column {
         modifier = Modifier.fillMaxWidth().height(56.dp),
         title = l("screen_timetable"),
     ) {
-        Text(
-            modifier = Modifier.padding(start = 16.dp, end = 8.dp),
-            text = l("switch_label_show_weekend"),
-            style = MaterialTheme.typography.body2,
-        )
-
         var showWeekend by timetableViewModel.showWeekend
-        Switch(
-            modifier = Modifier.padding(end = 16.dp),
-            enabled = showWeekend != ShowWeekend.FORCE,
-            checked = showWeekend != ShowWeekend.FALSE,
-            onCheckedChange = { checked ->
-                showWeekend = if (checked) ShowWeekend.TRUE else ShowWeekend.FALSE
-            }
-        )
+        val isEnabled = { showWeekend != ShowWeekend.FORCE }
+        val isChecked = { showWeekend != ShowWeekend.FALSE }
+        Row(
+            modifier = Modifier
+                .height(42.dp)
+                .padding(horizontal = 8.dp)
+                .clip(MaterialTheme.shapes.medium)
+                .clickable(enabled = isEnabled()) {
+                    showWeekend = if (!isChecked()) ShowWeekend.TRUE else ShowWeekend.FALSE
+                }
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                modifier = Modifier.padding(end = 12.dp),
+                text = l("switch_label_show_weekend"),
+                style = MaterialTheme.typography.body2,
+            )
+
+            Switch(
+                enabled = isEnabled(),
+                checked = isChecked(),
+                onCheckedChange = { checked ->
+                    showWeekend = if (checked) ShowWeekend.TRUE else ShowWeekend.FALSE
+                }
+            )
+        }
 
         if (selection is TimetableSelection.Loaded) {
             StudycourseAndSemesterSelectionDropdown(selection)
