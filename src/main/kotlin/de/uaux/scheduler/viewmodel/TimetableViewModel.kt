@@ -92,6 +92,9 @@ class TimetableViewModel(
                 scheduleRepository.queryScheduledEvents(studycourse, semester)
             }
 
+            val hasWeekends = scheduledEvents.any { event -> event.day > DayOfWeek.FRIDAY }
+            showWeekend.value = if (hasWeekends) ShowWeekend.FORCE else ShowWeekend.FALSE
+
             events.clear()
             events.addAll(scheduledEvents)
         }
