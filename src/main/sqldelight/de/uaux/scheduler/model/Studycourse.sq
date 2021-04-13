@@ -12,3 +12,6 @@ UPDATE Studycourse SET name = ?, revision = ? WHERE id = ?;
 
 queryAll:
 SELECT * FROM Studycourse ORDER BY name;
+
+queryStudycourseCount:
+SELECT count(id) FROM Studycourse;

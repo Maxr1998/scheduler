@@ -2,6 +2,7 @@ package de.uaux.scheduler.repository
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import de.uaux.scheduler.model.Database
 import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.Studycourse
@@ -23,6 +24,12 @@ class EventRepository(
             .queryAll()
             .asFlow()
             .mapToList(Dispatchers.IO)
+
+    val eventCountFlow: Flow<Long> =
+        eventQueries
+            .queryEventCount()
+            .asFlow()
+            .mapToOne(Dispatchers.IO)
 
     suspend fun insertOrUpdate(event: Event): Long = withContext(Dispatchers.IO) {
         eventQueries.transactionWithResult {

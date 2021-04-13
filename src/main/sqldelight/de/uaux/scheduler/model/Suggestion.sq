@@ -11,3 +11,11 @@ querySuggestionsInStudycourseBySemester:
 SELECT s.id, e.*, s.duration, s.text
 FROM StudycourseEvent se JOIN Event e JOIN Suggestion s ON se.event = e.id AND e.id = s.event
 WHERE se.studycourse = ? AND s.semester = ?;
+
+querySuggestionCountBySemester:
+SELECT count(id) FROM Suggestion WHERE semester = ?;
+
+queryUnprocessedSuggestionCountBySemester:
+SELECT count(id) FROM Suggestion WHERE semester = :semester AND event NOT IN (
+    SELECT event FROM Schedule WHERE semester = :semester
+);

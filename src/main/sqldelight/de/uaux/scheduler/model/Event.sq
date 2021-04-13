@@ -14,6 +14,9 @@ UPDATE Event SET name = ?, module = ?, participants = ? WHERE id = ?;
 queryAll:
 SELECT * FROM Event ORDER BY name;
 
+queryEventCount:
+SELECT count(id) FROM Event;
+
 queryAllByName:
 SELECT * FROM Event WHERE LOWER(name) LIKE LOWER(:name) ORDER BY name;
 
