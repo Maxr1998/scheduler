@@ -39,7 +39,11 @@ class ScheduleRepository(
             .asFlow()
             .map { query ->
                 withContext(Dispatchers.IO) {
-                    query.executeAsMappedList { semester -> Semester(semester) }
+                    query.executeAsMappedList { semester ->
+                        Semester(semester)
+                    }.ifEmpty {
+                        listOf(computeNextSemester())
+                    }
                 }
             }
 
