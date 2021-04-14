@@ -69,8 +69,8 @@ fun AppContent(darkTheme: Boolean = false) {
                 ) {
                     when (navigationController.currentScreen.value) {
                         NavigationController.Screen.Home -> HomeScreen()
-                        NavigationController.Screen.Events -> EventManagementScreen()
                         NavigationController.Screen.Timetable -> TimetableScreen()
+                        NavigationController.Screen.Events -> EventManagementScreen()
                         NavigationController.Screen.Settings -> SettingsScreen()
                     }
                 }

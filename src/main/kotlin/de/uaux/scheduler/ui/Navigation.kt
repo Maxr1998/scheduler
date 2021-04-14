@@ -8,11 +8,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.List
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -36,26 +31,13 @@ fun Sidebar(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            StatefulSidebarButton(
-                screenState = screenState,
-                screen = NavigationController.Screen.Home,
-                icon = Icons.Outlined.Home,
-            )
-            StatefulSidebarButton(
-                screenState = screenState,
-                screen = NavigationController.Screen.Timetable,
-                icon = Icons.Outlined.DateRange,
-            )
-            StatefulSidebarButton(
-                screenState = screenState,
-                screen = NavigationController.Screen.Events,
-                icon = Icons.Outlined.List,
-            )
-            StatefulSidebarButton(
-                screenState = screenState,
-                screen = NavigationController.Screen.Settings,
-                icon = Icons.Outlined.Settings,
-            )
+            for (screen in NavigationController.Screen.values()) {
+                StatefulSidebarButton(
+                    screenState = screenState,
+                    screen = screen,
+                    icon = screen.icon,
+                )
+            }
         }
     }
 }
