@@ -14,11 +14,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Link
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Event
@@ -38,6 +40,7 @@ fun EventsPane(
             val events by studycourseSelection.allEvents.collectAsState(emptyList())
             EventListContent(
                 events = events,
+                fabIcon = Icons.Outlined.Add,
                 onAdd = { openEventDialog(null) },
             ) { event ->
                 EventListItem(
@@ -50,6 +53,7 @@ fun EventsPane(
             val events by studycourseSelection.events.collectAsState(emptyList())
             EventListContent(
                 events = events,
+                fabIcon = Icons.Outlined.Link,
                 onAdd = { openStudycourseEventDialog(null) },
             ) { event ->
                 StudycourseEventListItem(
@@ -62,7 +66,12 @@ fun EventsPane(
 }
 
 @Composable
-private fun <T> EventListContent(events: List<T>, onAdd: () -> Unit, eventContent: @Composable (T) -> Unit) {
+private fun <T> EventListContent(
+    events: List<T>,
+    fabIcon: ImageVector,
+    onAdd: () -> Unit,
+    eventContent: @Composable (T) -> Unit,
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         if (events.isNotEmpty()) {
             LazyColumn(
@@ -91,7 +100,7 @@ private fun <T> EventListContent(events: List<T>, onAdd: () -> Unit, eventConten
             onClick = { onAdd() },
         ) {
             Icon(
-                imageVector = Icons.Outlined.Add,
+                imageVector = fabIcon,
                 contentDescription = null,
             )
         }
