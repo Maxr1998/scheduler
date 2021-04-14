@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -58,6 +59,14 @@ fun StudycoursesPane(
                     },
                 )
                 Divider()
+            }
+            item {
+                Text(
+                    modifier = Modifier.padding(horizontal = 20.dp).padding(top = 12.dp),
+                    text = l("studycourse_panel_header"),
+                    color = MaterialTheme.colors.secondary,
+                    style = MaterialTheme.typography.caption,
+                )
             }
             items(studycourses) { studycourse ->
                 val selected = studycourseSelection.isSelected(studycourse)

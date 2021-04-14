@@ -69,7 +69,12 @@ private fun <T> EventListContent(events: List<T>, onAdd: () -> Unit, eventConten
                 contentPadding = PaddingValues(bottom = 88.dp)
             ) {
                 item {
-                    EventListHeader()
+                    Text(
+                        modifier = Modifier.padding(horizontal = 16.dp).padding(top = 12.dp, bottom = 8.dp),
+                        text = l("event_panel_header"),
+                        color = MaterialTheme.colors.secondary,
+                        style = MaterialTheme.typography.caption,
+                    )
                 }
                 items(events) { event ->
                     eventContent(event)
@@ -91,16 +96,6 @@ private fun <T> EventListContent(events: List<T>, onAdd: () -> Unit, eventConten
             )
         }
     }
-}
-
-@Composable
-private fun EventListHeader() {
-    Text(
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-        text = l("event_panel_header"),
-        color = MaterialTheme.colors.secondary,
-        style = MaterialTheme.typography.caption,
-    )
 }
 
 @OptIn(ExperimentalMaterialApi::class)
