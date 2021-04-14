@@ -1,7 +1,7 @@
 package de.uaux.scheduler.controller
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.CalendarViewWeek
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Settings
@@ -14,7 +14,7 @@ class NavigationController {
 
     enum class Screen(val icon: ImageVector) {
         Home(Icons.Outlined.Home),
-        Timetable(Icons.Outlined.DateRange),
+        Timetable(Icons.Outlined.CalendarViewWeek),
         Events(Icons.Outlined.List),
         Settings(Icons.Outlined.Settings),
     }
