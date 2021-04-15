@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.dto.StudycourseEvent
-import de.uaux.scheduler.ui.model.StudycourseSelection
 import de.uaux.scheduler.ui.screens.event_management.EventDialog
 import de.uaux.scheduler.ui.screens.event_management.EventsPane
 import de.uaux.scheduler.ui.screens.event_management.StudycourseDialog
@@ -31,7 +30,7 @@ import org.koin.androidx.compose.get
 sealed class EventManagementDialogState {
     object Closed : EventManagementDialogState()
     data class StudycourseOpened(val studycourse: Studycourse?) : EventManagementDialogState()
-    data class StudycourseEventOpened(val studycourseEvent: StudycourseEvent?) : EventManagementDialogState()
+    data class StudycourseEventOpened(val studycourse: Studycourse, val studycourseEvent: StudycourseEvent?) : EventManagementDialogState()
     data class EventOpened(val event: Event?) : EventManagementDialogState()
 }
 
@@ -67,8 +66,8 @@ private fun EventManagementScreenContent() {
                 openEventDialog = { event ->
                     setDialogState(EventManagementDialogState.EventOpened(event))
                 },
-                openStudycourseEventDialog = { studycourseEvent ->
-                    setDialogState(EventManagementDialogState.StudycourseEventOpened(studycourseEvent))
+                openStudycourseEventDialog = { studycourse, studycourseEvent ->
+                    setDialogState(EventManagementDialogState.StudycourseEventOpened(studycourse, studycourseEvent))
                 },
             )
         }
@@ -83,9 +82,8 @@ private fun EventManagementScreenContent() {
                 )
             }
             is EventManagementDialogState.StudycourseEventOpened -> {
-                val studycourse = (studycourseSelection as StudycourseSelection.Selected).studycourse
                 StudycourseEventDialog(
-                    studycourse = studycourse,
+                    studycourse = dialogState.studycourse,
                     studycourseEvent = dialogState.studycourseEvent,
                     onCreateEventRequest = {
                         setDialogState(EventManagementDialogState.EventOpened(null))

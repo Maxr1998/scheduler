@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Event
+import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.ui.model.StudycourseSelection
 import de.uaux.scheduler.ui.util.EditButton
@@ -33,7 +34,7 @@ import de.uaux.scheduler.ui.util.l
 fun EventsPane(
     studycourseSelection: StudycourseSelection,
     openEventDialog: (Event?) -> Unit,
-    openStudycourseEventDialog: (StudycourseEvent?) -> Unit,
+    openStudycourseEventDialog: (Studycourse, StudycourseEvent?) -> Unit,
 ) {
     when (studycourseSelection) {
         is StudycourseSelection.None -> {
@@ -54,11 +55,13 @@ fun EventsPane(
             EventListContent(
                 events = events,
                 fabIcon = Icons.Outlined.Link,
-                onAdd = { openStudycourseEventDialog(null) },
+                onAdd = { openStudycourseEventDialog(studycourseSelection.studycourse, null) },
             ) { event ->
                 StudycourseEventListItem(
                     studycourseEvent = event,
-                    openDialog = openStudycourseEventDialog,
+                    openDialog = {
+                        openStudycourseEventDialog(studycourseSelection.studycourse, event)
+                    },
                 )
             }
         }
@@ -132,7 +135,7 @@ private fun EventListItem(
 private fun StudycourseEventListItem(
     modifier: Modifier = Modifier,
     studycourseEvent: StudycourseEvent,
-    openDialog: (StudycourseEvent?) -> Unit,
+    openDialog: () -> Unit,
 ) {
     val event = studycourseEvent.event
     ListItem(
@@ -150,7 +153,7 @@ private fun StudycourseEventListItem(
         },
         trailing = {
             EditButton(
-                onClick = { openDialog(studycourseEvent) },
+                onClick = openDialog,
             )
         },
     )
