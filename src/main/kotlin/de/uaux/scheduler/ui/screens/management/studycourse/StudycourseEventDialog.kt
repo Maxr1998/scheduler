@@ -1,4 +1,4 @@
-package de.uaux.scheduler.ui.screens.event_management
+package de.uaux.scheduler.ui.screens.management.studycourse
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column

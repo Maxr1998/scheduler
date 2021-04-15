@@ -18,9 +18,9 @@ import de.uaux.scheduler.controller.NavigationController
 import de.uaux.scheduler.ui.screens.EventManagementScreen
 import de.uaux.scheduler.ui.screens.HomeScreen
 import de.uaux.scheduler.ui.screens.SettingsScreen
+import de.uaux.scheduler.ui.screens.StudycourseManagementScreen
 import de.uaux.scheduler.ui.screens.TimetableScreen
 import org.koin.androidx.compose.get
-
 
 val LightColors = lightColors(
     primary = Color(0xFFFF9800),
@@ -73,6 +73,7 @@ fun AppContent(darkTheme: Boolean = false) {
                             NavigationController.Screen.Home -> HomeScreen()
                             NavigationController.Screen.Timetable -> TimetableScreen()
                             NavigationController.Screen.Events -> EventManagementScreen()
+                            NavigationController.Screen.Studycourses -> StudycourseManagementScreen()
                             NavigationController.Screen.Settings -> SettingsScreen()
                         }
                     }

@@ -2,9 +2,9 @@ package de.uaux.scheduler.ui
 
 import androidx.compose.runtime.Composable
 import de.uaux.scheduler.ui.model.DialogState
-import de.uaux.scheduler.ui.screens.event_management.EventDialog
-import de.uaux.scheduler.ui.screens.event_management.StudycourseDialog
-import de.uaux.scheduler.ui.screens.event_management.StudycourseEventDialog
+import de.uaux.scheduler.ui.screens.management.event.EventDialog
+import de.uaux.scheduler.ui.screens.management.studycourse.StudycourseDialog
+import de.uaux.scheduler.ui.screens.management.studycourse.StudycourseEventDialog
 import de.uaux.scheduler.viewmodel.DialogViewModel
 import org.koin.androidx.compose.get
 

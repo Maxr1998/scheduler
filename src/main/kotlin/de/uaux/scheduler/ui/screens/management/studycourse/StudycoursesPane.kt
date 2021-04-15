@@ -1,4 +1,4 @@
-package de.uaux.scheduler.ui.screens.event_management
+package de.uaux.scheduler.ui.screens.management.studycourse
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -45,21 +44,6 @@ fun StudycoursesPane(
         LazyColumn(
             modifier = Modifier.fillMaxWidth().weight(1f),
         ) {
-            item {
-                val selected = studycourseSelection is StudycourseSelection.None
-                SelectableListItem(
-                    modifier = Modifier.selectable(selected) {
-                        eventManagementViewModel.showAll()
-                    },
-                    selected = selected,
-                    text = {
-                        Text(
-                            text = l("item_all_events"),
-                        )
-                    },
-                )
-                Divider()
-            }
             item {
                 Text(
                     modifier = Modifier.padding(horizontal = 20.dp).padding(top = 12.dp),
