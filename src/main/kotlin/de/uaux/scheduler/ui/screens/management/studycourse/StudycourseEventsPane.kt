@@ -13,6 +13,7 @@ import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.ui.model.StudycourseSelection
 import de.uaux.scheduler.ui.screens.management.EventListContent
+import de.uaux.scheduler.ui.util.CenteredTextBox
 import de.uaux.scheduler.ui.util.EditButton
 import de.uaux.scheduler.ui.util.l
 
@@ -23,7 +24,7 @@ fun StudycourseEventsPane(
 ) {
     when (studycourseSelection) {
         is StudycourseSelection.None -> {
-            // TODO: empty state
+            CenteredTextBox(text = l("event_panel_no_studycourses"))
         }
         is StudycourseSelection.Selected -> {
             val events by studycourseSelection.events.collectAsState(emptyList())
