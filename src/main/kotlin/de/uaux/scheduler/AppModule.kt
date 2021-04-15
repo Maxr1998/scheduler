@@ -12,6 +12,7 @@ import de.uaux.scheduler.repository.SuggestionRepository
 import de.uaux.scheduler.util.Constants
 import de.uaux.scheduler.util.LocalizationUtil
 import de.uaux.scheduler.util.SuggestionParser
+import de.uaux.scheduler.viewmodel.DialogViewModel
 import de.uaux.scheduler.viewmodel.EventManagementViewModel
 import de.uaux.scheduler.viewmodel.HomeViewModel
 import de.uaux.scheduler.viewmodel.TimetableViewModel
@@ -23,6 +24,7 @@ val appModule = module {
     single { NavigationController() }
 
     // Viewmodels
+    single { DialogViewModel() }
     single { HomeViewModel(get(), get(), get(), get()) }
     single { EventManagementViewModel(get(), get()) }
     single { TimetableViewModel(get(), get(), get()) }

@@ -2,6 +2,7 @@ package de.uaux.scheduler.ui
 
 import androidx.compose.foundation.ScrollbarStyleAmbient
 import androidx.compose.foundation.defaultScrollbarStyle
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
@@ -58,22 +59,26 @@ fun AppContent(darkTheme: Boolean = false) {
         CompositionLocalProvider(
             ScrollbarStyleAmbient provides scrollbarStyle,
         ) {
-            Row {
-                val navigationController: NavigationController = get()
-                Sidebar(
-                    screenState = navigationController.currentScreen,
-                )
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background,
-                ) {
-                    when (navigationController.currentScreen.value) {
-                        NavigationController.Screen.Home -> HomeScreen()
-                        NavigationController.Screen.Timetable -> TimetableScreen()
-                        NavigationController.Screen.Events -> EventManagementScreen()
-                        NavigationController.Screen.Settings -> SettingsScreen()
+            Box {
+                Row {
+                    val navigationController: NavigationController = get()
+                    Sidebar(
+                        screenState = navigationController.currentScreen,
+                    )
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colors.background,
+                    ) {
+                        when (navigationController.currentScreen.value) {
+                            NavigationController.Screen.Home -> HomeScreen()
+                            NavigationController.Screen.Timetable -> TimetableScreen()
+                            NavigationController.Screen.Events -> EventManagementScreen()
+                            NavigationController.Screen.Settings -> SettingsScreen()
+                        }
                     }
                 }
+
+                Dialogs()
             }
         }
     }
