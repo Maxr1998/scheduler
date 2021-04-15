@@ -14,8 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import de.uaux.scheduler.ui.util.CenteredTextBox
 import de.uaux.scheduler.ui.util.l
 
 @Composable
@@ -43,9 +43,7 @@ fun <T> EventListContent(
                 }
             }
         } else {
-            CenteredTextMessage(
-                text = l("event_panel_no_events"),
-            )
+            CenteredTextBox(text = l("event_panel_no_events"))
         }
 
         FloatingActionButton(
@@ -57,19 +55,5 @@ fun <T> EventListContent(
                 contentDescription = null,
             )
         }
-    }
-}
-
-@Composable
-private fun CenteredTextMessage(text: String) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = text,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.body1,
-        )
     }
 }
