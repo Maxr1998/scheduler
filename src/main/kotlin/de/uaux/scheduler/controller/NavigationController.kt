@@ -4,7 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.CalendarViewWeek
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.outlined.School
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +17,7 @@ class NavigationController {
         Home(Icons.Outlined.Home),
         Timetable(Icons.Outlined.CalendarViewWeek),
         Events(Icons.Outlined.Book),
-        Studycourses(Icons.Outlined.List),
+        Studycourses(Icons.Outlined.School),
         Settings(Icons.Outlined.Settings),
     }
 }
