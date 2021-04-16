@@ -62,3 +62,14 @@ fun LabeledTextField(
         }
     }
 }
+
+@Composable
+fun calculateNumberInputError(value: String, allowedRange: LongRange, outOfRangeError: String): Pair<Long?, String?> {
+    val number = value.trim().toLongOrNull()
+    return number to when {
+        value.isBlank() -> null
+        number == null -> l("input_error_only_numbers")
+        number !in allowedRange -> l(outOfRangeError)
+        else -> null
+    }
+}

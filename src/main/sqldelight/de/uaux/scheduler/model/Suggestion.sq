@@ -2,13 +2,12 @@ CREATE TABLE Suggestion (
     id INTEGER PRIMARY KEY,
     semester INTEGER AS Int NOT NULL,
     event INTEGER NOT NULL REFERENCES Event(id) ON DELETE CASCADE,
-    duration INTEGER AS Int NOT NULL,
     text TEXT NOT NULL DEFAULT '',
     UNIQUE (id, event)
 );
 
 querySuggestionsInStudycourseBySemester:
-SELECT s.id, e.*, s.duration, s.text
+SELECT s.id, e.*, s.text
 FROM StudycourseEvent se JOIN Event e JOIN Suggestion s ON se.event = e.id AND e.id = s.event
 WHERE se.studycourse = ? AND s.semester = ?;
 

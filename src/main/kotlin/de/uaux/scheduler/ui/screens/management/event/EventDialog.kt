@@ -17,7 +17,9 @@ import de.uaux.scheduler.repository.EventRepository
 import de.uaux.scheduler.ui.util.LabeledTextField
 import de.uaux.scheduler.ui.util.PopupDialog
 import de.uaux.scheduler.ui.util.SaveButton
+import de.uaux.scheduler.ui.util.calculateNumberInputError
 import de.uaux.scheduler.ui.util.l
+import de.uaux.scheduler.viewmodel.TimetableViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
@@ -27,14 +29,18 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
     val eventRepository: EventRepository = get()
     val eventName = remember { mutableStateOf(TextFieldValue(event?.name.orEmpty())) }
     val eventModule = remember { mutableStateOf(TextFieldValue(event?.module.orEmpty())) }
+    val eventDurationText = remember { mutableStateOf(TextFieldValue(event?.participants?.toString().orEmpty())) }
+    val (eventDuration, eventDurationError) = calculateNumberInputError(
+        eventDurationText.value.text,
+        0L..TimetableViewModel.MAX_MINUTES_IN_DAY,
+        "input_error_invalid_duration",
+    )
     val eventParticipantsText = remember { mutableStateOf(TextFieldValue(event?.participants?.toString().orEmpty())) }
-    val eventParticipants = eventParticipantsText.value.text.trim().toLongOrNull()
-    val eventParticipantsError = when {
-        eventParticipantsText.value.text.isBlank() -> null
-        eventParticipants == null -> l("input_error_only_numbers")
-        eventParticipants !in 0..100000L -> l("input_error_invalid_participant_count")
-        else -> null
-    }
+    val (eventParticipants, eventParticipantsError) = calculateNumberInputError(
+        eventParticipantsText.value.text,
+        0..100000L,
+        "input_error_invalid_participant_count",
+    )
 
     PopupDialog(
         title = l(if (event == null) "dialog_title_add_event" else "dialog_title_edit_event"),
@@ -49,6 +55,7 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
             SaveButton(
                 enabled = eventName.value.text.isNotBlank() &&
                     eventModule.value.text.isNotBlank() &&
+                    eventDuration != null && eventDurationError == null &&
                     eventParticipantsError == null,
                 onSave = {
                     coroutineScope.launch {
@@ -56,6 +63,7 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
                             event?.id ?: -1L,
                             eventName.value.text,
                             eventModule.value.text,
+                            eventDuration!!.toInt(),
                             eventParticipants?.toInt(),
                         )
                         eventRepository.insertOrUpdate(updated)
@@ -82,6 +90,14 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
 
             Spacer(modifier = Modifier.height(4.dp))
 
+            LabeledTextField(
+                text = eventDurationText,
+                label = l("input_label_event_duration"),
+                placeholder = l("input_hint_event_duration"),
+                errorMessage = eventDurationError,
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
 
             LabeledTextField(
                 text = eventParticipantsText,

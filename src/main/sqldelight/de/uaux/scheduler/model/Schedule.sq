@@ -5,15 +5,12 @@ CREATE TABLE Schedule (
     event INTEGER NOT NULL REFERENCES Event(id) ON DELETE CASCADE,
     day INTEGER AS Int NOT NULL,
     start_time INTEGER AS Int NOT NULL,
-    end_time INTEGER AS Int NOT NULL,
     -- No enforced reference on table Room to allow 'meta'-rooms like online lectures
     room INTEGER NOT NULL,
-    UNIQUE (semester, event, day, start_time, end_time),
+    UNIQUE (semester, event, day, start_time),
     CHECK (semester % 10 = 1 OR semester % 10 = 2),
     CHECK (day BETWEEN 1 AND 7),
-    CHECK (start_time BETWEEN 0 AND 1439),
-    CHECK (end_time BETWEEN 0 AND 1439),
-    CHECK (start_time <= end_time)
+    CHECK (start_time BETWEEN 0 AND 1439)
 );
 
 CREATE INDEX idx_schedule_semester ON Schedule (semester);
@@ -24,11 +21,11 @@ queryAllSemesters:
 SELECT DISTINCT s.semester FROM Schedule s ORDER BY s.semester DESC;
 
 queryScheduledEventsInStudycourseBySemester:
-SELECT e.*, s.day, s.start_time, s.end_time, s.room
+SELECT e.*, s.day, s.start_time, s.room
 FROM StudycourseEvent se JOIN Event e JOIN Schedule s ON se.event = e.id AND e.id = s.event
 WHERE se.studycourse = ? AND s.semester = ?;
 
 rescheduleEvent:
 UPDATE Schedule
-SET day = :newDay, start_time = :newStart, end_time = :newEnd
-WHERE semester = ? AND event = ? AND day = ? AND start_time = ? AND end_time = ?;
+SET day = :newDay, start_time = :newStart
+WHERE semester = ? AND event = ? AND day = ? AND start_time = ?;

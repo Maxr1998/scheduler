@@ -9,7 +9,6 @@ data class Suggestion(
     val id: Long,
     val semester: Semester,
     val event: Event,
-    val duration: Int,
     /**
      * A free-form text to contain the original request from the lecturer
      */

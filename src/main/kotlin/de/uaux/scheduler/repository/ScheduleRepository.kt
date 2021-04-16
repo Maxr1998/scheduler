@@ -62,11 +62,11 @@ class ScheduleRepository(
 
     fun queryScheduledEvents(studycourse: Studycourse, semester: Semester): List<ScheduledEvent> {
         val roomCache = HashMap<Long, Room>()
-        return scheduleQueries.queryScheduledEventsInStudycourseBySemester(studycourse.id, semester.code) { id, name, module, participants, day, startTime, endTime, roomId ->
+        return scheduleQueries.queryScheduledEventsInStudycourseBySemester(studycourse.id, semester.code) { id, name, module, duration, participants, day, startTime, roomId ->
             val room = queryRoom(roomId, roomCache)?.also { room ->
                 roomCache.putIfAbsent(roomId, room)
             }
-            ScheduledEvent(semester, Event(id, name, module, participants), DayOfWeek.of(day), startTime, endTime, room)
+            ScheduledEvent(semester, Event(id, name, module, duration, participants), DayOfWeek.of(day), startTime, room)
         }.executeAsList()
     }
 
@@ -76,10 +76,10 @@ class ScheduleRepository(
         else -> roomQueries.queryRoomById(id).executeAsOneOrNull()
     }
 
-    fun rescheduleEvent(event: ScheduledEvent, day: DayOfWeek, startTime: Int, endTime: Int): Boolean {
+    fun rescheduleEvent(event: ScheduledEvent, day: DayOfWeek, startTime: Int): Boolean {
         scheduleQueries.rescheduleEvent(
-            day.value, startTime, endTime,
-            event.semester.code, event.event.id, event.day.value, event.startTime, event.endTime
+            day.value, startTime,
+            event.semester.code, event.event.id, event.day.value, event.startTime,
         )
         return standardQueries.changes().executeAsOne() == 1L
     }

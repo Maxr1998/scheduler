@@ -42,7 +42,7 @@ class EventRepository(
             }
 
             // Failed update or new object, insert
-            eventQueries.insert(event.name, event.module, event.participants)
+            eventQueries.insert(event.name, event.module, event.duration, event.participants)
             standardQueries.checkAndGetId()
         }
     }
@@ -63,8 +63,8 @@ class EventRepository(
 
     fun queryAllInStudycourseAsFlow(studycourse: Studycourse): Flow<List<StudycourseEvent>> =
         eventQueries
-            .queryAllInStudycourse(studycourse.id) { id, name, module, participants, semester, required ->
-                StudycourseEvent(Event(id, name, module, participants), semester, required)
+            .queryAllInStudycourse(studycourse.id) { id, name, module, duration, participants, semester, required ->
+                StudycourseEvent(Event(id, name, module, duration, participants), semester, required)
             }
             .asFlow()
             .mapToList(Dispatchers.IO)

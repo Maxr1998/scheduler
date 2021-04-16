@@ -131,6 +131,10 @@ class TimetableViewModel(
     fun reschedule(event: ScheduledEvent, day: DayOfWeek, startTime: Int) = coroutineScope.launch {
         logger.debug { "Rescheduling $event to $day at $startTime" }
 
+        // Assert start and end times
+        require(startTime in 0..MAX_MINUTES_IN_DAY)
+        require(event.endTime in 0..MAX_MINUTES_IN_DAY)
+
         // Get event index and check if present
         val index = events.indexOf(event)
         if (index < 0) {
@@ -139,16 +143,13 @@ class TimetableViewModel(
             return@launch
         }
 
-        // Calculate end time
-        val endTime = startTime + event.duration
-
         // Apply changes to ViewModel
-        val rescheduledEvent = event.copy(day = day, startTime = startTime, endTime = endTime)
+        val rescheduledEvent = event.copy(day = day, startTime = startTime)
         events[index] = rescheduledEvent
 
         // Persist to database and update events
         val changed = withContext(Dispatchers.IO) {
-            scheduleRepository.rescheduleEvent(event, day, startTime, endTime)
+            scheduleRepository.rescheduleEvent(event, day, startTime)
         }
 
         // Log result and revert changes on failure
@@ -161,6 +162,7 @@ class TimetableViewModel(
     }
 
     companion object {
+        const val MAX_MINUTES_IN_DAY = 1439
         const val TIMETABLE_DEFAULT_START_OF_DAY = 420
         const val TIMETABLE_DEFAULT_END_OF_DAY = 1200
     }

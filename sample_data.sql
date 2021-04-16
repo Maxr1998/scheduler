@@ -7,27 +7,27 @@ VALUES (1, 'B.Sc. Informatik', 'PO 2018'),
        (5, 'M.Sc. Ingenieurinformatik', 'PO 2016');
 
 INSERT OR
-REPLACE INTO Event (id, name, module)
-VALUES (1, 'Informatik 2', ''),
-       (2, 'Übung zu Informatik 2', ''),
-       (3, 'Einführung in die Theoretische Informatik', ''),
-       (4, 'Mathematik für Informatiker II', ''),
-       (5, 'Übung zu Mathematik für Informatiker II', ''),
-       (6, 'Globalübung - Mathematik für Informatiker II', ''),
-       (7, 'Systemnahe Informatik', ''),
-       (8, 'Übung zu Systemnahe Informatik', ''),
-       (9, 'Grundlagen der Human-Computer Interaction / Multimedia Grundlagen II', ''),
-       (10, 'Übung zu Grundlagen der Human-Computer Interaction / Multimedia Grundlagen II', ''),
-       (11, 'Softwareprojekt', ''),
-       (12, 'Übung zu Softwareprojekt', ''),
-       (13, 'Ad-Hoc und Sensornetze', ''),
-       (14, 'Übung zu Ad-Hoc und Sensornetze', ''),
-       (15, 'Safety and Security', ''),
-       (16, 'Übung zu Safety and Security', ''),
-       (17, 'Ingenieurwissenschaftliche Grundlagen', ''),
-       (18, 'Übung zu Ingenieurwissenschaftliche Grundlagen', ''),
-       (19, 'Konstruktionslehre', ''),
-       (20, 'Übung zu Konstruktionslehre', '');
+REPLACE INTO Event (id, name, module, duration)
+VALUES (1, 'Informatik 2', '', 90),
+       (2, 'Übung zu Informatik 2', '', 90),
+       (3, 'Einführung in die Theoretische Informatik', '', 90),
+       (4, 'Mathematik für Informatiker II', '', 90),
+       (5, 'Übung zu Mathematik für Informatiker II', '', 90),
+       (6, 'Globalübung - Mathematik für Informatiker II', '', 90),
+       (7, 'Systemnahe Informatik', '', 90),
+       (8, 'Übung zu Systemnahe Informatik', '', 90),
+       (9, 'Grundlagen der Human-Computer Interaction / Multimedia Grundlagen II', '', 90),
+       (10, 'Übung zu Grundlagen der Human-Computer Interaction / Multimedia Grundlagen II', '', 90),
+       (11, 'Softwareprojekt', '', 90),
+       (12, 'Übung zu Softwareprojekt', '', 90),
+       (13, 'Ad-Hoc und Sensornetze', '', 90),
+       (14, 'Übung zu Ad-Hoc und Sensornetze', '', 90),
+       (15, 'Safety and Security', '', 90),
+       (16, 'Übung zu Safety and Security', '', 90),
+       (17, 'Ingenieurwissenschaftliche Grundlagen', '', 90),
+       (18, 'Übung zu Ingenieurwissenschaftliche Grundlagen', '', 90),
+       (19, 'Konstruktionslehre', '', 90),
+       (20, 'Übung zu Konstruktionslehre', '', 90);
 
 
 INSERT OR
@@ -84,22 +84,22 @@ VALUES
     (20212, 1095, 1185);
 
 INSERT OR
-REPLACE INTO Schedule (semester, event, day, start_time, end_time, room)
+REPLACE INTO Schedule (semester, event, day, start_time, room)
 VALUES
     /* Informatik II Tue & Thu */
-    (20211, 1, 2, 615, 705, -1),
-    (20211, 1, 4, 615, 705, -1),
+    (20211, 1, 2, 615, -1),
+    (20211, 1, 4, 615, -1),
     /* TI Mon & Thu */
-    (20211, 3, 1, 975, 1065, -1),
-    (20211, 3, 4, 975, 1065, -1),
+    (20211, 3, 1, 975, -1),
+    (20211, 3, 4, 975, -1),
     /* MFI II Mon & Tue */
-    (20211, 4, 1, 615, 705, -1),
-    (20211, 4, 2, 855, 945, -1);
+    (20211, 4, 1, 615, -1),
+    (20211, 4, 2, 855, -1);
 
 INSERT OR
-REPLACE INTO Suggestion (id, semester, event, duration)
+REPLACE INTO Suggestion (id, semester, event)
 VALUES
     /* TI */
-    (0, 20211, 3, 90),
+    (0, 20211, 3),
     /* SI */
-    (1, 20211, 7, 90);
+    (1, 20211, 7);

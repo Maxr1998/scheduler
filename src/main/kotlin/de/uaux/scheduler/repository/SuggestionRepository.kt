@@ -19,9 +19,9 @@ class SuggestionRepository(
     private val constraintQueries = database.suggestionConstraintQueries
 
     fun querySuggestions(studycourse: Studycourse, semester: Semester): List<Suggestion> =
-        suggestionQueries.querySuggestionsInStudycourseBySemester(studycourse.id, semester.code) { id, eventId, name, module, participants, duration, text ->
+        suggestionQueries.querySuggestionsInStudycourseBySemester(studycourse.id, semester.code) { id, eventId, name, module, duration, participants, text ->
             val constraints = constraintQueries.querySuggestionConstraintsBySuggestion(id, suggestionParser::parseConstraint).executeAsList()
-            Suggestion(id, semester, Event(eventId, name, module, participants), duration, text, constraints)
+            Suggestion(id, semester, Event(eventId, name, module, duration, participants), text, constraints)
         }.executeAsList()
 
     fun querySuggestionCountBySemesterAsFlow(semester: Semester): Flow<Long> =
