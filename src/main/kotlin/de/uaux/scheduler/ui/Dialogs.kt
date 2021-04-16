@@ -12,14 +12,13 @@ import org.koin.androidx.compose.get
 fun Dialogs() {
     val dialogViewModel: DialogViewModel = get()
     val (dialogState, setDialogState) = dialogViewModel.dialogState
+    val closeDialog = { setDialogState(DialogState.Closed) }
 
     when (dialogState) {
         is DialogState.StudycourseDialog -> {
             StudycourseDialog(
                 studycourse = dialogState.studycourse,
-                onDismissRequest = {
-                    setDialogState(DialogState.Closed)
-                },
+                onDismissRequest = closeDialog,
             )
         }
         is DialogState.StudycourseEventDialog -> {
@@ -29,17 +28,13 @@ fun Dialogs() {
                 onCreateEventRequest = {
                     setDialogState(DialogState.EventDialog(null))
                 },
-                onDismissRequest = {
-                    setDialogState(DialogState.Closed)
-                },
+                onDismissRequest = closeDialog,
             )
         }
         is DialogState.EventDialog -> {
             EventDialog(
                 event = dialogState.event,
-                onDismissRequest = {
-                    setDialogState(DialogState.Closed)
-                }
+                onDismissRequest = closeDialog,
             )
         }
         DialogState.Closed -> Unit
