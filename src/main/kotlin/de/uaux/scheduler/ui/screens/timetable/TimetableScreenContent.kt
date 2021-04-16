@@ -21,6 +21,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -183,42 +184,21 @@ private fun TimetablePane(
             )
         }
 
-        // Draw drop indicator for dragged events, snapping to days and slots
-        draggedEvent?.let { event ->
-            val layoutModifier = remember(
+        // Update drop location and draw drop indicator
+        if (draggedEvent != null) {
+            val (location, layoutModifier) = calculateHoverLocation(
                 pointerOffset,
                 columnWidth, columnHeight, minuteHeight,
                 dayRange, numDays,
-                timeslots, event,
-            ) {
-                // Calculate hovered day
-                val day = (0 until numDays).first { day ->
-                    val offset = pointerOffset.x.coerceIn(0f, columnWidth * numDays)
-                    offset >= day * columnWidth && offset <= (day + 1) * columnWidth
-                }
+                timeslots,
+                draggedEvent.duration,
+            )
 
-                // Calculate hovered start time in minutes
-                val height = minuteHeight * event.duration
-                val rawOffset = pointerOffset.y - height / 2
-                val rawMinutes = dayRange.first + rawOffset / minuteHeight
-                val timeslotOffset = timeslots.find { timeslot ->
-                    abs(rawMinutes - timeslot.start_time) <= TIMESLOT_SNAP_MINUTES
-                }?.let { timeslot ->
-                    minuteHeight * (timeslot.start_time - dayRange.first)
-                }
-                val offsetY = (timeslotOffset ?: rawOffset).coerceIn(0f, columnHeight - height)
-                val startTime = (dayRange.first + offsetY / minuteHeight).roundToInt()
+            dropLocation.value = location
 
-                // Update drop location
-                dropLocation.value = DropLocation(DayOfWeek.of(day + 1), startTime)
-
-                // Return layout modifier
-                Modifier.layout { measurable, _ ->
-                    simpleLayout(measurable, columnWidth, height, Offset(columnWidth * day, offsetY))
-                }
+            if (layoutModifier != null) {
+                IndicatorCard(modifier = layoutModifier)
             }
-
-            IndicatorCard(modifier = layoutModifier)
         }
 
         // Draw events
@@ -281,6 +261,53 @@ private fun RowScope.WeightedTextBox(text: String) {
 // Helper functions
 private inline operator fun IntRange.contains(timeslot: Timeslot): Boolean =
     timeslot.start_time >= first && timeslot.end_time <= last
+
+/**
+ * Calculates the [DropLocation] for the hovered spot and a [Modifier]
+ * to position the drop indicator that snaps to days and slots
+ */
+@Stable
+private fun calculateHoverLocation(
+    pointerOffset: Offset,
+    columnWidth: Float,
+    columnHeight: Float,
+    minuteHeight: Float,
+    dayRange: IntRange,
+    numDays: Int,
+    timeslots: List<Timeslot>,
+    eventDuration: Int,
+): Pair<DropLocation?, Modifier?> {
+    // Abort drag over unscheduled events panel
+    if (pointerOffset.x > columnWidth * numDays) {
+        return null to null
+    }
+
+    // Calculate hovered day
+    val day = (0 until numDays).first { day ->
+        val offset = pointerOffset.x.coerceAtLeast(0f)
+        offset >= day * columnWidth && offset <= (day + 1) * columnWidth
+    }
+
+    // Calculate hovered start time in minutes
+    val height = minuteHeight * eventDuration
+    val rawOffset = pointerOffset.y - height / 2
+    val rawMinutes = dayRange.first + rawOffset / minuteHeight
+    val timeslotOffset = timeslots.find { timeslot ->
+        abs(rawMinutes - timeslot.start_time) <= TIMESLOT_SNAP_MINUTES
+    }?.let { timeslot ->
+        minuteHeight * (timeslot.start_time - dayRange.first)
+    }
+    val offsetY = (timeslotOffset ?: rawOffset).coerceIn(0f, columnHeight - height)
+    val startTime = (dayRange.first + offsetY / minuteHeight).roundToInt()
+
+    // Return result
+    val dropLocation = DropLocation(DayOfWeek.of(day + 1), startTime)
+    val layoutModifier = Modifier.layout { measurable, _ ->
+        simpleLayout(measurable, columnWidth, height, Offset(columnWidth * day, offsetY))
+    }
+
+    return dropLocation to layoutModifier
+}
 
 // Layout helper
 private fun MeasureScope.simpleLayout(measurable: Measurable, width: Float, height: Float, offset: Offset): MeasureResult {
