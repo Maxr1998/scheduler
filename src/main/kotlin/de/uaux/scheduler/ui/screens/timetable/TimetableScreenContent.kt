@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
@@ -20,6 +20,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +46,7 @@ import de.uaux.scheduler.model.duration
 import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.util.VerticalDivider
 import de.uaux.scheduler.ui.util.ZIndex
+import de.uaux.scheduler.ui.util.l
 import de.uaux.scheduler.ui.util.lightenedBackground
 import de.uaux.scheduler.util.formatMinutesOfDay
 import de.uaux.scheduler.viewmodel.TimetableViewModel
@@ -62,33 +64,28 @@ const val TIMESLOT_SNAP_MINUTES = 10
 
 @Composable
 fun TimetableScreenContent() {
-    Row {
-        TimetablePane(
-            modifier = Modifier.weight(1f, true).fillMaxHeight(),
-        )
-        VerticalDivider(modifier = Modifier.zIndex(ZIndex.DIVIDER))
-        UnscheduledPane(
-            modifier = Modifier.width(240.dp).fillMaxHeight(),
-        )
-    }
-}
-
-@Composable
-private fun TimetablePane(modifier: Modifier = Modifier) {
     val timetableViewModel: TimetableViewModel = get()
-    val events = timetableViewModel.events
     val showWeekend by timetableViewModel.showWeekend
     val numDays = if (showWeekend == ShowWeekend.FALSE) 5 else 7
-    val dayRange by timetableViewModel.dayRange
-    val timeslots by timetableViewModel.timeslots
 
-    var pointerOffset by remember { mutableStateOf(Offset.Zero) }
+    val pointerOffset = remember { mutableStateOf(Offset.Zero) }
     val draggedEvent = remember { mutableStateOf<ScheduledEvent?>(null) }
-    var dropLocation by remember { mutableStateOf<DropLocation?>(null) }
 
     Column(
-        modifier = modifier,
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                while (true) {
+                    awaitPointerEventScope {
+                        val event = awaitPointerEvent(PointerEventPass.Initial)
+                        event.changes.lastOrNull()?.let { change ->
+                            pointerOffset.value = change.position
+                        }
+                    }
+                }
+            },
     ) {
+        // Header
         Row(
             modifier = Modifier.fillMaxWidth().height(32.dp),
         ) {
@@ -97,107 +94,126 @@ private fun TimetablePane(modifier: Modifier = Modifier) {
                     text = remember(day) { day.getDisplayName(TextStyle.FULL, Locale.getDefault()) },
                 )
             }
+            WeightedTextBox(text = l("event_panel_header"))
         }
+
         Divider(modifier = Modifier.zIndex(ZIndex.DIVIDER))
 
-        BoxWithConstraints(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .pointerInput(Unit) {
-                    while (true) {
-                        awaitPointerEventScope {
-                            val event = awaitPointerEvent(PointerEventPass.Initial)
-                            event.changes.lastOrNull()?.let { change ->
-                                pointerOffset = change.position
-                            }
-                        }
-                    }
-                },
+        // Timetable content and unscheduled events
+        Row(
+            modifier = Modifier.fillMaxWidth().weight(1f),
         ) {
-            val columnWidth = constraints.maxWidth.toFloat() / numDays
-            val columnHeight = constraints.maxHeight.toFloat()
-            val minuteHeight = columnHeight / (dayRange.last - dayRange.first)
+            TimetablePane(
+                modifier = Modifier.weight(numDays.toFloat(), true).fillMaxHeight(),
+                numDays = numDays,
+                pointerOffset = pointerOffset.value,
+                draggedEvent = draggedEvent,
+            )
+            VerticalDivider(modifier = Modifier.zIndex(ZIndex.DIVIDER))
+            UnscheduledPane(
+                modifier = Modifier.weight(1f).fillMaxHeight(),
+            )
+        }
+    }
+}
 
-            // Draw timeslots
-            val checkerboardColor = MaterialTheme.colors.lightenedBackground
-            for (timeslot in timeslots) {
-                if (timeslot !in dayRange) continue
-                val offset = Offset(0f, minuteHeight * (timeslot.start_time - dayRange.first))
-                Box(
-                    modifier = Modifier
-                        .zIndex(ZIndex.BACKGROUND)
-                        .layout { measurable, _ ->
-                            simpleLayout(measurable, constraints.maxWidth.toFloat(), minuteHeight * timeslot.duration, offset)
-                        }
-                        .background(checkerboardColor, RectangleShape)
-                )
+@Composable
+private fun TimetablePane(
+    modifier: Modifier = Modifier,
+    numDays: Int,
+    pointerOffset: Offset,
+    draggedEvent: MutableState<ScheduledEvent?>,
+) {
+    val timetableViewModel: TimetableViewModel = get()
+    val events = timetableViewModel.events
+    val dayRange by timetableViewModel.dayRange
+    val timeslots by timetableViewModel.timeslots
+
+    var dropLocation by remember { mutableStateOf<DropLocation?>(null) }
+
+    BoxWithConstraints(modifier = modifier) {
+        val columnWidth = constraints.maxWidth.toFloat() / numDays
+        val columnHeight = constraints.maxHeight.toFloat()
+        val minuteHeight = columnHeight / (dayRange.last - dayRange.first)
+
+        // Draw timeslots
+        val checkerboardColor = MaterialTheme.colors.lightenedBackground
+        for (timeslot in timeslots) {
+            if (timeslot !in dayRange) continue
+            val offset = Offset(0f, minuteHeight * (timeslot.start_time - dayRange.first))
+            Box(
+                modifier = Modifier
+                    .zIndex(ZIndex.BACKGROUND)
+                    .layout { measurable, _ ->
+                        simpleLayout(measurable, constraints.maxWidth.toFloat(), minuteHeight * timeslot.duration, offset)
+                    }
+                    .background(checkerboardColor, RectangleShape)
+            )
+        }
+
+        // Draw drop indicator for dragged events, snapping to days and slots
+        draggedEvent.value?.let { event ->
+            val layoutModifier = remember(
+                pointerOffset,
+                columnWidth, columnHeight, minuteHeight,
+                dayRange, numDays,
+                timeslots, event,
+            ) {
+                // Calculate hovered day
+                val day = (0 until numDays).first { day ->
+                    val offset = pointerOffset.x.coerceIn(0f, columnWidth * numDays)
+                    offset >= day * columnWidth && offset <= (day + 1) * columnWidth
+                }
+
+                // Calculate hovered start time in minutes
+                val height = minuteHeight * event.duration
+                val rawOffset = pointerOffset.y - height / 2
+                val rawMinutes = dayRange.first + rawOffset / minuteHeight
+                val timeslotOffset = timeslots.find { timeslot ->
+                    abs(rawMinutes - timeslot.start_time) <= TIMESLOT_SNAP_MINUTES
+                }?.let { timeslot ->
+                    minuteHeight * (timeslot.start_time - dayRange.first)
+                }
+                val offsetY = (timeslotOffset ?: rawOffset).coerceIn(0f, columnHeight - height)
+                val startTime = (dayRange.first + offsetY / minuteHeight).roundToInt()
+
+                // Update drop location
+                dropLocation = DropLocation(DayOfWeek.of(day + 1), startTime)
+
+                // Return layout modifier
+                Modifier.layout { measurable, _ ->
+                    simpleLayout(measurable, columnWidth, height, Offset(columnWidth * day, offsetY))
+                }
             }
 
-            // Draw drop indicator for dragged events, snapping to days and slots
-            draggedEvent.value?.let { event ->
-                val layoutModifier = remember(
-                    pointerOffset,
-                    columnWidth, columnHeight, minuteHeight,
-                    dayRange, numDays,
-                    timeslots, event,
-                ) {
-                    // Calculate hovered day
-                    val day = (0 until numDays).first { day ->
-                        val offset = pointerOffset.x.coerceIn(0f, columnWidth * numDays)
-                        offset >= day * columnWidth && offset <= (day + 1) * columnWidth
-                    }
+            IndicatorCard(modifier = layoutModifier)
+        }
 
-                    // Calculate hovered start time in minutes
-                    val height = minuteHeight * event.duration
-                    val rawOffset = pointerOffset.y - height / 2
-                    val rawMinutes = dayRange.first + rawOffset / minuteHeight
-                    val timeslotOffset = timeslots.find { timeslot ->
-                        abs(rawMinutes - timeslot.start_time) <= TIMESLOT_SNAP_MINUTES
-                    }?.let { timeslot ->
-                        minuteHeight * (timeslot.start_time - dayRange.first)
-                    }
-                    val offsetY = (timeslotOffset ?: rawOffset).coerceIn(0f, columnHeight - height)
-                    val startTime = (dayRange.first + offsetY / minuteHeight).roundToInt()
-
-                    // Update drop location
-                    dropLocation = DropLocation(DayOfWeek.of(day + 1), startTime)
-
-                    // Return layout modifier
+        // Draw events
+        for (event in events) {
+            key(event) {
+                val layoutModifier = remember(event, columnWidth, minuteHeight, dayRange) {
                     Modifier.layout { measurable, _ ->
-                        simpleLayout(measurable, columnWidth, height, Offset(columnWidth * day, offsetY))
+                        val offset = Offset(columnWidth * (event.day.value - 1), minuteHeight * (event.startTime - dayRange.first))
+                        simpleLayout(measurable, columnWidth, minuteHeight * event.duration, offset)
                     }
                 }
-
-                IndicatorCard(modifier = layoutModifier)
-            }
-
-            // Draw events
-            for (event in events) {
-                key(event) {
-                    val layoutModifier = remember(event, columnWidth, minuteHeight, dayRange) {
-                        Modifier.layout { measurable, _ ->
-                            val offset = Offset(columnWidth * (event.day.value - 1), minuteHeight * (event.startTime - dayRange.first))
-                            simpleLayout(measurable, columnWidth, minuteHeight * event.duration, offset)
+                TimetableEventCard(
+                    modifier = layoutModifier,
+                    event = event,
+                    onDragStart = {
+                        draggedEvent.value = event
+                    },
+                    onDrop = { _, persist ->
+                        val droppedEvent = draggedEvent.value ?: return@TimetableEventCard
+                        logger.debug { "Dropped $droppedEvent at $dropLocation" + ", persisting".takeIf { persist } }
+                        if (persist && dropLocation != null) {
+                            val (day, startTime) = dropLocation!!
+                            timetableViewModel.reschedule(droppedEvent, day, startTime)
                         }
+                        draggedEvent.value = null
                     }
-                    TimetableEventCard(
-                        modifier = layoutModifier,
-                        event = event,
-                        onDragStart = {
-                            draggedEvent.value = event
-                        },
-                        onDrop = { _, persist ->
-                            val droppedEvent = draggedEvent.value ?: return@TimetableEventCard
-                            logger.debug { "Dropped $droppedEvent at $dropLocation" + ", persisting".takeIf { persist } }
-                            if (persist && dropLocation != null) {
-                                val (day, startTime) = dropLocation!!
-                                timetableViewModel.reschedule(droppedEvent, day, startTime)
-                            }
-                            draggedEvent.value = null
-                        }
-                    )
-                }
+                )
             }
         }
     }
