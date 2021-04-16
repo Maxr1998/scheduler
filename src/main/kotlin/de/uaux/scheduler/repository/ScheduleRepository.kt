@@ -70,6 +70,9 @@ class ScheduleRepository(
         }.executeAsList()
     }
 
+    fun queryUnscheduledEvents(studycourse: Studycourse, semester: Semester): List<Event> =
+        scheduleQueries.queryUnscheduledEventsInStudycourseBySemester(studycourse.id, semester.code).executeAsList()
+
     fun queryRoom(id: Long, cache: Map<Long, Room> = emptyMap()): Room? = when (id) {
         in cache -> cache[id]
         -1L -> Room(-1, localizationUtil["room_digital"], Int.MAX_VALUE)

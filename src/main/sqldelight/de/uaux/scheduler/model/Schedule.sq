@@ -25,6 +25,13 @@ SELECT e.*, s.day, s.start_time, s.room
 FROM StudycourseEvent se JOIN Event e JOIN Schedule s ON se.event = e.id AND e.id = s.event
 WHERE se.studycourse = ? AND s.semester = ?;
 
+queryUnscheduledEventsInStudycourseBySemester:
+SELECT e.*
+FROM StudycourseEvent se JOIN Event e ON se.event = e.id
+WHERE se.studycourse = ? AND e.id NOT IN (
+    SELECT s.event FROM Schedule s WHERE s.semester = ?
+) ORDER BY e.name;
+
 rescheduleEvent:
 UPDATE Schedule
 SET day = :newDay, start_time = :newStart

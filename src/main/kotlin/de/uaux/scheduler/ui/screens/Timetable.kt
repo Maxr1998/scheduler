@@ -26,8 +26,8 @@ import androidx.compose.ui.zIndex
 import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.model.TimetableSelection
 import de.uaux.scheduler.ui.screens.timetable.StudycourseAndSemesterSelectionDropdown
-import de.uaux.scheduler.ui.screens.timetable.SuggestionsPane
 import de.uaux.scheduler.ui.screens.timetable.TimetablePane
+import de.uaux.scheduler.ui.screens.timetable.UnscheduledPane
 import de.uaux.scheduler.ui.util.Toolbar
 import de.uaux.scheduler.ui.util.VerticalDivider
 import de.uaux.scheduler.ui.util.ZIndex
@@ -92,7 +92,7 @@ private fun TimetableScreenContent() {
             modifier = Modifier.weight(1f, true).fillMaxHeight(),
         )
         VerticalDivider(modifier = Modifier.zIndex(ZIndex.DIVIDER))
-        SuggestionsPane(
+        UnscheduledPane(
             modifier = Modifier.width(240.dp).fillMaxHeight(),
         )
     }

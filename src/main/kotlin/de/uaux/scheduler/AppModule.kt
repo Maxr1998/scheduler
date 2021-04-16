@@ -27,7 +27,7 @@ val appModule = module {
     single { DialogViewModel() }
     single { HomeViewModel(get(), get(), get(), get()) }
     single { EventManagementViewModel(get(), get()) }
-    single { TimetableViewModel(get(), get(), get()) }
+    single { TimetableViewModel(get(), get()) }
 
     // Repositories
     single { StudycourseRepository(get()) }

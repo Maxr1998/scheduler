@@ -10,10 +10,8 @@ import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.model.dto.ScheduledEvent
-import de.uaux.scheduler.model.dto.Suggestion
 import de.uaux.scheduler.repository.ScheduleRepository
 import de.uaux.scheduler.repository.StudycourseRepository
-import de.uaux.scheduler.repository.SuggestionRepository
 import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.model.TimetableSelection
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +30,6 @@ private val logger = KotlinLogging.logger {}
 class TimetableViewModel(
     private val studycourseRepository: StudycourseRepository,
     private val scheduleRepository: ScheduleRepository,
-    private val suggestionRepository: SuggestionRepository,
 ) {
     private val coroutineScope = MainScope()
 
@@ -46,9 +43,14 @@ class TimetableViewModel(
     private val _timetableSelection: MutableState<TimetableSelection> = mutableStateOf(TimetableSelection.None)
 
     /**
-     * Contains [Event]s for the currently selected schedule
+     * Contains [ScheduledEvent]s for the currently selected schedule
      */
     val events: SnapshotStateList<ScheduledEvent> = mutableStateListOf()
+
+    /**
+     * Contains [Event]s for the studycourse and semester that are currently not scheduled
+     */
+    val unscheduledEvents: SnapshotStateList<Event> = mutableStateListOf()
 
     /**
      * Whether to show the weekend in the timetable interface
@@ -67,11 +69,6 @@ class TimetableViewModel(
     val timeslots: State<List<Timeslot>> get() = _timeslots
     private val _timeslots: MutableState<List<Timeslot>> = mutableStateOf(emptyList())
 
-    /**
-     * Contains [Suggestion]s which are displayed in the timetable sidebar
-     */
-    val suggestions: SnapshotStateList<Suggestion> = SnapshotStateList()
-
     init {
         coroutineScope.launch {
             studycoursesFlow.collect { studycourses ->
@@ -87,16 +84,16 @@ class TimetableViewModel(
         _timetableSelection.value = TimetableSelection.Loading
 
         val eventsJob = launch {
-            // Query scheduled events
-            val scheduledEvents = withContext(Dispatchers.IO) {
+            // Refresh scheduled events
+            val scheduled = withContext(Dispatchers.IO) {
                 scheduleRepository.queryScheduledEvents(studycourse, semester)
             }
 
-            val hasWeekends = scheduledEvents.any { event -> event.day > DayOfWeek.FRIDAY }
+            val hasWeekends = scheduled.any { event -> event.day > DayOfWeek.FRIDAY }
             showWeekend.value = if (hasWeekends) ShowWeekend.FORCE else ShowWeekend.FALSE
 
             events.clear()
-            events.addAll(scheduledEvents)
+            events.addAll(scheduled)
         }
 
         val timeslotsJob = launch {
@@ -113,17 +110,17 @@ class TimetableViewModel(
             _dayRange.value = startOfDay..endOfDay
         }
 
-        val suggestionsJob = launch {
-            // Refresh suggestions
-            val suggestions = withContext(Dispatchers.IO) {
-                suggestionRepository.querySuggestions(studycourse, semester)
+        val unscheduledJob = launch {
+            // Refresh unscheduled events
+            val unscheduled = withContext(Dispatchers.IO) {
+                scheduleRepository.queryUnscheduledEvents(studycourse, semester)
             }
 
-            this@TimetableViewModel.suggestions.clear()
-            this@TimetableViewModel.suggestions.addAll(suggestions)
+            unscheduledEvents.clear()
+            unscheduledEvents.addAll(unscheduled)
         }
 
-        joinAll(eventsJob, timeslotsJob, suggestionsJob)
+        joinAll(eventsJob, timeslotsJob, unscheduledJob)
 
         _timetableSelection.value = TimetableSelection.Loaded(semester, studycourse)
     }
