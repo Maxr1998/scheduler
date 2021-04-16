@@ -3,7 +3,6 @@
 package de.uaux.scheduler.ui.screens.timetable
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -13,6 +12,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -26,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
@@ -37,16 +38,14 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.duration
 import de.uaux.scheduler.ui.model.ShowWeekend
-import de.uaux.scheduler.ui.util.DraggableCard
+import de.uaux.scheduler.ui.util.VerticalDivider
 import de.uaux.scheduler.ui.util.ZIndex
 import de.uaux.scheduler.ui.util.lightenedBackground
-import de.uaux.scheduler.ui.util.l
 import de.uaux.scheduler.util.formatMinutesOfDay
 import de.uaux.scheduler.viewmodel.TimetableViewModel
 import mu.KotlinLogging
@@ -62,7 +61,20 @@ private val logger = KotlinLogging.logger {}
 const val TIMESLOT_SNAP_MINUTES = 10
 
 @Composable
-fun TimetablePane(modifier: Modifier = Modifier) {
+fun TimetableScreenContent() {
+    Row {
+        TimetablePane(
+            modifier = Modifier.weight(1f, true).fillMaxHeight(),
+        )
+        VerticalDivider(modifier = Modifier.zIndex(ZIndex.DIVIDER))
+        UnscheduledPane(
+            modifier = Modifier.width(240.dp).fillMaxHeight(),
+        )
+    }
+}
+
+@Composable
+private fun TimetablePane(modifier: Modifier = Modifier) {
     val timetableViewModel: TimetableViewModel = get()
     val events = timetableViewModel.events
     val showWeekend by timetableViewModel.showWeekend
@@ -192,6 +204,18 @@ fun TimetablePane(modifier: Modifier = Modifier) {
 }
 
 @Composable
+private fun UnscheduledPane(modifier: Modifier = Modifier) {
+    val timetableViewModel: TimetableViewModel = get()
+    LazyColumn(
+        modifier = modifier,
+    ) {
+        items(timetableViewModel.unscheduledEvents) { unscheduled ->
+            UnscheduledEventCard(event = unscheduled)
+        }
+    }
+}
+
+@Composable
 private fun RowScope.WeightedTextBox(text: String) {
     Box(
         modifier = Modifier.weight(1f).fillMaxHeight().padding(horizontal = 8.dp),
@@ -202,54 +226,6 @@ private fun RowScope.WeightedTextBox(text: String) {
             style = MaterialTheme.typography.subtitle1,
         )
     }
-}
-
-@Composable
-private fun TimetableEventCard(
-    modifier: Modifier = Modifier,
-    event: ScheduledEvent,
-    onDragStart: () -> Unit = { },
-    onDragUpdate: (offset: Offset) -> Unit = { },
-    onDrop: (offset: Offset, persist: Boolean) -> Unit = { _, _ -> },
-) {
-    DraggableCard(
-        modifier = modifier,
-        onDragStart = onDragStart,
-        onDragUpdate = onDragUpdate,
-        onDrop = onDrop
-    ) {
-        Column(
-            modifier = Modifier.padding(8.dp),
-        ) {
-            Text(
-                modifier = Modifier.padding(bottom = 8.dp),
-                text = event.event.name,
-                fontSize = 14.sp,
-                style = MaterialTheme.typography.subtitle1,
-            )
-            event.room?.let { room ->
-                Text(
-                    text = l("event_label_room") + ": ${room.name}",
-                    fontSize = 11.sp,
-                    style = MaterialTheme.typography.subtitle2,
-                )
-            }
-
-        }
-    }
-}
-
-@Composable
-private fun IndicatorCard(
-    modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colors.primary,
-) {
-    Box(
-        modifier = modifier
-            .padding(4.dp)
-            .background(color.copy(alpha = 0.12f), MaterialTheme.shapes.medium)
-            .border(1.dp, color, MaterialTheme.shapes.medium),
-    )
 }
 
 // Helper functions

@@ -3,11 +3,9 @@ package de.uaux.scheduler.ui.screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
@@ -20,16 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.model.TimetableSelection
 import de.uaux.scheduler.ui.screens.timetable.StudycourseAndSemesterSelectionDropdown
-import de.uaux.scheduler.ui.screens.timetable.TimetablePane
-import de.uaux.scheduler.ui.screens.timetable.UnscheduledPane
+import de.uaux.scheduler.ui.screens.timetable.TimetableScreenContent
 import de.uaux.scheduler.ui.util.LoadingBox
 import de.uaux.scheduler.ui.util.Toolbar
-import de.uaux.scheduler.ui.util.VerticalDivider
-import de.uaux.scheduler.ui.util.ZIndex
 import de.uaux.scheduler.ui.util.l
 import de.uaux.scheduler.viewmodel.TimetableViewModel
 import org.koin.androidx.compose.get
@@ -85,19 +79,6 @@ private fun ShowWeekendToggle(weekendState: MutableState<ShowWeekend>) {
             onCheckedChange = { checked ->
                 showWeekend = if (checked) ShowWeekend.TRUE else ShowWeekend.FALSE
             }
-        )
-    }
-}
-
-@Composable
-private fun TimetableScreenContent() {
-    Row {
-        TimetablePane(
-            modifier = Modifier.weight(1f, true).fillMaxHeight(),
-        )
-        VerticalDivider(modifier = Modifier.zIndex(ZIndex.DIVIDER))
-        UnscheduledPane(
-            modifier = Modifier.width(240.dp).fillMaxHeight(),
         )
     }
 }
