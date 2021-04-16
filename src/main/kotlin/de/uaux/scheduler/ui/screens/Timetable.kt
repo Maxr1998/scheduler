@@ -13,6 +13,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,34 +42,7 @@ fun TimetableScreen() = Column {
         modifier = Modifier.fillMaxWidth().height(56.dp),
         title = l("screen_timetable"),
     ) {
-        var showWeekend by timetableViewModel.showWeekend
-        val isEnabled = { showWeekend != ShowWeekend.FORCE }
-        val isChecked = { showWeekend != ShowWeekend.FALSE }
-        Row(
-            modifier = Modifier
-                .height(42.dp)
-                .padding(horizontal = 8.dp)
-                .clip(MaterialTheme.shapes.medium)
-                .clickable(enabled = isEnabled()) {
-                    showWeekend = if (!isChecked()) ShowWeekend.TRUE else ShowWeekend.FALSE
-                }
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                modifier = Modifier.padding(end = 12.dp),
-                text = l("switch_label_show_weekend"),
-                style = MaterialTheme.typography.body2,
-            )
-
-            Switch(
-                enabled = isEnabled(),
-                checked = isChecked(),
-                onCheckedChange = { checked ->
-                    showWeekend = if (checked) ShowWeekend.TRUE else ShowWeekend.FALSE
-                }
-            )
-        }
+        ShowWeekendToggle(timetableViewModel.showWeekend)
 
         if (selection is TimetableSelection.Loaded) {
             StudycourseAndSemesterSelectionDropdown(selection)
@@ -80,6 +54,38 @@ fun TimetableScreen() = Column {
             TimetableSelection.Loading -> LoadingBox()
             is TimetableSelection.Loaded -> TimetableScreenContent()
         }
+    }
+}
+
+@Composable
+private fun ShowWeekendToggle(weekendState: MutableState<ShowWeekend>) {
+    var showWeekend by weekendState
+    val isEnabled = { showWeekend != ShowWeekend.FORCE }
+    val isChecked = { showWeekend != ShowWeekend.FALSE }
+    Row(
+        modifier = Modifier
+            .height(42.dp)
+            .padding(horizontal = 8.dp)
+            .clip(MaterialTheme.shapes.medium)
+            .clickable(enabled = isEnabled()) {
+                showWeekend = if (!isChecked()) ShowWeekend.TRUE else ShowWeekend.FALSE
+            }
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            modifier = Modifier.padding(end = 12.dp),
+            text = l("switch_label_show_weekend"),
+            style = MaterialTheme.typography.body2,
+        )
+
+        Switch(
+            enabled = isEnabled(),
+            checked = isChecked(),
+            onCheckedChange = { checked ->
+                showWeekend = if (checked) ShowWeekend.TRUE else ShowWeekend.FALSE
+            }
+        )
     }
 }
 
