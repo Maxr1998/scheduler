@@ -17,6 +17,9 @@ CREATE INDEX idx_schedule_semester ON Schedule (semester);
 CREATE INDEX idx_schedule_event ON Schedule (event);
 CREATE INDEX idx_schedule_room ON Schedule (room);
 
+insert:
+INSERT INTO Schedule VALUES ?;
+
 queryAllSemesters:
 SELECT DISTINCT s.semester FROM Schedule s ORDER BY s.semester DESC;
 

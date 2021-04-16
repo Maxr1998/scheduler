@@ -3,6 +3,7 @@ package de.uaux.scheduler.model.dto
 import androidx.compose.runtime.Immutable
 import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.Room
+import de.uaux.scheduler.model.Schedule
 import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.util.formatMinutesOfDay
 import java.time.DayOfWeek
@@ -22,4 +23,6 @@ data class ScheduledEvent(
         "ScheduledEvent(${event.name}, $semester, $day / ${formatMinutesOfDay(startTime)} - ${formatMinutesOfDay(endTime)}, room=${room?.id})"
 
     fun toShortString(): String = "ScheduledEvent(${event.name})"
+
+    fun persist(): Schedule = Schedule(semester.code, event.id, day.value, startTime, room?.id ?: 0L)
 }

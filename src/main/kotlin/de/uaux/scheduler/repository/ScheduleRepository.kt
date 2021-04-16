@@ -75,8 +75,14 @@ class ScheduleRepository(
 
     fun queryRoom(id: Long, cache: Map<Long, Room> = emptyMap()): Room? = when (id) {
         in cache -> cache[id]
+        0L -> null
         -1L -> Room(-1, localizationUtil["room_digital"], Int.MAX_VALUE)
         else -> roomQueries.queryRoomById(id).executeAsOneOrNull()
+    }
+
+    fun scheduleEvent(event: ScheduledEvent): Boolean {
+        scheduleQueries.insert(event.persist())
+        return standardQueries.changes().executeAsOne() == 1L
     }
 
     fun rescheduleEvent(event: ScheduledEvent, day: DayOfWeek, startTime: Int): Boolean {
