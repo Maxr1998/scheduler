@@ -1,17 +1,14 @@
 package de.uaux.scheduler.ui.screens
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.DisableSelection
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
@@ -28,6 +25,7 @@ import de.uaux.scheduler.ui.model.TimetableSelection
 import de.uaux.scheduler.ui.screens.timetable.StudycourseAndSemesterSelectionDropdown
 import de.uaux.scheduler.ui.screens.timetable.TimetablePane
 import de.uaux.scheduler.ui.screens.timetable.UnscheduledPane
+import de.uaux.scheduler.ui.util.LoadingBox
 import de.uaux.scheduler.ui.util.Toolbar
 import de.uaux.scheduler.ui.util.VerticalDivider
 import de.uaux.scheduler.ui.util.ZIndex
@@ -95,15 +93,5 @@ private fun TimetableScreenContent() {
         UnscheduledPane(
             modifier = Modifier.width(240.dp).fillMaxHeight(),
         )
-    }
-}
-
-@Composable
-private fun LoadingBox() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        CircularProgressIndicator()
     }
 }
