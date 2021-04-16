@@ -125,6 +125,31 @@ class TimetableViewModel(
         _timetableSelection.value = TimetableSelection.Loaded(semester, studycourse)
     }
 
+    fun schedule(event: ScheduledEvent) = coroutineScope.launch {
+        logger.debug { "Scheduling $event" }
+
+        // Assert start and end times
+        require(event.startTime in 0..MAX_MINUTES_IN_DAY)
+        require(event.endTime in 0..MAX_MINUTES_IN_DAY)
+
+        // Apply changes to ViewModel
+        events.add(event)
+
+        // Persist to database and update events
+        val changed = withContext(Dispatchers.IO) {
+            scheduleRepository.scheduleEvent(event)
+        }
+
+        // Log result and revert changes on failure
+        if (changed) {
+            logger.debug { "Successfully added $event to schedule" }
+            unscheduledEvents.remove(event.event)
+        } else {
+            logger.debug { "Failed to add $event to schedule" }
+            events.remove(event)
+        }
+    }
+
     fun reschedule(event: ScheduledEvent, day: DayOfWeek, startTime: Int) = coroutineScope.launch {
         logger.debug { "Rescheduling $event to $day at $startTime" }
 

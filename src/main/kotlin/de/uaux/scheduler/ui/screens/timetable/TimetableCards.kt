@@ -2,16 +2,20 @@ package de.uaux.scheduler.ui.screens.timetable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.uaux.scheduler.model.Event
@@ -19,19 +23,20 @@ import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.ui.util.DraggableCard
 import de.uaux.scheduler.ui.util.l
 
+private const val POINTER_KEY_PSEUDO_DRAGGABLE = "pseudo-draggable-card"
+
 @Composable
 fun TimetableEventCard(
     modifier: Modifier = Modifier,
     event: ScheduledEvent,
-    onDragStart: () -> Unit = { },
-    onDragUpdate: (offset: Offset) -> Unit = { },
-    onDrop: (offset: Offset, persist: Boolean) -> Unit = { _, _ -> },
+    onDrag: () -> Unit,
+    onDrop: (persist: Boolean) -> Unit,
 ) {
     DraggableCard(
         modifier = modifier,
-        onDragStart = onDragStart,
-        onDragUpdate = onDragUpdate,
-        onDrop = onDrop
+        onDragStart = onDrag,
+        onDragUpdate = { },
+        onDrop = { _, success -> onDrop(success) }
     ) {
         Column(
             modifier = Modifier.padding(8.dp),
@@ -68,9 +73,35 @@ fun IndicatorCard(
 }
 
 @Composable
-fun UnscheduledEventCard(event: Event) {
-    DraggableCard(
-        modifier = Modifier.fillMaxWidth(),
+fun UnscheduledEventCard(
+    event: Event,
+    onDragStart: () -> Unit = { },
+    onDragUpdate: () -> Unit = { },
+    onDrop: (success: Boolean) -> Unit = { },
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp)
+            .clickable {}
+            .pointerInput(POINTER_KEY_PSEUDO_DRAGGABLE) {
+                detectDragGestures(
+                    onDragStart = {
+                        onDragStart()
+                    },
+                    onDrag = { change, _ ->
+                        change.consumeAllChanges()
+                        onDragUpdate()
+                    },
+                    onDragEnd = {
+                        onDrop(true)
+                    },
+                    onDragCancel = {
+                        onDrop(false)
+                    },
+                )
+            },
+        elevation = 2.dp,
     ) {
         Column(
             modifier = Modifier.padding(8.dp),

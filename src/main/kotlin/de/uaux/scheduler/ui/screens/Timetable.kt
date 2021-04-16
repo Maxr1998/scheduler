@@ -46,7 +46,7 @@ fun TimetableScreen() = Column {
         when (selection) {
             TimetableSelection.None -> Unit // TODO
             TimetableSelection.Loading -> LoadingBox()
-            is TimetableSelection.Loaded -> TimetableScreenContent()
+            is TimetableSelection.Loaded -> TimetableScreenContent(selection)
         }
     }
 }
