@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -80,9 +81,8 @@ fun TimetablePane(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth().height(32.dp),
         ) {
             for (day in DayOfWeek.values().take(numDays)) {
-                DayOfWeekLabel(
-                    modifier = Modifier.weight(1f).fillMaxHeight(),
-                    day = day,
+                WeightedTextBox(
+                    text = remember(day) { day.getDisplayName(TextStyle.FULL, Locale.getDefault()) },
                 )
             }
         }
@@ -192,13 +192,13 @@ fun TimetablePane(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun DayOfWeekLabel(modifier: Modifier = Modifier, day: DayOfWeek) {
+private fun RowScope.WeightedTextBox(text: String) {
     Box(
-        modifier = modifier.padding(horizontal = 8.dp),
+        modifier = Modifier.weight(1f).fillMaxHeight().padding(horizontal = 8.dp),
         contentAlignment = Alignment.CenterStart
     ) {
         Text(
-            text = remember(day) { day.getDisplayName(TextStyle.FULL, Locale.getDefault()) },
+            text = text,
             style = MaterialTheme.typography.subtitle1,
         )
     }
