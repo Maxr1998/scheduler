@@ -1,5 +1,7 @@
 package de.uaux.scheduler.util
 
+val IntRange.size get() = last - first
+
 fun <T : Comparable<T>> List<T>.binaryInsertIndex(element: T): Int {
     val searchIndex = binarySearch(element)
     return if (searchIndex < 0) -(searchIndex + 1) else searchIndex

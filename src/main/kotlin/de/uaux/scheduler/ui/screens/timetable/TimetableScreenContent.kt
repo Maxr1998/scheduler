@@ -51,6 +51,7 @@ import de.uaux.scheduler.ui.util.ZIndex
 import de.uaux.scheduler.ui.util.l
 import de.uaux.scheduler.ui.util.lightenedBackground
 import de.uaux.scheduler.util.formatMinutesOfDay
+import de.uaux.scheduler.util.size
 import de.uaux.scheduler.viewmodel.TimetableViewModel
 import mu.KotlinLogging
 import org.koin.androidx.compose.get
@@ -58,6 +59,7 @@ import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 private val logger = KotlinLogging.logger {}
@@ -202,13 +204,42 @@ private fun TimetablePane(
         }
 
         // Draw events
-        for (event in events) {
+        var overlap = -1..-1
+        for (i in events.indices) {
+            val event = events[i]
             key(event) {
-                val layoutModifier = remember(event, columnWidth, minuteHeight, dayRange) {
-                    Modifier.layout { measurable, _ ->
-                        val offset = Offset(columnWidth * (event.day.value - 1), minuteHeight * (event.startTime - dayRange.first))
-                        simpleLayout(measurable, columnWidth, minuteHeight * event.duration, offset)
+                // Calculate offset multiplier (and overlap if necessary)
+                val offsetMultiplier: Int
+                if (i in overlap) {
+                    // Event is already part of an active overlap group, set offset according to the provided data
+                    offsetMultiplier = i - overlap.first
+                } else {
+                    // Check for new overlap groups
+                    var maxEndTime = event.endTime
+                    var parallel = 0
+
+                    // Iterate through successive events to check for overlaps
+                    for (j in i + 1 until events.size) {
+                        val successor = events[j]
+                        // Increase counter for events on the same day that start before the current overlap group ends,
+                        // otherwise break
+                        if (successor.day == event.day && successor.startTime < maxEndTime) parallel++ else break
+                        maxEndTime = max(maxEndTime, successor.endTime)
                     }
+
+                    // Overlap is from current event to the last overlapping one
+                    overlap = i..i + parallel
+
+                    // First event in overlap group never has an offset
+                    offsetMultiplier = 0
+                }
+
+                // Set size divisor according to computed data
+                val sizeDivisor = overlap.size + 1
+
+                val layoutModifier = Modifier.layout { measurable, _ ->
+                    val offset = Offset(columnWidth * (event.day.value - 1) + ((columnWidth / sizeDivisor) * offsetMultiplier), minuteHeight * (event.startTime - dayRange.first))
+                    simpleLayout(measurable, columnWidth / sizeDivisor, minuteHeight * event.duration, offset)
                 }
                 TimetableEventCard(
                     modifier = layoutModifier,
