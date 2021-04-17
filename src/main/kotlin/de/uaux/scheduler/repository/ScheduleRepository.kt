@@ -60,6 +60,10 @@ class ScheduleRepository(
     fun queryTimeslots(semester: Semester): List<Timeslot> =
         timeslotQueries.queryTimeslotsForSemester(semester.code).executeAsList()
 
+    /**
+     * List of scheduled events for [studycourse] in [semester],
+     * pre-sorted by [day][ScheduledEvent.day] and [start time][ScheduledEvent.startTime]
+     */
     fun queryScheduledEvents(studycourse: Studycourse, semester: Semester): List<ScheduledEvent> {
         val roomCache = HashMap<Long, Room>()
         return scheduleQueries.queryScheduledEventsInStudycourseBySemester(studycourse.id, semester.code) { id, name, module, duration, participants, day, startTime, roomId ->

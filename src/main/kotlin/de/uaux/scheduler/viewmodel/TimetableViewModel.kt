@@ -14,6 +14,8 @@ import de.uaux.scheduler.repository.ScheduleRepository
 import de.uaux.scheduler.repository.StudycourseRepository
 import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.model.TimetableSelection
+import de.uaux.scheduler.util.binaryInsert
+import de.uaux.scheduler.util.binaryInsertIndex
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -133,7 +135,8 @@ class TimetableViewModel(
         require(event.endTime in 0..MAX_MINUTES_IN_DAY)
 
         // Apply changes to ViewModel
-        events.add(event)
+        val insertIndex = events.binaryInsertIndex(event)
+        events.add(insertIndex, event)
 
         // Persist to database and update events
         val changed = withContext(Dispatchers.IO) {
@@ -146,7 +149,7 @@ class TimetableViewModel(
             unscheduledEvents.remove(event.event)
         } else {
             logger.debug { "Failed to add $event to schedule" }
-            events.remove(event)
+            events.removeAt(insertIndex)
         }
     }
 
@@ -158,7 +161,7 @@ class TimetableViewModel(
         require(event.endTime in 0..MAX_MINUTES_IN_DAY)
 
         // Get event index and check if present
-        val index = events.indexOf(event)
+        val index = events.binarySearch(event)
         if (index < 0) {
             // Abort if invalid event
             logger.error { "$event not in list" }
@@ -166,8 +169,10 @@ class TimetableViewModel(
         }
 
         // Apply changes to ViewModel
+        events.removeAt(index)
         val rescheduledEvent = event.copy(day = day, startTime = startTime)
-        events[index] = rescheduledEvent
+        val insertIndex = events.binaryInsertIndex(rescheduledEvent)
+        events.add(insertIndex, rescheduledEvent)
 
         // Persist to database and update events
         val changed = withContext(Dispatchers.IO) {
@@ -179,7 +184,10 @@ class TimetableViewModel(
             logger.debug { "Successfully rescheduled $rescheduledEvent" }
         } else {
             logger.debug { "Failed to reschedule $event" }
-            events[index] = event
+
+            // Rollback changes
+            events.removeAt(insertIndex)
+            events.binaryInsert(event)
         }
     }
 

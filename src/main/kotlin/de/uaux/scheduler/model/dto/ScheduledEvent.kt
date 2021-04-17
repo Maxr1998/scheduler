@@ -15,7 +15,7 @@ data class ScheduledEvent(
     val day: DayOfWeek,
     val startTime: Int,
     val room: Room?,
-) {
+) : Comparable<ScheduledEvent> {
     val duration: Int = event.duration
     val endTime: Int = startTime + event.duration
 
@@ -25,4 +25,18 @@ data class ScheduledEvent(
     fun toShortString(): String = "ScheduledEvent(${event.name})"
 
     fun persist(): Schedule = Schedule(semester.code, event.id, day.value, startTime, room?.id ?: 0L)
+
+    override fun compareTo(other: ScheduledEvent): Int {
+        if (this == other) return 0
+        val byDay = day.compareTo(other.day)
+        if (byDay != 0) return byDay
+
+        val byTime = startTime.compareTo(other.startTime)
+        if (byTime != 0) return byTime
+
+        val byDuration = -duration.compareTo(other.duration)
+        if (byDuration != 0) return byDuration
+
+        return -1 // Default less
+    }
 }

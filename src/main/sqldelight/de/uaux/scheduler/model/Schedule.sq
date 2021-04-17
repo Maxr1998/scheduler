@@ -26,7 +26,8 @@ SELECT DISTINCT s.semester FROM Schedule s ORDER BY s.semester DESC;
 queryScheduledEventsInStudycourseBySemester:
 SELECT e.*, s.day, s.start_time, s.room
 FROM StudycourseEvent se JOIN Event e JOIN Schedule s ON se.event = e.id AND e.id = s.event
-WHERE se.studycourse = ? AND s.semester = ?;
+WHERE se.studycourse = ? AND s.semester = ?
+ORDER BY s.day, s.start_time, e.duration DESC;
 
 queryUnscheduledEventsInStudycourseBySemester:
 SELECT e.*
