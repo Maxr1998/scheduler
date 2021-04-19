@@ -59,7 +59,7 @@ private fun StudycourseEventListItem(
         },
         secondaryText = {
             val fields = listOfNotNull(
-                studycourseEvent.semester?.let { semester -> l("event_panel_event_summary_semester").format(semester) },
+                l("event_panel_event_summary_semester").format(studycourseEvent.semester),
                 if (studycourseEvent.required) l("studycourse_domain_required") else l("studycourse_domain_voluntary"),
                 "-", // TODO: list lecturers
             )

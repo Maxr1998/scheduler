@@ -1,7 +1,7 @@
 CREATE TABLE StudycourseEvent (
     studycourse INTEGER NOT NULL REFERENCES Studycourse(id) ON DELETE CASCADE,
     event INTEGER NOT NULL REFERENCES Event(id) ON DELETE CASCADE,
-    semester INTEGER AS Int,
+    semester INTEGER AS Int NOT NULL,
     required INTEGER AS Boolean NOT NULL,
     UNIQUE (studycourse, event)
 );

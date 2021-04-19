@@ -6,6 +6,6 @@ import de.uaux.scheduler.model.Event
 @Immutable
 data class StudycourseEvent(
     val event: Event,
-    val semester: Int?,
+    val semester: Int,
     val required: Boolean,
 )

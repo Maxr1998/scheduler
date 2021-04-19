@@ -87,12 +87,12 @@ fun StudycourseEventDialog(
             }
 
             SaveButton(
-                enabled = event.value != null && semesterError == null,
+                enabled = event.value != null && semester != null && semesterError == null,
                 onSave = {
                     coroutineScope.launch {
                         val updated = StudycourseEvent(
                             requireNotNull(event.value),
-                            semester,
+                            requireNotNull(semester),
                             required.value,
                         )
                         studycourseRepository.link(studycourse, updated)
