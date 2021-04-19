@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.uaux.scheduler.model.Event
@@ -39,18 +40,20 @@ fun TimetableEventCard(
         onDrop = { _, success -> onDrop(success) }
     ) {
         Column(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 8.dp),
         ) {
             Text(
-                modifier = Modifier.padding(bottom = 8.dp),
+                modifier = Modifier.padding(bottom = 4.dp),
                 text = event.event.name,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.subtitle1,
             )
             event.room?.let { room ->
                 Text(
                     text = l("event_label_room") + ": ${room.name}",
-                    fontSize = 11.sp,
+                    fontSize = 10.sp,
                     style = MaterialTheme.typography.subtitle2,
                 )
             }
