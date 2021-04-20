@@ -12,7 +12,6 @@ import de.uaux.scheduler.util.checkAndGetId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
-import de.uaux.scheduler.model.StudycourseEvent as DbStudycourseEvent
 
 class StudycourseRepository(database: Database) {
     private val standardQueries = database.standardQueries
@@ -51,8 +50,7 @@ class StudycourseRepository(database: Database) {
      * Links the [Event] in [studycourseEvent] to [studycourse], replacing all attributes with the provided ones
      */
     suspend fun link(studycourse: Studycourse, studycourseEvent: StudycourseEvent): Boolean = withContext(Dispatchers.IO) {
-        val relationObject = DbStudycourseEvent(studycourse.id, studycourseEvent.event.id, studycourseEvent.semester, studycourseEvent.required)
-        studycourseEventQueries.insertOrReplace(relationObject)
+        studycourseEventQueries.insertOrReplace(studycourseEvent.persist(studycourse))
         standardQueries.changedOne()
     }
 

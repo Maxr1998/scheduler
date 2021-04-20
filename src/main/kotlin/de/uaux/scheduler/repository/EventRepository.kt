@@ -7,6 +7,7 @@ import de.uaux.scheduler.model.Database
 import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.dto.StudycourseEvent
+import de.uaux.scheduler.util.StudycourseEventMapper
 import de.uaux.scheduler.util.changedOne
 import de.uaux.scheduler.util.checkAndGetId
 import kotlinx.coroutines.Dispatchers
@@ -61,11 +62,10 @@ class EventRepository(
         }.executeAsList()
     }
 
-    fun queryAllInStudycourseAsFlow(studycourse: Studycourse): Flow<List<StudycourseEvent>> =
-        eventQueries
-            .queryAllInStudycourse(studycourse.id) { id, name, module, duration, participants, semester, required ->
-                StudycourseEvent(Event(id, name, module, duration, participants), semester, required)
-            }
-            .asFlow()
-            .mapToList(Dispatchers.IO)
+    fun queryAllInStudycourseAsFlow(studycourse: Studycourse): Flow<List<StudycourseEvent>> {
+        val mapper: StudycourseEventMapper = { id, name, module, duration, participants, semester, required ->
+            StudycourseEvent(Event(id, name, module, duration, participants), semester, required)
+        }
+        return eventQueries.queryAllInStudycourse(studycourse.id, mapper = mapper).asFlow().mapToList(Dispatchers.IO)
+    }
 }
