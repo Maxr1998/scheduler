@@ -36,6 +36,7 @@ import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
@@ -65,6 +66,7 @@ import kotlin.math.roundToInt
 
 private val logger = KotlinLogging.logger {}
 
+val timetablePaddingStart = 20.dp
 const val TIMESLOT_SNAP_MINUTES = 10
 
 @Composable
@@ -95,10 +97,14 @@ fun TimetableScreenContent(selection: TimetableSelection.Loaded) {
         Row(
             modifier = Modifier.fillMaxWidth().height(32.dp),
         ) {
-            for (day in DayOfWeek.values().take(numDays)) {
-                WeightedTextBox(
-                    text = remember(day) { day.getDisplayName(TextStyle.FULL, Locale.getDefault()) },
-                )
+            Row(
+                modifier = Modifier.weight(numDays.toFloat(), true).padding(start = timetablePaddingStart),
+            ) {
+                for (day in DayOfWeek.values().take(numDays)) {
+                    WeightedTextBox(
+                        text = remember(day) { day.getDisplayName(TextStyle.FULL, Locale.getDefault()) },
+                    )
+                }
             }
             WeightedTextBox(text = l("event_panel_header"))
         }
@@ -168,7 +174,8 @@ private fun TimetablePane(
     val timeslots by timetableViewModel.timeslots
 
     BoxWithConstraints(modifier = modifier) {
-        val columnWidth = constraints.maxWidth.toFloat() / numDays
+        val paddingStart = with(LocalDensity.current) { timetablePaddingStart.toPx() }
+        val columnWidth = (constraints.maxWidth.toFloat() - paddingStart) / numDays
         val columnHeight = constraints.maxHeight.toFloat()
         val minuteHeight = columnHeight / (dayRange.last - dayRange.first)
 
@@ -191,7 +198,7 @@ private fun TimetablePane(
         if (draggedEvent != null) {
             val (location, layoutModifier) = calculateHoverLocation(
                 pointerOffset,
-                columnWidth, columnHeight, minuteHeight,
+                paddingStart, columnWidth, columnHeight, minuteHeight,
                 dayRange, numDays,
                 timeslots,
                 draggedEvent.duration,
@@ -239,7 +246,7 @@ private fun TimetablePane(
                 val sizeDivisor = overlap.size + 1
 
                 val layoutModifier = Modifier.layout { measurable, _ ->
-                    val offset = Offset(columnWidth * (event.day.value - 1) + ((columnWidth / sizeDivisor) * offsetMultiplier), minuteHeight * (event.startTime - dayRange.first))
+                    val offset = Offset(paddingStart + columnWidth * (event.day.value - 1) + ((columnWidth / sizeDivisor) * offsetMultiplier), minuteHeight * (event.startTime - dayRange.first))
                     simpleLayout(measurable, columnWidth / sizeDivisor, minuteHeight * event.duration, offset)
                 }
                 TimetableEventCard(
@@ -301,6 +308,7 @@ private inline operator fun IntRange.contains(timeslot: Timeslot): Boolean =
 @Stable
 private fun calculateHoverLocation(
     pointerOffset: Offset,
+    paddingStart: Float,
     columnWidth: Float,
     columnHeight: Float,
     minuteHeight: Float,
@@ -335,7 +343,7 @@ private fun calculateHoverLocation(
     // Return result
     val dropLocation = DropLocation(DayOfWeek.of(day + 1), startTime)
     val layoutModifier = Modifier.layout { measurable, _ ->
-        simpleLayout(measurable, columnWidth, height, Offset(columnWidth * day, offsetY))
+        simpleLayout(measurable, columnWidth, height, Offset(paddingStart + columnWidth * day, offsetY))
     }
 
     return dropLocation to layoutModifier
