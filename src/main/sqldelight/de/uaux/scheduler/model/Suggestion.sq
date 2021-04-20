@@ -6,6 +6,11 @@ CREATE TABLE Suggestion (
     UNIQUE (semester, event)
 );
 
+querySuggestionBySemesterAndEvent:
+SELECT s.id, e.*, s.text
+FROM Event e JOIN Suggestion s ON e.id = s.event
+WHERE s.semester = ? AND e.id = ?;
+
 querySuggestionsInStudycourseBySemester:
 SELECT s.id, e.*, s.text
 FROM StudycourseEvent se JOIN Event e JOIN Suggestion s ON se.event = e.id AND e.id = s.event
