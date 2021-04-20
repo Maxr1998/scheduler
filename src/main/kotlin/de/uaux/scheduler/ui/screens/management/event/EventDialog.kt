@@ -38,7 +38,7 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
     val eventParticipantsText = remember { mutableStateOf(TextFieldValue(event?.participants?.toString().orEmpty())) }
     val (eventParticipants, eventParticipantsError) = calculateNumberInputError(
         eventParticipantsText.value.text,
-        0..100000L,
+        1..100000L,
         "input_error_invalid_participant_count",
     )
 
