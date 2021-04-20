@@ -6,7 +6,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -23,6 +25,7 @@ import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.ui.util.DraggableCard
 import de.uaux.scheduler.ui.util.l
+import de.uaux.scheduler.util.formatMinutesOfDay
 
 private const val POINTER_KEY_PSEUDO_DRAGGABLE = "pseudo-draggable-card"
 
@@ -43,21 +46,30 @@ fun TimetableEventCard(
             modifier = Modifier.padding(horizontal = 6.dp, vertical = 8.dp),
         ) {
             Text(
-                modifier = Modifier.padding(bottom = 4.dp),
                 text = event.event.name,
                 fontSize = 12.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.subtitle1,
             )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = l("event_label_recommended_semester").format(event.studycourseEvent.semester),
+                fontSize = 10.sp,
+                style = MaterialTheme.typography.subtitle2,
+            )
+
             event.room?.let { room ->
+                Spacer(modifier = Modifier.height(4.dp))
+
                 Text(
-                    text = l("event_label_room") + ": ${room.name}",
+                    text = "${l("event_label_room")}: ${room.name}",
                     fontSize = 10.sp,
                     style = MaterialTheme.typography.subtitle2,
                 )
             }
-
         }
     }
 }
@@ -111,8 +123,24 @@ fun UnscheduledEventCard(
         ) {
             Text(
                 text = studycourseEvent.event.name,
-                fontSize = 14.sp,
+                fontSize = 12.sp,
                 style = MaterialTheme.typography.subtitle1,
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = "${l("event_label_duration")}: ${formatMinutesOfDay(studycourseEvent.event.duration)}",
+                fontSize = 10.sp,
+                style = MaterialTheme.typography.subtitle2,
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = l("event_label_recommended_semester").format(studycourseEvent.semester),
+                fontSize = 10.sp,
+                style = MaterialTheme.typography.subtitle2,
             )
         }
     }
