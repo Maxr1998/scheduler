@@ -36,9 +36,9 @@ fun TimetableScreen() = Column {
         modifier = Modifier.fillMaxWidth().height(56.dp),
         title = l("screen_timetable"),
     ) {
-        ShowWeekendToggle(timetableViewModel.showWeekend)
-
         if (selection is TimetableSelection.Loaded) {
+            ShowWeekendToggle(timetableViewModel.showWeekend)
+
             StudycourseAndSemesterSelectionDropdown(selection)
         }
     }
