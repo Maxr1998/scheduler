@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import java.sql.SQLException
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month.DECEMBER
@@ -100,11 +101,13 @@ class ScheduleRepository(
         return standardQueries.changes().executeAsOne() == 1L
     }
 
-    fun rescheduleEvent(event: ScheduledEvent, day: DayOfWeek, startTime: Int): Boolean {
+    fun rescheduleEvent(event: ScheduledEvent, day: DayOfWeek, startTime: Int): Boolean = try {
         scheduleQueries.rescheduleEvent(
             day.value, startTime,
             event.semester.code, event.event.id, event.day.value, event.startTime,
         )
-        return standardQueries.changes().executeAsOne() == 1L
+        standardQueries.changes().executeAsOne() == 1L
+    } catch (e: SQLException) {
+        false
     }
 }
