@@ -3,7 +3,7 @@ CREATE TABLE Suggestion (
     semester INTEGER AS Int NOT NULL,
     event INTEGER NOT NULL REFERENCES Event(id) ON DELETE CASCADE,
     text TEXT NOT NULL DEFAULT '',
-    UNIQUE (id, event)
+    UNIQUE (semester, event)
 );
 
 querySuggestionsInStudycourseBySemester:
