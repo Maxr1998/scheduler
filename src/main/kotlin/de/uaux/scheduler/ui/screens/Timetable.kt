@@ -22,6 +22,7 @@ import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.model.TimetableSelection
 import de.uaux.scheduler.ui.screens.timetable.StudycourseAndSemesterSelectionDropdown
 import de.uaux.scheduler.ui.screens.timetable.TimetableScreenContent
+import de.uaux.scheduler.ui.util.CenteredTextBox
 import de.uaux.scheduler.ui.util.LoadingBox
 import de.uaux.scheduler.ui.util.Toolbar
 import de.uaux.scheduler.ui.util.l
@@ -44,7 +45,7 @@ fun TimetableScreen() = Column {
     }
     DisableSelection {
         when (selection) {
-            TimetableSelection.None -> Unit // TODO
+            TimetableSelection.None -> CenteredTextBox(text = l("event_panel_no_studycourses"))
             TimetableSelection.Loading -> LoadingBox()
             is TimetableSelection.Loaded -> TimetableScreenContent(selection)
         }
