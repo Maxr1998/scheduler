@@ -10,7 +10,10 @@ import de.uaux.scheduler.model.Semester.Type.WS
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.model.dto.ScheduledEvent
+import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.util.LocalizationUtil
+import de.uaux.scheduler.util.ScheduledEventMapper
+import de.uaux.scheduler.util.StudycourseEventMapper
 import de.uaux.scheduler.util.executeAsMappedList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -66,16 +69,24 @@ class ScheduleRepository(
      */
     fun queryScheduledEvents(studycourse: Studycourse, semester: Semester): List<ScheduledEvent> {
         val roomCache = HashMap<Long, Room>()
-        return scheduleQueries.queryScheduledEventsInStudycourseBySemester(studycourse.id, semester.code) { id, name, module, duration, participants, day, startTime, roomId ->
+        val mapper: ScheduledEventMapper = { id, name, module, duration, participants, studycourseSemester, required, day, startTime, roomId ->
             val room = queryRoom(roomId, roomCache)?.also { room ->
                 roomCache.putIfAbsent(roomId, room)
             }
-            ScheduledEvent(semester, Event(id, name, module, duration, participants), DayOfWeek.of(day), startTime, room)
-        }.executeAsList()
+            val event = Event(id, name, module, duration, participants)
+            val studycourseEvent = StudycourseEvent(event, studycourseSemester, required)
+            ScheduledEvent(semester, studycourseEvent, DayOfWeek.of(day), startTime, room)
+        }
+        return scheduleQueries.queryScheduledEventsInStudycourseBySemester(studycourse.id, semester.code, mapper = mapper).executeAsList()
     }
 
-    fun queryUnscheduledEvents(studycourse: Studycourse, semester: Semester): List<Event> =
-        scheduleQueries.queryUnscheduledEventsInStudycourseBySemester(studycourse.id, semester.code).executeAsList()
+    fun queryUnscheduledEvents(studycourse: Studycourse, semester: Semester): List<StudycourseEvent> {
+        val mapper: StudycourseEventMapper = { id, name, module, duration, participants, studycourseSemester, required ->
+            val event = Event(id, name, module, duration, participants)
+            StudycourseEvent(event, studycourseSemester, required)
+        }
+        return scheduleQueries.queryUnscheduledEventsInStudycourseBySemester(studycourse.id, semester.code, mapper = mapper).executeAsList()
+    }
 
     fun queryRoom(id: Long, cache: Map<Long, Room> = emptyMap()): Room? = when (id) {
         in cache -> cache[id]

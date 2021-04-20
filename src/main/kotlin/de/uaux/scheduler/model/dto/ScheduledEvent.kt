@@ -11,11 +11,12 @@ import java.time.DayOfWeek
 @Immutable
 data class ScheduledEvent(
     val semester: Semester,
-    val event: Event,
+    val studycourseEvent: StudycourseEvent,
     val day: DayOfWeek,
     val startTime: Int,
     val room: Room?,
 ) : Comparable<ScheduledEvent> {
+    val event = studycourseEvent.event
     val duration: Int = event.duration
     val endTime: Int = startTime + event.duration
 

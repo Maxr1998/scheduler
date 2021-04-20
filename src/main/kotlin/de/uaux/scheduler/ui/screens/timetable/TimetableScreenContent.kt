@@ -43,6 +43,7 @@ import androidx.compose.ui.zIndex
 import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.model.dto.ScheduledEvent
+import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.model.duration
 import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.model.TimetableSelection
@@ -132,8 +133,8 @@ fun TimetableScreenContent(selection: TimetableSelection.Loaded) {
             VerticalDivider(modifier = Modifier.zIndex(ZIndex.DIVIDER))
             UnscheduledPane(
                 modifier = Modifier.weight(1f).fillMaxHeight(),
-                onDragStart = { event ->
-                    draggedEvent.value = ScheduledEvent(selection.semester, event, DayOfWeek.MONDAY, 0, null)
+                onDragStart = { studycourseEvent ->
+                    draggedEvent.value = ScheduledEvent(selection.semester, studycourseEvent, DayOfWeek.MONDAY, 0, null)
                 },
                 onDrop = { persist ->
                     val droppedEvent = draggedEvent.value ?: return@UnscheduledPane
@@ -257,16 +258,16 @@ private fun TimetablePane(
 @Composable
 private fun UnscheduledPane(
     modifier: Modifier = Modifier,
-    onDragStart: (Event) -> Unit,
+    onDragStart: (StudycourseEvent) -> Unit,
     onDrop: (success: Boolean) -> Unit,
 ) {
     val timetableViewModel: TimetableViewModel = get()
     LazyColumn(
         modifier = modifier,
     ) {
-        items(timetableViewModel.unscheduledEvents, Event::id) { unscheduled ->
+        items(timetableViewModel.unscheduledEvents, key = { studycourseEvent -> studycourseEvent.event.id }) { unscheduled ->
             UnscheduledEventCard(
-                event = unscheduled,
+                studycourseEvent = unscheduled,
                 onDragStart = {
                     onDragStart(unscheduled)
                 },

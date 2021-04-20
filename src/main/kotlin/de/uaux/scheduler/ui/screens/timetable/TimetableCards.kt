@@ -19,8 +19,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.dto.ScheduledEvent
+import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.ui.util.DraggableCard
 import de.uaux.scheduler.ui.util.l
 
@@ -77,7 +77,7 @@ fun IndicatorCard(
 
 @Composable
 fun UnscheduledEventCard(
-    event: Event,
+    studycourseEvent: StudycourseEvent,
     onDragStart: () -> Unit = { },
     onDragUpdate: () -> Unit = { },
     onDrop: (success: Boolean) -> Unit = { },
@@ -110,7 +110,7 @@ fun UnscheduledEventCard(
             modifier = Modifier.padding(8.dp),
         ) {
             Text(
-                text = event.name,
+                text = studycourseEvent.event.name,
                 fontSize = 14.sp,
                 style = MaterialTheme.typography.subtitle1,
             )

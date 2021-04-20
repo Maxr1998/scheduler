@@ -10,6 +10,7 @@ import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.model.dto.ScheduledEvent
+import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.repository.ScheduleRepository
 import de.uaux.scheduler.repository.StudycourseRepository
 import de.uaux.scheduler.ui.model.ShowWeekend
@@ -52,7 +53,7 @@ class TimetableViewModel(
     /**
      * Contains [Event]s for the studycourse and semester that are currently not scheduled
      */
-    val unscheduledEvents: SnapshotStateList<Event> = mutableStateListOf()
+    val unscheduledEvents: SnapshotStateList<StudycourseEvent> = mutableStateListOf()
 
     /**
      * Whether to show the weekend in the timetable interface
@@ -146,7 +147,7 @@ class TimetableViewModel(
         // Log result and revert changes on failure
         if (changed) {
             logger.debug { "Successfully added $event to schedule" }
-            unscheduledEvents.remove(event.event)
+            unscheduledEvents.remove(event.studycourseEvent)
         } else {
             logger.debug { "Failed to add $event to schedule" }
             events.removeAt(insertIndex)
