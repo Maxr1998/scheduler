@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
@@ -28,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.PointerEventPass
@@ -37,9 +40,12 @@ import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.Timeslot
@@ -183,15 +189,33 @@ private fun TimetablePane(
         val checkerboardColor = MaterialTheme.colors.lightenedBackground
         for (timeslot in timeslots) {
             if (timeslot !in dayRange) continue
+            val height = minuteHeight * timeslot.duration
             val offset = Offset(0f, minuteHeight * (timeslot.start_time - dayRange.first))
             Box(
                 modifier = Modifier
                     .zIndex(ZIndex.BACKGROUND)
                     .layout { measurable, _ ->
-                        simpleLayout(measurable, constraints.maxWidth.toFloat(), minuteHeight * timeslot.duration, offset)
+                        simpleLayout(measurable, constraints.maxWidth.toFloat(), height, offset)
                     }
                     .background(checkerboardColor, RectangleShape)
-            )
+            ) {
+                val timeslotTextHeight = with(LocalDensity.current) { height.toDp() }
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .size(timeslotTextHeight, timetablePaddingStart)
+                        .offset(-((timeslotTextHeight - timetablePaddingStart) / 2))
+                        .rotate(-90f)
+                        .size(timetablePaddingStart, timeslotTextHeight)
+                        .padding(4.dp),
+                    text = "${formatMinutesOfDay(timeslot.start_time)} - ${formatMinutesOfDay(timeslot.end_time)}",
+                    fontSize = 10.sp,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.subtitle2,
+                )
+            }
         }
 
         // Update drop location and draw drop indicator
