@@ -29,7 +29,7 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
     val eventRepository: EventRepository = get()
     val eventName = remember { mutableStateOf(TextFieldValue(event?.name.orEmpty())) }
     val eventModule = remember { mutableStateOf(TextFieldValue(event?.module.orEmpty())) }
-    val eventDurationText = remember { mutableStateOf(TextFieldValue(event?.participants?.toString().orEmpty())) }
+    val eventDurationText = remember { mutableStateOf(TextFieldValue(event?.duration?.toString().orEmpty())) }
     val (eventDuration, eventDurationError) = calculateNumberInputError(
         eventDurationText.value.text,
         0L..TimetableViewModel.MAX_MINUTES_IN_DAY,
