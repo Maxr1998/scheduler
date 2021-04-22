@@ -25,7 +25,7 @@ object Dependencies {
     }
 
     object Core {
-        const val koin = "org.koin:koin-core:${Versions.koin}"
+        const val koin = "io.insert-koin:koin-core:${Versions.koin}"
         const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     }
 
