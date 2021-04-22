@@ -112,7 +112,7 @@ fun TimetableScreenContent(filter: TimetableFilter) {
                     )
                 }
             }
-            WeightedTextBox(text = l("event_panel_header"))
+            WeightedTextBox(text = l("timetable_unscheduled_events_header"))
         }
 
         Divider(modifier = Modifier.zIndex(ZIndex.DIVIDER))

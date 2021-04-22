@@ -47,7 +47,7 @@ fun TimetableScreen() = Column {
     }
     DisableSelection {
         when (selection) {
-            None -> CenteredTextBox(text = l("event_panel_no_studycourses"))
+            None -> CenteredTextBox(text = l("timetable_no_studycourses"))
             Loading -> LoadingBox()
             is Selected -> TimetableScreenContent(selection.value)
         }

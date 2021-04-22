@@ -74,7 +74,7 @@ fun StudycourseEventDialog(
                         }
                     },
                 ) {
-                    Text(text = l("button_remove_studycourse_event"))
+                    Text(text = l("button_text_remove"))
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
