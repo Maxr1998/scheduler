@@ -39,7 +39,7 @@ fun PopupDialog(
     content: @Composable BoxScope.() -> Unit,
 ) {
     Popup(
-        isFocusable = true,
+        focusable = true,
         onDismissRequest = onDismissRequest,
     ) {
         Box(
