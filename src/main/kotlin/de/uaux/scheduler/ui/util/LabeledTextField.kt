@@ -19,16 +19,18 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun LabeledTextField(
+    modifier: Modifier = Modifier,
     text: MutableState<TextFieldValue>,
     label: String,
     placeholder: String,
     errorMessage: String? = null,
+    singleLine: Boolean = true,
 ) {
     Column {
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().then(modifier),
             value = text.value,
-            singleLine = true,
+            singleLine = singleLine,
             label = {
                 Text(text = label)
             },

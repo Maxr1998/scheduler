@@ -56,17 +56,17 @@ fun StudycourseDialog(studycourse: Studycourse?, onDismissRequest: () -> Unit) {
     ) {
         Column {
             LabeledTextField(
-                studycourseName,
-                l("input_label_studycourse_name"),
-                l("input_hint_studycourse_name"),
+                text = studycourseName,
+                label = l("input_label_studycourse_name"),
+                placeholder = l("input_hint_studycourse_name"),
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             LabeledTextField(
-                studycourseRevision,
-                l("input_label_studycourse_revision"),
-                l("input_hint_studycourse_revision"),
+                text = studycourseRevision,
+                label = l("input_label_studycourse_revision"),
+                placeholder = l("input_hint_studycourse_revision"),
             )
 
             Spacer(modifier = Modifier.height(8.dp))

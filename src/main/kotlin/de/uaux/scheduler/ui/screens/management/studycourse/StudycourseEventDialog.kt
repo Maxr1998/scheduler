@@ -154,7 +154,7 @@ fun StudycourseEventDialog(
                 text = semesterText,
                 label = l("input_label_studycourse_event_semester"),
                 placeholder = l("input_hint_studycourse_event_semester"),
-                semesterError,
+                errorMessage = semesterError,
             )
 
             Spacer(modifier = Modifier.height(12.dp))
