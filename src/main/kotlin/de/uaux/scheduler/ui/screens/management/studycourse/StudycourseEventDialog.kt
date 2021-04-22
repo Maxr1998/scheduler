@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -34,6 +33,7 @@ import de.uaux.scheduler.ui.util.PopupDialog
 import de.uaux.scheduler.ui.util.SaveButton
 import de.uaux.scheduler.ui.util.SearchableSelectionDropdown
 import de.uaux.scheduler.ui.util.ToggleableText
+import de.uaux.scheduler.ui.util.disabled
 import de.uaux.scheduler.ui.util.l
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
@@ -159,12 +159,11 @@ fun StudycourseEventDialog(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            val borderColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
             ToggleableText(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .border(1.dp, SolidColor(borderColor), MaterialTheme.shapes.medium)
+                    .border(1.dp, SolidColor(MaterialTheme.colors.disabled), MaterialTheme.shapes.medium)
                     .clip(MaterialTheme.shapes.medium),
                 state = required,
                 text = l("studycourse_domain_voluntary"),

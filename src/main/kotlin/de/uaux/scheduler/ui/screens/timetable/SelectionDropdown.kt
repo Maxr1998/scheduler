@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.ui.model.TimetableFilter
 import de.uaux.scheduler.ui.util.FixUnsupportedIntrinsicMeasurementsLayoutModifier
 import de.uaux.scheduler.ui.util.VerticalDivider
+import de.uaux.scheduler.ui.util.disabled
 import de.uaux.scheduler.viewmodel.TimetableViewModel
 import org.koin.androidx.compose.get
 
@@ -43,7 +44,7 @@ fun StudycourseAndSemesterSelectionDropdown(filter: TimetableFilter) {
             .height(42.dp)
             .clip(shape)
             .clickable { expanded = true }
-            .border(Dp.Hairline, MaterialTheme.colors.onSurface.copy(alpha = 0.6f), shape)
+            .border(1.dp, MaterialTheme.colors.disabled, shape)
             .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

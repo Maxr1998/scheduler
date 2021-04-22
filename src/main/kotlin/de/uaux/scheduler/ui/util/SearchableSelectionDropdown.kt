@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ContentAlpha
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -39,9 +38,8 @@ fun <T : Any> SearchableSelectionDropdown(
     itemLabel: (T) -> String = Any::toString,
     itemContent: @Composable (T) -> Unit,
 ) {
-    val borderColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled)
     Column(
-        modifier = Modifier.border(1.dp, SolidColor(borderColor), MaterialTheme.shapes.medium)
+        modifier = Modifier.border(1.dp, SolidColor(MaterialTheme.colors.disabled), MaterialTheme.shapes.medium)
     ) {
         val searchText = remember { mutableStateOf(TextFieldValue(selected?.let(itemLabel).orEmpty())) }
         var showResults by remember { mutableStateOf(false) }
