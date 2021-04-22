@@ -53,7 +53,7 @@ import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.model.duration
 import de.uaux.scheduler.ui.model.ShowWeekend
-import de.uaux.scheduler.ui.model.TimetableSelection
+import de.uaux.scheduler.ui.model.TimetableFilter
 import de.uaux.scheduler.ui.util.VerticalDivider
 import de.uaux.scheduler.ui.util.ZIndex
 import de.uaux.scheduler.ui.util.l
@@ -76,7 +76,7 @@ val timetablePaddingStart = 20.dp
 const val TIMESLOT_SNAP_MINUTES = 10
 
 @Composable
-fun TimetableScreenContent(selection: TimetableSelection.Loaded) {
+fun TimetableScreenContent(filter: TimetableFilter) {
     val timetableViewModel: TimetableViewModel = get()
     val showWeekend by timetableViewModel.showWeekend
     val numDays = if (showWeekend == ShowWeekend.FALSE) 5 else 7
@@ -146,7 +146,7 @@ fun TimetableScreenContent(selection: TimetableSelection.Loaded) {
             UnscheduledPane(
                 modifier = Modifier.weight(1f).fillMaxHeight(),
                 onDragStart = { studycourseEvent ->
-                    draggedEvent.value = ScheduledEvent(selection.semester, studycourseEvent, DayOfWeek.MONDAY, 0, null)
+                    draggedEvent.value = ScheduledEvent(filter.semester, studycourseEvent, DayOfWeek.MONDAY, 0, null)
                 },
                 onDrop = { persist ->
                     val droppedEvent = draggedEvent.value ?: return@UnscheduledPane

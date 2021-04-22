@@ -13,8 +13,11 @@ import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.repository.ScheduleRepository
 import de.uaux.scheduler.repository.StudycourseRepository
+import de.uaux.scheduler.ui.model.Loading
+import de.uaux.scheduler.ui.model.None
+import de.uaux.scheduler.ui.model.Selection
 import de.uaux.scheduler.ui.model.ShowWeekend
-import de.uaux.scheduler.ui.model.TimetableSelection
+import de.uaux.scheduler.ui.model.TimetableFilter
 import de.uaux.scheduler.util.binaryInsert
 import de.uaux.scheduler.util.binaryInsertIndex
 import kotlinx.coroutines.Dispatchers
@@ -42,8 +45,8 @@ class TimetableViewModel(
     /**
      * The currently selected [Semester] and [Studycourse] that filters the events in the timetable
      */
-    val timetableSelection: State<TimetableSelection> get() = _timetableSelection
-    private val _timetableSelection: MutableState<TimetableSelection> = mutableStateOf(TimetableSelection.None)
+    val timetableSelection: State<Selection<TimetableFilter>> get() = _timetableSelection
+    private val _timetableSelection: MutableState<Selection<TimetableFilter>> = mutableStateOf(None)
 
     /**
      * Contains [ScheduledEvent]s for the currently selected schedule
@@ -84,7 +87,7 @@ class TimetableViewModel(
     }
 
     fun loadContent(semester: Semester, studycourse: Studycourse) = coroutineScope.launch {
-        _timetableSelection.value = TimetableSelection.Loading
+        _timetableSelection.value = Loading
 
         val eventsJob = launch {
             // Refresh scheduled events
@@ -125,7 +128,7 @@ class TimetableViewModel(
 
         joinAll(eventsJob, timeslotsJob, unscheduledJob)
 
-        _timetableSelection.value = TimetableSelection.Loaded(semester, studycourse)
+        _timetableSelection.value = Selection(TimetableFilter(semester, studycourse))
     }
 
     fun schedule(event: ScheduledEvent) = coroutineScope.launch {

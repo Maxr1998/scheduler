@@ -28,14 +28,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import de.uaux.scheduler.ui.model.TimetableSelection
+import de.uaux.scheduler.ui.model.TimetableFilter
 import de.uaux.scheduler.ui.util.FixUnsupportedIntrinsicMeasurementsLayoutModifier
 import de.uaux.scheduler.ui.util.VerticalDivider
 import de.uaux.scheduler.viewmodel.TimetableViewModel
 import org.koin.androidx.compose.get
 
 @Composable
-fun StudycourseAndSemesterSelectionDropdown(selection: TimetableSelection.Loaded) {
+fun StudycourseAndSemesterSelectionDropdown(filter: TimetableFilter) {
     var expanded by remember { mutableStateOf(false) }
     val shape = MaterialTheme.shapes.medium
     Row(
@@ -53,7 +53,7 @@ fun StudycourseAndSemesterSelectionDropdown(selection: TimetableSelection.Loaded
         )
         Text(
             modifier = Modifier.padding(horizontal = 8.dp),
-            text = "${selection.studycourse.name} | ${selection.semester}",
+            text = "${filter.studycourse.name} | ${filter.semester}",
             style = MaterialTheme.typography.button,
         )
 
@@ -63,21 +63,21 @@ fun StudycourseAndSemesterSelectionDropdown(selection: TimetableSelection.Loaded
                 expanded = false
             },
         ) {
-            StudycourseAndSemesterSelectionDropdownMenuContent(selection)
+            StudycourseAndSemesterSelectionDropdownMenuContent(filter)
         }
     }
 }
 
 @Composable
-private fun StudycourseAndSemesterSelectionDropdownMenuContent(selection: TimetableSelection.Loaded) {
+private fun StudycourseAndSemesterSelectionDropdownMenuContent(filter: TimetableFilter) {
     Row(
         modifier = Modifier.size(600.dp, 300.dp),
     ) {
         val timetableViewModel: TimetableViewModel = get()
         val studycourses by timetableViewModel.studycoursesFlow.collectAsState(emptyList())
         val semesters by timetableViewModel.semestersFlow.collectAsState(emptyList())
-        var selectedStudycourse by remember { mutableStateOf(selection.studycourse) }
-        var selectedSemester by remember { mutableStateOf(selection.semester) }
+        var selectedStudycourse by remember { mutableStateOf(filter.studycourse) }
+        var selectedSemester by remember { mutableStateOf(filter.semester) }
 
         val selectedBackground = Modifier.background(MaterialTheme.colors.primaryVariant.copy(alpha = 0.12f))
         Column(

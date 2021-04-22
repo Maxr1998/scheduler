@@ -18,8 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import de.uaux.scheduler.ui.model.Loading
+import de.uaux.scheduler.ui.model.None
+import de.uaux.scheduler.ui.model.Selected
 import de.uaux.scheduler.ui.model.ShowWeekend
-import de.uaux.scheduler.ui.model.TimetableSelection
 import de.uaux.scheduler.ui.screens.timetable.StudycourseAndSemesterSelectionDropdown
 import de.uaux.scheduler.ui.screens.timetable.TimetableScreenContent
 import de.uaux.scheduler.ui.util.CenteredTextBox
@@ -37,17 +39,17 @@ fun TimetableScreen() = Column {
         modifier = Modifier.fillMaxWidth().height(56.dp),
         title = l("screen_timetable"),
     ) {
-        if (selection is TimetableSelection.Loaded) {
+        if (selection is Selected) {
             ShowWeekendToggle(timetableViewModel.showWeekend)
 
-            StudycourseAndSemesterSelectionDropdown(selection)
+            StudycourseAndSemesterSelectionDropdown(selection.value)
         }
     }
     DisableSelection {
         when (selection) {
-            TimetableSelection.None -> CenteredTextBox(text = l("event_panel_no_studycourses"))
-            TimetableSelection.Loading -> LoadingBox()
-            is TimetableSelection.Loaded -> TimetableScreenContent(selection)
+            None -> CenteredTextBox(text = l("event_panel_no_studycourses"))
+            Loading -> LoadingBox()
+            is Selected -> TimetableScreenContent(selection.value)
         }
     }
 }
