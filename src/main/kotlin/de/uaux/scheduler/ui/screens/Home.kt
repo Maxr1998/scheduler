@@ -1,6 +1,7 @@
 package de.uaux.scheduler.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,10 +23,12 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import de.uaux.scheduler.controller.NavigationController
 import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.ui.util.Toolbar
 import de.uaux.scheduler.ui.util.l
@@ -53,6 +56,9 @@ private fun HomeScreenContent() {
     val eventCount by homeViewModel.eventCount.collectAsState(null)
     val suggestionsProgress by homeViewModel.getSuggestionProgress(currentSemester).collectAsState(null)
 
+    val navigationController: NavigationController = get()
+    var currentScreen by navigationController.currentScreen
+
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
     ) {
@@ -61,6 +67,9 @@ private fun HomeScreenContent() {
         Row {
             studycourseCount?.let { count ->
                 DetailsItem(
+                    modifier = Modifier.clickable {
+                        currentScreen = NavigationController.Screen.Studycourses
+                    },
                     label = l("home_screen_label_studycourses"),
                     count = count,
                 )
@@ -70,6 +79,9 @@ private fun HomeScreenContent() {
 
             eventCount?.let { count ->
                 DetailsItem(
+                    modifier = Modifier.clickable {
+                        currentScreen = NavigationController.Screen.Events
+                    },
                     label = l("home_screen_label_events"),
                     count = count,
                 )
@@ -78,7 +90,12 @@ private fun HomeScreenContent() {
             Spacer(modifier = Modifier.width(16.dp))
 
             suggestionsProgress?.let { progress ->
-                Progress(progress)
+                Progress(
+                    modifier = Modifier.clickable {
+                        currentScreen = NavigationController.Screen.Timetable
+                    },
+                    progress = progress,
+                )
             }
         }
     }
@@ -94,11 +111,16 @@ private fun HeaderText(semester: Semester) {
 }
 
 @Composable
-private fun DetailsItem(label: String, count: Long) {
+private fun DetailsItem(
+    modifier: Modifier = Modifier,
+    label: String,
+    count: Long,
+) {
     Box(
         modifier = Modifier
             .size(144.dp)
             .background(MaterialTheme.colors.primary, RoundedCornerShape(16.dp))
+            .then(modifier)
             .padding(horizontal = 8.dp)
             .padding(top = 36.dp, bottom = 28.dp)
     ) {
@@ -122,11 +144,15 @@ private fun DetailsItem(label: String, count: Long) {
 }
 
 @Composable
-private fun Progress(progress: Pair<Long, Long>) {
+private fun Progress(
+    modifier: Modifier = Modifier,
+    progress: Pair<Long, Long>,
+) {
     Box(
         modifier = Modifier
             .size(288.dp, 144.dp)
             .background(MaterialTheme.colors.primary, RoundedCornerShape(16.dp))
+            .then(modifier)
             .padding(horizontal = 16.dp)
             .padding(top = 42.dp, bottom = 20.dp)
     ) {
