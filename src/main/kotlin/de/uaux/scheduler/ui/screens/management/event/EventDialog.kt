@@ -60,8 +60,8 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
                     coroutineScope.launch {
                         val updated = Event(
                             event?.id ?: -1L,
-                            eventName.value.text,
-                            eventModule.value.text,
+                            eventName.value.text.trim(),
+                            eventModule.value.text.trim(),
                             eventDuration!!.toInt(),
                             eventParticipants?.toInt(),
                         )
