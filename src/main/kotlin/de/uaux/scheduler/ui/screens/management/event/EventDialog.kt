@@ -54,7 +54,6 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
 
             SaveButton(
                 enabled = eventName.value.text.isNotBlank() &&
-                    eventModule.value.text.isNotBlank() &&
                     eventDuration != null && eventDurationError == null &&
                     eventParticipantsError == null,
                 onSave = {
