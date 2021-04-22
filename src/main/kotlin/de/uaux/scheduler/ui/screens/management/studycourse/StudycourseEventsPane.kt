@@ -8,35 +8,43 @@ import androidx.compose.material.icons.outlined.Link
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.dto.StudycourseEvent
-import de.uaux.scheduler.ui.model.StudycourseSelection
 import de.uaux.scheduler.ui.screens.management.EventListContent
 import de.uaux.scheduler.ui.util.CenteredTextBox
 import de.uaux.scheduler.ui.util.EditButton
+import de.uaux.scheduler.ui.util.LoadingBox
 import de.uaux.scheduler.ui.util.l
+import de.uaux.scheduler.ui.model.Loading
+import de.uaux.scheduler.ui.model.None
+import de.uaux.scheduler.ui.model.Selected
+import de.uaux.scheduler.ui.model.Selection
+import de.uaux.scheduler.viewmodel.EventManagementViewModel
+import org.koin.androidx.compose.get
 
 @Composable
 fun StudycourseEventsPane(
-    studycourseSelection: StudycourseSelection,
+    selection: Selection<Studycourse>,
     openStudycourseEventDialog: (Studycourse, StudycourseEvent?) -> Unit,
 ) {
-    when (studycourseSelection) {
-        is StudycourseSelection.None -> {
-            CenteredTextBox(text = l("event_panel_no_studycourses"))
-        }
-        is StudycourseSelection.Selected -> {
-            val events by studycourseSelection.events.collectAsState(emptyList())
+    when (selection) {
+        None -> CenteredTextBox(text = l("event_panel_no_studycourses"))
+        Loading -> LoadingBox()
+        is Selected -> {
+            val eventManagementViewModel: EventManagementViewModel = get()
+            val eventsFlow = remember(selection.value) { eventManagementViewModel.getStudycourseEvents(selection.value) }
+            val events by eventsFlow.collectAsState(emptyList())
             EventListContent(
                 events = events,
                 fabIcon = Icons.Outlined.Link,
-                onAdd = { openStudycourseEventDialog(studycourseSelection.studycourse, null) },
+                onAdd = { openStudycourseEventDialog(selection.value, null) },
             ) { event ->
                 StudycourseEventListItem(
                     studycourseEvent = event,
                     openDialog = {
-                        openStudycourseEventDialog(studycourseSelection.studycourse, event)
+                        openStudycourseEventDialog(selection.value, event)
                     },
                 )
             }

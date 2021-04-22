@@ -23,17 +23,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Studycourse
-import de.uaux.scheduler.ui.model.StudycourseSelection
 import de.uaux.scheduler.ui.util.EditButton
 import de.uaux.scheduler.ui.util.SelectableListItem
 import de.uaux.scheduler.ui.util.l
+import de.uaux.scheduler.ui.model.Selection
 import de.uaux.scheduler.viewmodel.EventManagementViewModel
 import org.koin.androidx.compose.get
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun StudycoursesPane(
-    studycourseSelection: StudycourseSelection,
+    selection: Selection<Studycourse>,
     openDialog: (Studycourse?) -> Unit,
 ) {
     val eventManagementViewModel: EventManagementViewModel = get()
@@ -53,10 +53,10 @@ fun StudycoursesPane(
                 )
             }
             items(studycourses) { studycourse ->
-                val selected = studycourseSelection.isSelected(studycourse)
+                val selected = selection.isActive(studycourse)
                 StudycourseListItem(
                     modifier = Modifier.selectable(selected) {
-                        eventManagementViewModel.load(studycourse)
+                        eventManagementViewModel.select(studycourse)
                     },
                     studycourse = studycourse,
                     selected = selected,

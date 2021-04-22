@@ -39,16 +39,17 @@ private fun StudycourseManagementScreenContent() {
 
     Row {
         StudycoursesPane(
-            studycourseSelection = studycourseSelection,
+            selection = studycourseSelection,
             openDialog = { studycourse ->
                 dialogViewModel.openDialog(DialogState.StudycourseDialog(studycourse))
             },
         )
         VerticalDivider()
         StudycourseEventsPane(
-            studycourseSelection = studycourseSelection,
-        ) { studycourse, studycourseEvent ->
-            dialogViewModel.openDialog(DialogState.StudycourseEventDialog(studycourse, studycourseEvent))
-        }
+            selection = studycourseSelection,
+            openStudycourseEventDialog = { studycourse, studycourseEvent ->
+                dialogViewModel.openDialog(DialogState.StudycourseEventDialog(studycourse, studycourseEvent))
+            },
+        )
     }
 }

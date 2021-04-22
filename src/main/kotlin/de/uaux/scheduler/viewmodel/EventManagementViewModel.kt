@@ -5,9 +5,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.Studycourse
+import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.repository.EventRepository
 import de.uaux.scheduler.repository.StudycourseRepository
-import de.uaux.scheduler.ui.model.StudycourseSelection
+import de.uaux.scheduler.ui.model.Loading
+import de.uaux.scheduler.ui.model.None
+import de.uaux.scheduler.ui.model.Selection
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
@@ -23,22 +26,26 @@ class EventManagementViewModel(
     val eventsFlow: Flow<List<Event>> get() = eventRepository.allEventsFlow
     val studycoursesFlow: Flow<List<Studycourse>> get() = studycourseRepository.allStudycoursesFlow
 
-    private val _studycourseSelection: MutableState<StudycourseSelection> = mutableStateOf(StudycourseSelection.None)
-    val studycourseSelection: State<StudycourseSelection> = _studycourseSelection
+    private val _studycourseSelection: MutableState<Selection<Studycourse>> = mutableStateOf(Loading)
+    val studycourseSelection: State<Selection<Studycourse>> = _studycourseSelection
 
     init {
         coroutineScope.launch {
             studycoursesFlow.collect { studycourses ->
                 if (studycourses.isNotEmpty()) {
-                    load(studycourses[0])
+                    select(studycourses[0])
                     cancel()
+                } else {
+                    _studycourseSelection.value = None
                 }
             }
         }
     }
 
-    fun load(studycourse: Studycourse) {
-        val events = eventRepository.queryAllInStudycourseAsFlow(studycourse)
-        _studycourseSelection.value = StudycourseSelection.Selected(studycourse, events)
+    fun select(studycourse: Studycourse) {
+        _studycourseSelection.value = Selection(studycourse)
     }
+
+    fun getStudycourseEvents(studycourse: Studycourse): Flow<List<StudycourseEvent>> =
+        eventRepository.queryAllInStudycourseAsFlow(studycourse)
 }
