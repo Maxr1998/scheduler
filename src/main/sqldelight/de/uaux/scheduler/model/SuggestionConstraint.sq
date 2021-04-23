@@ -4,5 +4,11 @@ CREATE TABLE SuggestionConstraint (
     value BLOB AS ByteArray NOT NULL
 );
 
+insert:
+INSERT INTO SuggestionConstraint VALUES ?;
+
+clearConstraintsBySuggestion:
+DELETE FROM SuggestionConstraint WHERE suggestion = ?;
+
 querySuggestionConstraintsBySuggestion:
 SELECT sc.type, sc.value FROM SuggestionConstraint sc WHERE suggestion = ?;

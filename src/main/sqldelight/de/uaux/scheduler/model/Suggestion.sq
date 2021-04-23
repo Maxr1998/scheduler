@@ -6,6 +6,12 @@ CREATE TABLE Suggestion (
     UNIQUE (semester, event)
 );
 
+insert:
+INSERT INTO Suggestion (semester, event, text) VALUES (?, ?, ?);
+
+update:
+UPDATE Suggestion SET text = ? WHERE id = ?;
+
 querySuggestionBySemesterAndEvent:
 SELECT s.id, e.*, s.text
 FROM Event e JOIN Suggestion s ON e.id = s.event
