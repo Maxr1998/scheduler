@@ -107,10 +107,10 @@ fun SuggestionDialog(event: Event, onDismissRequest: () -> Unit) {
                         onSave = { text, constraints ->
                             coroutineScope.launch {
                                 val updated = selectedSuggestion.orNull()?.copy(text = text, constraints = constraints)
-                                selectedSuggestion = Loading
                                 val suggestion = updated ?: Suggestion(-1, semester, event, text, constraints)
                                 val id = suggestionRepository.insertOrUpdate(suggestion)
                                 selectedSuggestion = Selection(suggestion.copy(id = id))
+                                inEditMode.value = false
                             }
                         },
                     )
@@ -154,10 +154,11 @@ private fun SuggestionDetails(
 
         SuggestionEditButtons(
             inEditMode = inEditMode.value,
-            onStart = { inEditMode.value = true },
+            onStart = {
+                inEditMode.value = true
+            },
             onFinish = {
                 onSave(text.value.text, constraints.toList())
-                inEditMode.value = false
             },
             onCancel = {
                 text.value = TextFieldValue(initialText)
