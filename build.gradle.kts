@@ -40,25 +40,6 @@ dependencies {
     testRuntimeOnly(libs.junit.runtime)
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_14.toString()
-        @Suppress("SuspiciousCollectionReassignment")
-        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xinline-classes")
-        useIR = true
-    }
-}
-
-sqldelight {
-    database("Database") {
-        packageName = "$group.${project.name}.model"
-    }
-}
-
 compose.desktop {
     application {
         mainClass = "scheduler"
@@ -69,22 +50,43 @@ compose.desktop {
     }
 }
 
-// Configure dependency updates task
-tasks.withType<DependencyUpdatesTask> {
-    gradleReleaseChannel = GradleReleaseChannel.CURRENT.id
-    rejectVersionIf {
-        val candidateType = classifyVersion(candidate.version)
-        val currentType = classifyVersion(currentVersion)
+sqldelight {
+    database("Database") {
+        packageName = "$group.${project.name}.model"
+    }
+}
 
-        val accept = when (candidateType) {
-            // Always accept stable updates
-            VersionType.STABLE -> true
-            // Accept milestone updates for current milestone and unstable
-            VersionType.MILESTONE -> currentType != VersionType.STABLE
-            // Only accept unstable for current unstable
-            VersionType.UNSTABLE -> currentType == VersionType.UNSTABLE
+tasks {
+    withType<KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_14.toString()
+            @Suppress("SuspiciousCollectionReassignment")
+            freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xinline-classes")
+            useIR = true
         }
+    }
 
-        !accept
+    test {
+        useJUnitPlatform()
+    }
+
+    // Configure dependency updates task
+    withType<DependencyUpdatesTask> {
+        gradleReleaseChannel = GradleReleaseChannel.CURRENT.id
+        rejectVersionIf {
+            val candidateType = classifyVersion(candidate.version)
+            val currentType = classifyVersion(currentVersion)
+
+            val accept = when (candidateType) {
+                // Always accept stable updates
+                VersionType.STABLE -> true
+                // Accept milestone updates for current milestone and unstable
+                VersionType.MILESTONE -> currentType != VersionType.STABLE
+                // Only accept unstable for current unstable
+                VersionType.UNSTABLE -> currentType == VersionType.UNSTABLE
+            }
+
+            !accept
+        }
     }
 }
