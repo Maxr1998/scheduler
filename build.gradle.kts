@@ -44,9 +44,9 @@ compose.desktop {
     application {
         mainClass = "scheduler"
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = project.name
-            modules("java.naming")
+            modules("java.naming", "java.sql")
+            targetFormats(TargetFormat.AppImage)
         }
     }
 }
