@@ -1,4 +1,5 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -68,12 +69,22 @@ compose.desktop {
     }
 }
 
-fun isStable(version: String): Boolean {
-    return listOf("alpha", "beta", "dev", "rc").none { version.toLowerCase().contains(it) }
-}
-
+// Configure dependency updates task
 tasks.withType<DependencyUpdatesTask> {
+    gradleReleaseChannel = GradleReleaseChannel.CURRENT.id
     rejectVersionIf {
-        !isStable(candidate.version) && isStable(currentVersion)
+        val candidateType = classifyVersion(candidate.version)
+        val currentType = classifyVersion(currentVersion)
+
+        val accept = when (candidateType) {
+            // Always accept stable updates
+            VersionType.STABLE -> true
+            // Accept milestone updates for current milestone and unstable
+            VersionType.MILESTONE -> currentType != VersionType.STABLE
+            // Only accept unstable for current unstable
+            VersionType.UNSTABLE -> currentType == VersionType.UNSTABLE
+        }
+
+        !accept
     }
 }
