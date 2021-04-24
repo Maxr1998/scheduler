@@ -53,7 +53,28 @@ import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.get
 
 @Composable
-fun SuggestionDialog(event: Event, onDismissRequest: () -> Unit) {
+fun SuggestionDialog(suggestion: Suggestion, onDismissRequest: () -> Unit) {
+    PopupDialog(
+        title = l("dialog_title_suggestions"),
+        actions = {
+            TextButton(
+                onClick = onDismissRequest,
+            ) {
+                Text(text = l("button_text_close"))
+            }
+        },
+    ) {
+        Column {
+            SuggestionDetails(
+                initialText = suggestion.text,
+                initialConstraints = suggestion.constraints,
+            )
+        }
+    }
+}
+
+@Composable
+fun EditSuggestionDialog(event: Event, onDismissRequest: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val scheduleRepository: ScheduleRepository = get()
     val suggestionRepository: SuggestionRepository = get()
@@ -133,13 +154,15 @@ fun SuggestionDialog(event: Event, onDismissRequest: () -> Unit) {
 private fun SuggestionDetails(
     initialText: String,
     initialConstraints: List<Suggestion.Constraint>,
-    inEditMode: MutableState<Boolean>,
-    onSave: (String, List<Suggestion.Constraint>) -> Unit,
+    inEditMode: MutableState<Boolean>? = null,
+    onSave: (String, List<Suggestion.Constraint>) -> Unit = { _, _ -> },
 ) {
     val text = remember { mutableStateOf(TextFieldValue(initialText)) }
     val constraints = remember { initialConstraints.toMutableStateList() }
 
-    Spacer(modifier = Modifier.height(12.dp))
+    if (inEditMode != null) {
+        Spacer(modifier = Modifier.height(12.dp))
+    }
 
     Row(
         modifier = Modifier.height(36.dp),
@@ -152,21 +175,23 @@ private fun SuggestionDetails(
             style = MaterialTheme.typography.subtitle1,
         )
 
-        SuggestionEditButtons(
-            inEditMode = inEditMode.value,
-            onStart = {
-                inEditMode.value = true
-            },
-            onFinish = {
-                onSave(text.value.text, constraints.toList())
-            },
-            onCancel = {
-                text.value = TextFieldValue(initialText)
-                constraints.clear()
-                constraints.addAll(initialConstraints)
-                inEditMode.value = false
-            },
-        )
+        if (inEditMode != null) {
+            SuggestionEditButtons(
+                inEditMode = inEditMode.value,
+                onStart = {
+                    inEditMode.value = true
+                },
+                onFinish = {
+                    onSave(text.value.text, constraints.toList())
+                },
+                onCancel = {
+                    text.value = TextFieldValue(initialText)
+                    constraints.clear()
+                    constraints.addAll(initialConstraints)
+                    inEditMode.value = false
+                },
+            )
+        }
     }
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -177,7 +202,7 @@ private fun SuggestionDetails(
         label = l("input_label_suggestion_text"),
         placeholder = l("input_hint_suggestion_text"),
         singleLine = false,
-        readOnly = !inEditMode.value,
+        readOnly = inEditMode?.value != true,
     )
 }
 

@@ -5,6 +5,7 @@ import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.dto.StudycourseEvent
+import de.uaux.scheduler.model.dto.Suggestion
 
 @Immutable
 sealed class DialogState {
@@ -12,5 +13,6 @@ sealed class DialogState {
     data class StudycourseDialog(val studycourse: Studycourse?) : DialogState()
     data class StudycourseEventDialog(val studycourse: Studycourse, val studycourseEvent: StudycourseEvent?) : DialogState()
     data class EventDialog(val event: Event?) : DialogState()
-    data class SuggestionDialog(val event: Event) : DialogState()
+    data class SuggestionDialog(val suggestion: Suggestion) : DialogState()
+    data class EditSuggestionDialog(val event: Event) : DialogState()
 }

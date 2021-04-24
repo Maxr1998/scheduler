@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -52,6 +53,7 @@ import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.model.duration
+import de.uaux.scheduler.ui.model.DialogState
 import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.model.TimetableFilter
 import de.uaux.scheduler.ui.util.VerticalDivider
@@ -60,7 +62,9 @@ import de.uaux.scheduler.ui.util.l
 import de.uaux.scheduler.ui.util.lightenedBackground
 import de.uaux.scheduler.util.formatMinutesOfDay
 import de.uaux.scheduler.util.size
+import de.uaux.scheduler.viewmodel.DialogViewModel
 import de.uaux.scheduler.viewmodel.TimetableViewModel
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import org.koin.androidx.compose.get
 import java.time.DayOfWeek
@@ -77,6 +81,8 @@ const val TIMESLOT_SNAP_MINUTES = 10
 
 @Composable
 fun TimetableScreenContent(filter: TimetableFilter) {
+    val coroutineScope = rememberCoroutineScope()
+    val dialogViewModel: DialogViewModel = get()
     val timetableViewModel: TimetableViewModel = get()
     val showWeekend by timetableViewModel.showWeekend
     val numDays = if (showWeekend == ShowWeekend.FALSE) 5 else 7
@@ -84,6 +90,15 @@ fun TimetableScreenContent(filter: TimetableFilter) {
     val pointerOffset = remember { mutableStateOf(Offset.Zero) }
     val draggedEvent = remember { mutableStateOf<ScheduledEvent?>(null) }
     val dropLocation = remember { mutableStateOf<DropLocation?>(null) }
+
+    val showSuggestion: (Event) -> Unit = { event ->
+        coroutineScope.launch {
+            val suggestion = timetableViewModel.getSuggestion(filter.semester, event)
+            if (suggestion != null && (suggestion.text.isNotEmpty() || suggestion.constraints.isNotEmpty())) {
+                dialogViewModel.openDialog(DialogState.SuggestionDialog(suggestion))
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -127,6 +142,9 @@ fun TimetableScreenContent(filter: TimetableFilter) {
                 pointerOffset = pointerOffset.value,
                 draggedEvent = draggedEvent.value?.event,
                 dropLocation = dropLocation,
+                onClick = { event ->
+                    showSuggestion(event.event)
+                },
                 onDrag = { event ->
                     draggedEvent.value = event
                 },
@@ -145,6 +163,9 @@ fun TimetableScreenContent(filter: TimetableFilter) {
             VerticalDivider(modifier = Modifier.zIndex(ZIndex.DIVIDER))
             UnscheduledPane(
                 modifier = Modifier.weight(1f).fillMaxHeight(),
+                onClick = { studycourseEvent ->
+                    showSuggestion(studycourseEvent.event)
+                },
                 onDragStart = { studycourseEvent ->
                     draggedEvent.value = ScheduledEvent(filter.semester, studycourseEvent, DayOfWeek.MONDAY, 0, null)
                 },
@@ -171,6 +192,7 @@ private fun TimetablePane(
     pointerOffset: Offset,
     draggedEvent: Event?,
     dropLocation: MutableState<DropLocation?>,
+    onClick: (ScheduledEvent) -> Unit,
     onDrag: (ScheduledEvent) -> Unit,
     onDrop: (success: Boolean) -> Unit,
 ) {
@@ -276,6 +298,9 @@ private fun TimetablePane(
                 TimetableEventCard(
                     modifier = layoutModifier,
                     event = event,
+                    onClick = {
+                        onClick(event)
+                    },
                     onDrag = {
                         onDrag(event)
                     },
@@ -289,6 +314,7 @@ private fun TimetablePane(
 @Composable
 private fun UnscheduledPane(
     modifier: Modifier = Modifier,
+    onClick: (StudycourseEvent) -> Unit,
     onDragStart: (StudycourseEvent) -> Unit,
     onDrop: (success: Boolean) -> Unit,
 ) {
@@ -299,6 +325,9 @@ private fun UnscheduledPane(
         items(timetableViewModel.unscheduledEvents, key = { studycourseEvent -> studycourseEvent.event.id }) { unscheduled ->
             UnscheduledEventCard(
                 studycourseEvent = unscheduled,
+                onClick = {
+                    onClick(unscheduled)
+                },
                 onDragStart = {
                     onDragStart(unscheduled)
                 },

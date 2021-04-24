@@ -11,8 +11,10 @@ import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.dto.StudycourseEvent
+import de.uaux.scheduler.model.dto.Suggestion
 import de.uaux.scheduler.repository.ScheduleRepository
 import de.uaux.scheduler.repository.StudycourseRepository
+import de.uaux.scheduler.repository.SuggestionRepository
 import de.uaux.scheduler.ui.model.Loading
 import de.uaux.scheduler.ui.model.None
 import de.uaux.scheduler.ui.model.Selection
@@ -36,6 +38,7 @@ private val logger = KotlinLogging.logger {}
 class TimetableViewModel(
     private val studycourseRepository: StudycourseRepository,
     private val scheduleRepository: ScheduleRepository,
+    private val suggestionRepository: SuggestionRepository,
 ) {
     private val coroutineScope = MainScope()
 
@@ -193,6 +196,10 @@ class TimetableViewModel(
             events.removeAt(insertIndex)
             events.binaryInsert(event)
         }
+    }
+
+    suspend fun getSuggestion(semester: Semester, event: Event): Suggestion? = withContext(Dispatchers.IO) {
+        suggestionRepository.querySuggestionBySemesterAndEvent(semester, event)
     }
 
     companion object {

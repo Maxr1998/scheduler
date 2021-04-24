@@ -33,11 +33,13 @@ private const val POINTER_KEY_PSEUDO_DRAGGABLE = "pseudo-draggable-card"
 fun TimetableEventCard(
     modifier: Modifier = Modifier,
     event: ScheduledEvent,
+    onClick: () -> Unit,
     onDrag: () -> Unit,
     onDrop: (persist: Boolean) -> Unit,
 ) {
     DraggableCard(
         modifier = modifier,
+        onClick = onClick,
         onDragStart = onDrag,
         onDragUpdate = { },
         onDrop = { _, success -> onDrop(success) }
@@ -90,6 +92,7 @@ fun IndicatorCard(
 @Composable
 fun UnscheduledEventCard(
     studycourseEvent: StudycourseEvent,
+    onClick: () -> Unit = { },
     onDragStart: () -> Unit = { },
     onDragUpdate: () -> Unit = { },
     onDrop: (success: Boolean) -> Unit = { },
@@ -98,7 +101,7 @@ fun UnscheduledEventCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
-            .clickable {}
+            .clickable(onClick = onClick)
             .pointerInput(POINTER_KEY_PSEUDO_DRAGGABLE) {
                 detectDragGestures(
                     onDragStart = {

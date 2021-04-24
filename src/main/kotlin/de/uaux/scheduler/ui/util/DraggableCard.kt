@@ -23,6 +23,7 @@ private const val POINTER_KEY_DRAGGABLE = "draggable-card"
 @Composable
 fun DraggableCard(
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = { },
     onDragStart: () -> Unit = { },
     onDragUpdate: (offset: Offset) -> Unit = { },
     onDrop: (offset: Offset, success: Boolean) -> Unit = { _, _ -> },
@@ -37,7 +38,7 @@ fun DraggableCard(
             .then(modifier)
             .offset { offset.round() }
             .padding(4.dp)
-            .clickable {}
+            .clickable(onClick = onClick)
             .pointerInput(POINTER_KEY_DRAGGABLE) {
                 detectDragGestures(
                     onDragStart = {

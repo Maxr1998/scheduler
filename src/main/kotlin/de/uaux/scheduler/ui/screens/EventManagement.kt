@@ -54,7 +54,7 @@ fun EventManagementScreenContent() {
     ) { event ->
         EventListItem(
             modifier = Modifier.clickable {
-                dialogViewModel.openDialog(DialogState.SuggestionDialog(event))
+                dialogViewModel.openDialog(DialogState.EditSuggestionDialog(event))
             },
             event = event,
             openDialog = openEventDialog,
