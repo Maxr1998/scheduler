@@ -4,10 +4,10 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin(Dependencies.Plugins.kotlinJvm) version Dependencies.Versions.kotlin
-    id(Dependencies.Plugins.compose) version Dependencies.Versions.composePlugin
-    id(Dependencies.Plugins.sqlDelight) version Dependencies.Versions.sqlDelight
-    id(Dependencies.Plugins.dependencyUpdates) version Dependencies.Versions.dependencyUpdatesPlugin
+    kotlin(Plugins.kotlinJvm) version Plugins.Versions.kotlin
+    id(Plugins.compose) version Plugins.Versions.composePlugin
+    id(Plugins.sqlDelight) version Plugins.Versions.sqlDelight
+    id(Plugins.dependencyUpdates) version Plugins.Versions.dependencyUpdatesPlugin
 }
 
 group = "de.uaux"
@@ -20,25 +20,23 @@ repositories {
 
 dependencies {
     // Core
-    implementation(Dependencies.Core.koin)
-    implementation(Dependencies.Core.coroutines)
+    implementation(libs.koin)
+    implementation(libs.coroutines)
 
     // UI
     implementation(compose.desktop.currentOs)
     implementation(compose("org.jetbrains.compose.material:material-icons-extended"))
 
     // Persistence
-    implementation(Dependencies.Persistence.sqlDelightSqliteDriver)
-    implementation(Dependencies.Persistence.sqlDelightCoroutinesExtension)
+    implementation(libs.bundles.sqlDelight)
 
     // Logging
-    implementation(Dependencies.Logging.kotlinLogging)
-    implementation(Dependencies.Logging.logback)
+    implementation(libs.bundles.logging)
 
     // Tests
     testImplementation(kotlin("test-junit5"))
-    testImplementation(Dependencies.Testing.junit)
-    testRuntimeOnly(Dependencies.Testing.junitRuntime)
+    testImplementation(libs.junit.api)
+    testRuntimeOnly(libs.junit.runtime)
 }
 
 tasks.test {

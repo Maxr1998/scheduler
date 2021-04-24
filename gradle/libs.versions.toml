@@ -1,0 +1,24 @@
+[versions]
+koin = "2.2.2"
+coroutines = "1.4.3"
+sqlDelight = "1.5.0"
+kotlinLogging = "2.0.6"
+logback = "1.2.3"
+junit = "5.7.0"
+
+[libraries]
+koin = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+
+sqlDelight-sqliteDriver = { group = "com.squareup.sqldelight", name = "sqlite-driver", version.ref = "sqlDelight" }
+sqlDelight-coroutinesExtension = { group = "com.squareup.sqldelight", name = "coroutines-extensions-jvm", version.ref = "sqlDelight" }
+
+kotlinLogging = { group = "io.github.microutils", name = "kotlin-logging", version.ref = "kotlinLogging" }
+logback = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
+
+junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
+junit-runtime = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+
+[bundles]
+sqlDelight = ["sqlDelight-sqliteDriver", "sqlDelight-coroutinesExtension"]
+logging = ["kotlinLogging", "logback"]
