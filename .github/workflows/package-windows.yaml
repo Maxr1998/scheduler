@@ -1,0 +1,40 @@
+name: Build Windows package
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  package:
+    runs-on: windows-2019
+    environment: release
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 15
+      - name: Setup Gradle cache
+        uses: actions/cache@v2.1.4
+        with:
+          path: |
+            %USERPROFILE%\.gradle\caches
+            %USERPROFILE%\.gradle\wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Run package task
+        run: .\gradlew.bat --no-daemon --info packageUberJarForCurrentOS packageMsi
+      - name: Collect artifacts
+        run: |
+          mkdir build\artifacts
+          move build\compose\jars\* build\artifacts\
+          move build\compose\binaries\main\msi\* build\artifacts\
+      - uses: actions/upload-artifact@v2
+        with:
+          name: scheduler
+          path: |
+            build\artifacts\*
