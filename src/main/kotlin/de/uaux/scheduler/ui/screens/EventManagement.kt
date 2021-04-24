@@ -1,5 +1,6 @@
 package de.uaux.scheduler.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -52,6 +53,9 @@ fun EventManagementScreenContent() {
         onAdd = { openEventDialog(null) },
     ) { event ->
         EventListItem(
+            modifier = Modifier.clickable {
+                dialogViewModel.openDialog(DialogState.SuggestionDialog(event))
+            },
             event = event,
             openDialog = openEventDialog,
         )

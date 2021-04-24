@@ -25,11 +25,13 @@ fun LabeledTextField(
     placeholder: String,
     errorMessage: String? = null,
     singleLine: Boolean = true,
+    readOnly: Boolean = false,
 ) {
     Column {
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth().then(modifier),
             value = text.value,
+            readOnly = readOnly,
             singleLine = singleLine,
             label = {
                 Text(text = label)

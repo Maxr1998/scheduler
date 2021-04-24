@@ -13,6 +13,8 @@ sealed class Selection<out T> {
 
     companion object {
         operator fun <T> invoke(some: T): Selection<T> = Selected(some)
+
+        fun <T> fromNullable(value: T?): Selection<T> = if (value != null) Selected(value) else None
     }
 }
 
