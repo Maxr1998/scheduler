@@ -32,7 +32,7 @@ jobs:
         run: |
           mkdir build\artifacts
           move build\compose\jars\* build\artifacts\
-          move build\compose\binaries\main\app build\artifacts\
+          move build\compose\binaries\main\app\* build\artifacts\
       - uses: actions/upload-artifact@v2
         with:
           name: scheduler
