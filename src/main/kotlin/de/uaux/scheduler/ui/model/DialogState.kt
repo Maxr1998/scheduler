@@ -10,9 +10,23 @@ import de.uaux.scheduler.model.dto.Suggestion
 @Immutable
 sealed class DialogState {
     object Closed : DialogState()
-    data class EventDetailsDialog(val studycourseEvent: StudycourseEvent, val scheduledEvent: ScheduledEvent?, val suggestion: Suggestion?) : DialogState()
+
+    @Immutable
+    data class EventDetailsDialog(
+        val studycourseEvent: StudycourseEvent,
+        val scheduledEvent: ScheduledEvent?,
+        val suggestion: Suggestion?,
+    ) : DialogState()
+
+    @Immutable
     data class StudycourseDialog(val studycourse: Studycourse?) : DialogState()
+
+    @Immutable
     data class StudycourseEventDialog(val studycourse: Studycourse, val studycourseEvent: StudycourseEvent?) : DialogState()
+
+    @Immutable
     data class EventDialog(val event: Event?) : DialogState()
+
+    @Immutable
     data class EditSuggestionDialog(val event: Event) : DialogState()
 }
