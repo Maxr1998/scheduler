@@ -100,6 +100,6 @@ INSERT OR
 REPLACE INTO Suggestion (id, semester, event)
 VALUES
     /* TI */
-    (0, 20211, 3),
+    (1, 20211, 3),
     /* SI */
-    (1, 20211, 7);
+    (2, 20211, 7);
