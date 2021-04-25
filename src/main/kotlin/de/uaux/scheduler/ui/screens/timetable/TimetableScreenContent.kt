@@ -91,12 +91,10 @@ fun TimetableScreenContent(filter: TimetableFilter) {
     val draggedEvent = remember { mutableStateOf<ScheduledEvent?>(null) }
     val dropLocation = remember { mutableStateOf<DropLocation?>(null) }
 
-    val showSuggestion: (Event) -> Unit = { event ->
+    val showSuggestion: (StudycourseEvent, ScheduledEvent?) -> Unit = { studycourseEvent, scheduledEvent ->
         coroutineScope.launch {
-            val suggestion = timetableViewModel.getSuggestion(filter.semester, event)
-            if (suggestion != null && (suggestion.text.isNotEmpty() || suggestion.constraints.isNotEmpty())) {
-                dialogViewModel.openDialog(DialogState.SuggestionDialog(suggestion))
-            }
+            val suggestion = timetableViewModel.getSuggestion(filter.semester, studycourseEvent.event)
+            dialogViewModel.openDialog(DialogState.EventDetailsDialog(studycourseEvent, scheduledEvent, suggestion))
         }
     }
 
@@ -143,7 +141,7 @@ fun TimetableScreenContent(filter: TimetableFilter) {
                 draggedEvent = draggedEvent.value?.event,
                 dropLocation = dropLocation,
                 onClick = { event ->
-                    showSuggestion(event.event)
+                    showSuggestion(event.studycourseEvent, event)
                 },
                 onDrag = { event ->
                     draggedEvent.value = event
@@ -164,7 +162,7 @@ fun TimetableScreenContent(filter: TimetableFilter) {
             UnscheduledPane(
                 modifier = Modifier.weight(1f).fillMaxHeight(),
                 onClick = { studycourseEvent ->
-                    showSuggestion(studycourseEvent.event)
+                    showSuggestion(studycourseEvent, null)
                 },
                 onDragStart = { studycourseEvent ->
                     draggedEvent.value = ScheduledEvent(filter.semester, studycourseEvent, DayOfWeek.MONDAY, 0, null)

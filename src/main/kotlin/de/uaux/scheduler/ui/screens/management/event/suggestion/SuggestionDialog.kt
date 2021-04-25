@@ -53,27 +53,6 @@ import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.get
 
 @Composable
-fun SuggestionDialog(suggestion: Suggestion, onDismissRequest: () -> Unit) {
-    PopupDialog(
-        title = l("dialog_title_suggestions"),
-        actions = {
-            TextButton(
-                onClick = onDismissRequest,
-            ) {
-                Text(text = l("button_text_close"))
-            }
-        },
-    ) {
-        Column {
-            SuggestionDetails(
-                initialText = suggestion.text,
-                initialConstraints = suggestion.constraints,
-            )
-        }
-    }
-}
-
-@Composable
 fun EditSuggestionDialog(event: Event, onDismissRequest: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val scheduleRepository: ScheduleRepository = get()
@@ -151,7 +130,7 @@ fun EditSuggestionDialog(event: Event, onDismissRequest: () -> Unit) {
 }
 
 @Composable
-private fun SuggestionDetails(
+fun SuggestionDetails(
     initialText: String,
     initialConstraints: List<Suggestion.Constraint>,
     inEditMode: MutableState<Boolean>? = null,
