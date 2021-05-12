@@ -46,7 +46,12 @@ compose.desktop {
         nativeDistributions {
             packageName = project.name
             modules("java.naming", "java.sql")
-            targetFormats(TargetFormat.AppImage)
+
+            val os = System.getProperty("os.name")
+            if (!os.equals("Mac OS X", ignoreCase = true)) {
+                // Don't declare AppImage target on macOS
+                targetFormats(TargetFormat.AppImage)
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-name: Build Linux package
+name: Build Linux and macOS package
 
 on:
   push:
@@ -7,7 +7,10 @@ on:
 
 jobs:
   package:
-    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04, macos-10.15 ]
+    runs-on: ${{ matrix.os }}
     environment: release
     steps:
       - name: Checkout repository
@@ -27,12 +30,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run package task
-        run: ./gradlew --no-daemon --info packageUberJarForCurrentOS packageAppImage
+        run: ./gradlew --no-daemon --info packageUberJarForCurrentOS
+      - name: Run AppImage task
+        if: ${{ runner.os == 'Linux' }}
+        run: ./gradlew --no-daemon --info packageAppImage
       - name: Collect artifacts
         run: |
           mkdir build/artifacts
           mv build/compose/jars/* build/artifacts/
-          mv build/compose/binaries/main/app/* build/artifacts/
+          mv build/compose/binaries/main/app/* build/artifacts/ || true
       - uses: actions/upload-artifact@v2
         with:
           name: scheduler
