@@ -35,6 +35,6 @@ jobs:
           move build\compose\binaries\main\app\* build\artifacts\
       - uses: actions/upload-artifact@v2
         with:
-          name: scheduler
+          name: scheduler-${{ runner.os }}
           path: |
             build\artifacts\*
