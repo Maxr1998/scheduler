@@ -25,6 +25,18 @@ fun Dialogs() {
                 onDismissRequest = closeDialog,
             )
         }
+        is DialogState.EventDialog -> {
+            EventDialog(
+                event = dialogState.event,
+                onDismissRequest = closeDialog,
+            )
+        }
+        is DialogState.EditSuggestionDialog -> {
+            EditSuggestionDialog(
+                event = dialogState.event,
+                onDismissRequest = closeDialog,
+            )
+        }
         is DialogState.StudycourseDialog -> {
             StudycourseDialog(
                 studycourse = dialogState.studycourse,
@@ -38,18 +50,6 @@ fun Dialogs() {
                 onCreateEventRequest = {
                     setDialogState(DialogState.EventDialog(null))
                 },
-                onDismissRequest = closeDialog,
-            )
-        }
-        is DialogState.EventDialog -> {
-            EventDialog(
-                event = dialogState.event,
-                onDismissRequest = closeDialog,
-            )
-        }
-        is DialogState.EditSuggestionDialog -> {
-            EditSuggestionDialog(
-                event = dialogState.event,
                 onDismissRequest = closeDialog,
             )
         }

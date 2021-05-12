@@ -19,14 +19,14 @@ sealed class DialogState {
     ) : DialogState()
 
     @Immutable
-    data class StudycourseDialog(val studycourse: Studycourse?) : DialogState()
-
-    @Immutable
-    data class StudycourseEventDialog(val studycourse: Studycourse, val studycourseEvent: StudycourseEvent?) : DialogState()
-
-    @Immutable
     data class EventDialog(val event: Event?) : DialogState()
 
     @Immutable
     data class EditSuggestionDialog(val event: Event) : DialogState()
+
+    @Immutable
+    data class StudycourseDialog(val studycourse: Studycourse?) : DialogState()
+
+    @Immutable
+    data class StudycourseEventDialog(val studycourse: Studycourse, val studycourseEvent: StudycourseEvent?) : DialogState()
 }
