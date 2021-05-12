@@ -30,6 +30,16 @@ val LightColors = lightColors(
     background = Color(0xFFFAFAFA),
 )
 
+@Suppress("unused")
+val MonochromeColors = lightColors(
+    primary = Color(0xFF808080),
+    primaryVariant = Color(0xFF606060),
+    secondary = Color(0xFF808080),
+    secondaryVariant = Color(0xFF606060),
+    background = Color(0xFFFAFAFA),
+    onPrimary = Color.White,
+)
+
 val DarkColors = darkColors(
     primary = Color(0xFFFF9800),
     primaryVariant = Color(0xFFC66900),
