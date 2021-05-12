@@ -3,6 +3,7 @@ package de.uaux.scheduler.ui
 import androidx.compose.runtime.Composable
 import de.uaux.scheduler.ui.model.DialogState
 import de.uaux.scheduler.ui.screens.management.event.EventDialog
+import de.uaux.scheduler.ui.screens.management.event.LecturersDialog
 import de.uaux.scheduler.ui.screens.management.event.suggestion.EditSuggestionDialog
 import de.uaux.scheduler.ui.screens.management.studycourse.StudycourseDialog
 import de.uaux.scheduler.ui.screens.management.studycourse.StudycourseEventDialog
@@ -22,6 +23,11 @@ fun Dialogs() {
                 studycourseEvent = dialogState.studycourseEvent,
                 scheduledEvent = dialogState.scheduledEvent,
                 suggestion = dialogState.suggestion,
+                onDismissRequest = closeDialog,
+            )
+        }
+        DialogState.LecturersDialog -> {
+            LecturersDialog(
                 onDismissRequest = closeDialog,
             )
         }

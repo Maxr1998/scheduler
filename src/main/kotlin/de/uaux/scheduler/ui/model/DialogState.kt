@@ -19,6 +19,9 @@ sealed class DialogState {
     ) : DialogState()
 
     @Immutable
+    object LecturersDialog : DialogState()
+
+    @Immutable
     data class EventDialog(val event: Event?) : DialogState()
 
     @Immutable

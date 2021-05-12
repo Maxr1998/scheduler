@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,10 +34,24 @@ import org.koin.androidx.compose.get
 
 @Composable
 fun EventManagementScreen() = Column {
+    val dialogViewModel: DialogViewModel = get()
+
     Toolbar(
         modifier = Modifier.fillMaxWidth().height(56.dp),
         title = l("screen_event_management"),
-    ) {}
+        actions = {
+            IconButton(
+                onClick = {
+                    dialogViewModel.openDialog(DialogState.LecturersDialog)
+                },
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Person,
+                    contentDescription = null,
+                )
+            }
+        },
+    )
 
     DisableSelection {
         EventManagementScreenContent()
