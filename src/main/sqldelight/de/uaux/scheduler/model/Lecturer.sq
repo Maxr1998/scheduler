@@ -2,3 +2,12 @@ CREATE TABLE Lecturer (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL
 );
+
+queryAll:
+SELECT * FROM Lecturer ORDER BY name;
+
+queryLecturersByEvent:
+SELECT l.*
+FROM  Lecturer l JOIN EventLecturer el JOIN Event e ON l.id = el.lecturer AND el.event = e.id
+WHERE e.id = ?
+ORDER BY l.name;

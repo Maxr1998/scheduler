@@ -6,6 +6,7 @@ import de.uaux.scheduler.controller.NavigationController
 import de.uaux.scheduler.controller.StartupController
 import de.uaux.scheduler.model.Database
 import de.uaux.scheduler.repository.EventRepository
+import de.uaux.scheduler.repository.LecturerRepository
 import de.uaux.scheduler.repository.ScheduleRepository
 import de.uaux.scheduler.repository.StudycourseRepository
 import de.uaux.scheduler.repository.SuggestionRepository
@@ -32,6 +33,7 @@ val appModule = module {
     // Repositories
     single { StudycourseRepository(get()) }
     single { EventRepository(get()) }
+    single { LecturerRepository(get()) }
     single { ScheduleRepository(get(), get()) }
     single { SuggestionRepository(get(), get()) }
 
