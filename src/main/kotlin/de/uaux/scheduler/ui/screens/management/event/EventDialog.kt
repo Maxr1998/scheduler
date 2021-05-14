@@ -7,13 +7,16 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Event
+import de.uaux.scheduler.model.Lecturer
 import de.uaux.scheduler.repository.EventRepository
+import de.uaux.scheduler.repository.LecturerRepository
 import de.uaux.scheduler.ui.util.LabeledTextField
 import de.uaux.scheduler.ui.util.PopupDialog
 import de.uaux.scheduler.ui.util.SaveButton
@@ -27,6 +30,7 @@ import org.koin.androidx.compose.get
 fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val eventRepository: EventRepository = get()
+    val lecturerRepository: LecturerRepository = get()
     val eventName = remember { mutableStateOf(TextFieldValue(event?.name.orEmpty())) }
     val eventModule = remember { mutableStateOf(TextFieldValue(event?.module.orEmpty())) }
     val eventDurationText = remember { mutableStateOf(TextFieldValue(event?.duration?.toString().orEmpty())) }
@@ -35,6 +39,9 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
         0L..TimetableViewModel.MAX_MINUTES_IN_DAY,
         "input_error_invalid_duration",
     )
+    val eventLecturers = produceState(emptyList<Lecturer>()) {
+        value = if (event != null) lecturerRepository.queryLecturersByEvent(event) else emptyList()
+    }
     val eventParticipantsText = remember { mutableStateOf(TextFieldValue(event?.participants?.toString().orEmpty())) }
     val (eventParticipants, eventParticipantsError) = calculateNumberInputError(
         eventParticipantsText.value.text,
@@ -95,6 +102,10 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
                 placeholder = l("input_hint_event_duration"),
                 errorMessage = eventDurationError,
             )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            // TODO: Lecturers
 
             Spacer(modifier = Modifier.height(4.dp))
 
