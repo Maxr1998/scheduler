@@ -27,9 +27,11 @@ fun LabeledTextField(
     singleLine: Boolean = true,
     readOnly: Boolean = false,
 ) {
-    Column {
+    Column(
+        modifier = modifier,
+    ) {
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().then(modifier),
+            modifier = Modifier.fillMaxWidth().run { if (!singleLine) weight(1f) else this },
             value = text.value,
             readOnly = readOnly,
             singleLine = singleLine,
