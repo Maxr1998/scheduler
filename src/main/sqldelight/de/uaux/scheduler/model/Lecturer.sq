@@ -2,3 +2,38 @@ CREATE TABLE Lecturer (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL
 );
+
+insert:
+INSERT INTO Lecturer (name) VALUES (?);
+
+queryAll:
+SELECT * FROM Lecturer ORDER BY name;
+
+queryAllByName:
+SELECT * FROM Lecturer WHERE LOWER(name) LIKE LOWER(:name) ORDER BY name;
+
+queryAllNotInEvent:
+SELECT *
+FROM Lecturer
+WHERE id NOT IN (
+    SELECT l.id
+    FROM Lecturer l JOIN EventLecturer e ON l.id = e.lecturer
+    WHERE e.event = ?
+)
+ORDER BY name;
+
+queryAllNotInEventByName:
+SELECT *
+FROM Lecturer
+WHERE id NOT IN (
+     SELECT l.id
+     FROM Lecturer l JOIN EventLecturer e ON l.id = e.lecturer
+     WHERE e.event = ?
+) AND LOWER(name) LIKE LOWER(:name)
+ORDER BY name;
+
+queryLecturersByEvent:
+SELECT l.*
+FROM  Lecturer l JOIN EventLecturer el JOIN Event e ON l.id = el.lecturer AND el.event = e.id
+WHERE e.id = ?
+ORDER BY l.name;

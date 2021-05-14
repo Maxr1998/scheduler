@@ -3,3 +3,9 @@ CREATE TABLE EventLecturer (
     lecturer INTEGER NOT NULL REFERENCES Lecturer(id) ON DELETE CASCADE,
     UNIQUE (event, lecturer)
 );
+
+insertOrReplace:
+INSERT OR REPLACE INTO EventLecturer VALUES (?, ?);
+
+delete:
+DELETE FROM EventLecturer WHERE event = ? AND lecturer = ?;
