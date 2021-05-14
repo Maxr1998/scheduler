@@ -65,7 +65,7 @@ sqldelight {
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_14.toString()
+            jvmTarget = JavaVersion.VERSION_11.toString()
             @Suppress("SuspiciousCollectionReassignment")
             freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xinline-classes")
             useIR = true
