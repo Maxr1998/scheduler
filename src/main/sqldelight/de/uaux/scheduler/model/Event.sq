@@ -1,16 +1,17 @@
 CREATE TABLE Event (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
+    type INTEGER AS Int NOT NULL DEFAULT 0,
     module TEXT NOT NULL,
     duration INTEGER AS Int NOT NULL,
     participants INTEGER AS Int DEFAULT NULL CHECK (participants > 0)
 );
 
 insert:
-INSERT INTO Event (name, module, duration, participants) VALUES (?, ?, ?, ?);
+INSERT INTO Event (name, type, module, duration, participants) VALUES (?, ?,?, ?, ?);
 
 update:
-UPDATE Event SET name = ?, module = ?, duration = ?, participants = ? WHERE id = ?;
+UPDATE Event SET name = ?, type = ?, module = ?, duration = ?, participants = ? WHERE id = ?;
 
 queryAll:
 SELECT * FROM Event ORDER BY name;

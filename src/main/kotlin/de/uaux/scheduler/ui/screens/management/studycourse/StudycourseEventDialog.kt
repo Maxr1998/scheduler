@@ -106,7 +106,7 @@ fun StudycourseEventDialog(
             if (studycourseEvent == null) { // Select new event
                 val searchQuery = remember { mutableStateOf("") }
 
-                val createNewPseudoEvent = Event(-1, l("event_title_add_event"), "", 0, null)
+                val createNewPseudoEvent = Event(-1, l("event_title_add_event"), 0, "", 0, null)
                 val events: List<Event> by produceState(emptyList(), searchQuery.value) {
                     value = eventRepository.searchByName(searchQuery.value, studycourse) + createNewPseudoEvent
                 }

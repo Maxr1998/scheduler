@@ -6,6 +6,7 @@ import de.uaux.scheduler.model.dto.StudycourseEvent
 typealias StudycourseEventMapper = (
     id: Long,
     name: String,
+    type: Int,
     module: String,
     duration: Int,
     participants: Int?,
@@ -16,6 +17,7 @@ typealias StudycourseEventMapper = (
 typealias ScheduledEventMapper = (
     id: Long,
     name: String,
+    type: Int,
     module: String,
     duration: Int,
     participants: Int?,

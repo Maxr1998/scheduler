@@ -36,14 +36,14 @@ class EventRepository(
         eventQueries.transactionWithResult {
             if (event.id > 0) {
                 // Existing object, attempt to update
-                eventQueries.update(event.name, event.module, event.duration, event.participants, event.id)
+                eventQueries.update(event.name, event.type, event.module, event.duration, event.participants, event.id)
                 if (standardQueries.changedOne()) {
                     return@transactionWithResult event.id
                 }
             }
 
             // Failed update or new object, insert
-            eventQueries.insert(event.name, event.module, event.duration, event.participants)
+            eventQueries.insert(event.name, event.type, event.module, event.duration, event.participants)
             standardQueries.checkAndGetId()
         }
     }
@@ -63,8 +63,8 @@ class EventRepository(
     }
 
     fun queryAllInStudycourseAsFlow(studycourse: Studycourse): Flow<List<StudycourseEvent>> {
-        val mapper: StudycourseEventMapper = { id, name, module, duration, participants, semester, required ->
-            StudycourseEvent(Event(id, name, module, duration, participants), semester, required)
+        val mapper: StudycourseEventMapper = { id, name, type, module, duration, participants, semester, required ->
+            StudycourseEvent(Event(id, name, type, module, duration, participants), semester, required)
         }
         return eventQueries.queryAllInStudycourse(studycourse.id, mapper = mapper).asFlow().mapToList(Dispatchers.IO)
     }

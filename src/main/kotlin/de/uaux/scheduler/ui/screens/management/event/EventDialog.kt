@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Event
+import de.uaux.scheduler.model.dto.EventType
 import de.uaux.scheduler.repository.EventRepository
 import de.uaux.scheduler.ui.util.LabeledTextField
 import de.uaux.scheduler.ui.util.PopupDialog
@@ -28,6 +29,7 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val eventRepository: EventRepository = get()
     val eventName = remember { mutableStateOf(TextFieldValue(event?.name.orEmpty())) }
+    val eventType = remember { mutableStateOf(event?.type?.let { i -> EventType.values()[i] } ?: EventType.UNDEFINED) }
     val eventModule = remember { mutableStateOf(TextFieldValue(event?.module.orEmpty())) }
     val eventDurationText = remember { mutableStateOf(TextFieldValue(event?.duration?.toString().orEmpty())) }
     val (eventDuration, eventDurationError) = calculateNumberInputError(
@@ -61,6 +63,7 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
                         val updated = Event(
                             event?.id ?: -1L,
                             eventName.value.text.trim(),
+                            eventType.value.ordinal,
                             eventModule.value.text.trim(),
                             eventDuration!!.toInt(),
                             eventParticipants?.toInt(),

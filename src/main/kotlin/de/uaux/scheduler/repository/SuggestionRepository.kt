@@ -53,15 +53,15 @@ class SuggestionRepository(
     }
 
     fun querySuggestionBySemesterAndEvent(semester: Semester, event: Event): Suggestion? =
-        suggestionQueries.querySuggestionBySemesterAndEvent(semester.code, event.id) { id, eventId, name, module, duration, participants, text ->
+        suggestionQueries.querySuggestionBySemesterAndEvent(semester.code, event.id) { id, eventId, name, type, module, duration, participants, text ->
             val constraints = constraintQueries.querySuggestionConstraintsBySuggestion(id, suggestionParser::parseConstraint).executeAsList()
-            Suggestion(id, semester, Event(eventId, name, module, duration, participants), text, constraints)
+            Suggestion(id, semester, Event(eventId, name, type, module, duration, participants), text, constraints)
         }.executeAsOneOrNull()
 
     fun querySuggestions(studycourse: Studycourse, semester: Semester): List<Suggestion> =
-        suggestionQueries.querySuggestionsInStudycourseBySemester(studycourse.id, semester.code) { id, eventId, name, module, duration, participants, text ->
+        suggestionQueries.querySuggestionsInStudycourseBySemester(studycourse.id, semester.code) { id, eventId, name, type, module, duration, participants, text ->
             val constraints = constraintQueries.querySuggestionConstraintsBySuggestion(id, suggestionParser::parseConstraint).executeAsList()
-            Suggestion(id, semester, Event(eventId, name, module, duration, participants), text, constraints)
+            Suggestion(id, semester, Event(eventId, name, type, module, duration, participants), text, constraints)
         }.executeAsList()
 
     fun querySuggestionCountBySemesterAsFlow(semester: Semester): Flow<Long> =
