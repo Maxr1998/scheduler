@@ -10,7 +10,7 @@ insert:
 INSERT INTO Event (name, module, duration, participants) VALUES (?, ?, ?, ?);
 
 update:
-UPDATE Event SET name = ?, module = ?, participants = ? WHERE id = ?;
+UPDATE Event SET name = ?, module = ?, duration = ?, participants = ? WHERE id = ?;
 
 queryAll:
 SELECT * FROM Event ORDER BY name;

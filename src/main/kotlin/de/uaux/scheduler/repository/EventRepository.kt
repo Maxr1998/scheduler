@@ -36,7 +36,7 @@ class EventRepository(
         eventQueries.transactionWithResult {
             if (event.id > 0) {
                 // Existing object, attempt to update
-                eventQueries.update(event.name, event.module, event.participants, event.id)
+                eventQueries.update(event.name, event.module, event.duration, event.participants, event.id)
                 if (standardQueries.changedOne()) {
                     return@transactionWithResult event.id
                 }
