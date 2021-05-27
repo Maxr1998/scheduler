@@ -17,13 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import de.uaux.scheduler.controller.NavigationController
+import de.uaux.scheduler.controller.NavigationController.Screen
 import de.uaux.scheduler.ui.util.ZIndex
 
 @Composable
-fun Sidebar(
-    screenState: MutableState<NavigationController.Screen>
-) {
+fun Sidebar(screenState: MutableState<Screen>) {
     Surface(
         modifier = Modifier.width(64.dp).fillMaxHeight().zIndex(ZIndex.NAVIGATION),
         elevation = 1.dp,
@@ -31,12 +29,14 @@ fun Sidebar(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            for (screen in NavigationController.Screen.values()) {
-                StatefulSidebarButton(
-                    screenState = screenState,
-                    screen = screen,
-                    icon = screen.icon,
-                )
+            for (screen in Screen.values()) {
+                if (screen != Screen.Settings) {
+                    StatefulSidebarButton(
+                        screenState = screenState,
+                        screen = screen,
+                        icon = screen.icon,
+                    )
+                }
             }
         }
     }
@@ -44,8 +44,8 @@ fun Sidebar(
 
 @Composable
 private fun StatefulSidebarButton(
-    screenState: MutableState<NavigationController.Screen>,
-    screen: NavigationController.Screen,
+    screenState: MutableState<Screen>,
+    screen: Screen,
     icon: ImageVector,
 ) {
     var currentScreen by screenState
