@@ -1,15 +1,18 @@
 package de.uaux.scheduler.ui.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,6 +22,7 @@ import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.ui.model.DialogState
 import de.uaux.scheduler.ui.screens.management.EventListContent
 import de.uaux.scheduler.ui.util.EditButton
+import de.uaux.scheduler.ui.util.ThemedIconButton
 import de.uaux.scheduler.ui.util.Toolbar
 import de.uaux.scheduler.ui.util.l
 import de.uaux.scheduler.viewmodel.DialogViewModel
@@ -43,6 +47,9 @@ fun EventManagementScreenContent() {
     val events by eventManagementViewModel.eventsFlow.collectAsState(emptyList())
 
     val dialogViewModel: DialogViewModel = get()
+    val openSuggestionDialog: (Event) -> Unit = { event ->
+        dialogViewModel.openDialog(DialogState.EditSuggestionDialog(event))
+    }
     val openEventDialog: (Event?) -> Unit = { event ->
         dialogViewModel.openDialog(DialogState.EventDialog(event))
     }
@@ -53,11 +60,9 @@ fun EventManagementScreenContent() {
         onAdd = { openEventDialog(null) },
     ) { event ->
         EventListItem(
-            modifier = Modifier.clickable {
-                dialogViewModel.openDialog(DialogState.EditSuggestionDialog(event))
-            },
             event = event,
-            openDialog = openEventDialog,
+            onClickSuggestion = openSuggestionDialog,
+            onClickEdit = openEventDialog,
         )
     }
 }
@@ -67,7 +72,8 @@ fun EventManagementScreenContent() {
 private fun EventListItem(
     modifier: Modifier = Modifier,
     event: Event,
-    openDialog: (Event?) -> Unit,
+    onClickSuggestion: (Event) -> Unit,
+    onClickEdit: (Event) -> Unit,
 ) {
     ListItem(
         modifier = modifier,
@@ -75,9 +81,18 @@ private fun EventListItem(
             Text(text = event.name)
         },
         trailing = {
-            EditButton(
-                onClick = { openDialog(event) },
-            )
+            Row {
+                ThemedIconButton(
+                    icon = Icons.Outlined.AutoAwesome,
+                    onClick = { onClickSuggestion(event) },
+                )
+
+                Spacer(modifier = Modifier.width(4.dp))
+
+                EditButton(
+                    onClick = { onClickEdit(event) },
+                )
+            }
         },
     )
 }
