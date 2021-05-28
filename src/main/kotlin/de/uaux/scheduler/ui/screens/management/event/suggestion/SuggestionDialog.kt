@@ -60,6 +60,7 @@ fun EditSuggestionDialog(event: Event, onDismissRequest: () -> Unit) {
 
     PopupDialog(
         title = l("dialog_title_suggestions"),
+        onDismissRequest = onDismissRequest,
         actions = {
             TextButton(
                 onClick = onDismissRequest,

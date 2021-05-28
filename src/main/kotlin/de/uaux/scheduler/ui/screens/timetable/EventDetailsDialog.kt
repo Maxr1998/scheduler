@@ -29,6 +29,7 @@ fun EventDetailsDialog(
 ) {
     PopupDialog(
         title = studycourseEvent.event.name,
+        onDismissRequest = onDismissRequest,
         actions = {
             TextButton(
                 onClick = onDismissRequest,

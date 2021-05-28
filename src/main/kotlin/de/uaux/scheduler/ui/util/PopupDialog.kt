@@ -34,7 +34,7 @@ import androidx.compose.ui.window.Popup
 @Composable
 fun PopupDialog(
     title: String? = null,
-    onDismissRequest: (() -> Unit)? = null,
+    onDismissRequest: (() -> Unit),
     actions: @Composable RowScope.() -> Unit = {},
     content: @Composable BoxScope.() -> Unit,
 ) {
@@ -57,7 +57,7 @@ fun PopupDialog(
                     .onKeyEvent { keyEvent ->
                         val isEscape = keyEvent.key == Key.Escape
                         if (isEscape) {
-                            onDismissRequest?.invoke()
+                            onDismissRequest.invoke()
                         }
                         isEscape
                     },
