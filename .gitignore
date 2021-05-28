@@ -6,3 +6,4 @@
 build
 
 scheduler.db
+scheduler.log

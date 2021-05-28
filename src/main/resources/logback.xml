@@ -1,10 +1,20 @@
 <configuration>
+    <property name="defaultPattern" value="%d{YYYY-MM-dd HH:mm:ss} %-5level %logger{16} - %msg%n"/>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{YYYY-MM-dd HH:mm:ss} %-5level %logger{16} - %msg%n</pattern>
+            <pattern>${defaultPattern}</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>scheduler.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>${defaultPattern}</pattern>
         </encoder>
     </appender>
     <root level="trace">
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 </configuration>
