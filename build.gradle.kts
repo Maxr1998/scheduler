@@ -3,6 +3,18 @@ import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import proguard.gradle.ProGuardTask
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath(Plugins.proguardGradle) {
+            exclude("com.android.tools.build")
+        }
+    }
+}
 
 plugins {
     kotlin(Plugins.kotlinJvm) version Plugins.Versions.kotlin
@@ -70,6 +82,17 @@ tasks {
             freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xinline-classes")
             useIR = true
         }
+    }
+
+    register<ProGuardTask>("minify") {
+        val packageUberJarForCurrentOS by getting
+        dependsOn(packageUberJarForCurrentOS)
+        val files = packageUberJarForCurrentOS.outputs.files
+        injars(files)
+        outjars(files.map { file -> File(file.parentFile, "${file.nameWithoutExtension}.min.jar") })
+        val library = if (System.getProperty("java.version").startsWith("1.")) "lib/rt.jar" else "jmods"
+        libraryjars("${System.getProperty("java.home")}/$library")
+        configuration("proguard-rules.pro")
     }
 
     test {

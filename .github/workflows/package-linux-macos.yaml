@@ -30,14 +30,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run package task
-        run: ./gradlew --no-daemon --info packageUberJarForCurrentOS
+        run: ./gradlew --no-daemon --info minify
       - name: Run AppImage task
         if: ${{ runner.os == 'Linux' }}
         run: ./gradlew --no-daemon --info packageAppImage
       - name: Collect artifacts
         run: |
           mkdir build/artifacts
-          mv build/compose/jars/* build/artifacts/
+          mv build/compose/jars/*.min.jar build/artifacts/
           mv build/compose/binaries/main/app/* build/artifacts/ || true
       - uses: actions/upload-artifact@v2
         with:
