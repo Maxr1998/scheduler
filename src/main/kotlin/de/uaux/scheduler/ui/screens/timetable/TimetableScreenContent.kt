@@ -22,7 +22,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -139,7 +138,9 @@ fun TimetableScreenContent(filter: TimetableFilter) {
                 numDays = numDays,
                 pointerOffset = pointerOffset.value,
                 draggedEvent = draggedEvent.value?.event,
-                dropLocation = dropLocation,
+                onUpdateDropLocation = { location ->
+                    dropLocation.value = location
+                },
                 onClick = { event ->
                     showSuggestion(event.studycourseEvent, event)
                 },
@@ -150,9 +151,18 @@ fun TimetableScreenContent(filter: TimetableFilter) {
                     val droppedEvent = draggedEvent.value ?: return@TimetablePane
                     val location = dropLocation.value ?: return@TimetablePane
 
-                    logger.debug("Dropped $droppedEvent at $location" + ", persisting".takeIf { persist })
-                    if (persist) {
-                        timetableViewModel.reschedule(droppedEvent, location.day, location.minutes)
+                    if (location == DropLocation.REMOVE) {
+                        // Remove from timetable when dropped over unscheduled events
+                        logger.debug("Dropped $droppedEvent over unscheduled events" + ", persisting".takeIf { persist })
+
+                        if (persist) {
+                            timetableViewModel.unschedule(droppedEvent)
+                        }
+                    } else {
+                        logger.debug("Dropped $droppedEvent at $location" + ", persisting".takeIf { persist })
+                        if (persist) {
+                            timetableViewModel.reschedule(droppedEvent, location.day, location.minutes)
+                        }
                     }
 
                     draggedEvent.value = null
@@ -171,9 +181,11 @@ fun TimetableScreenContent(filter: TimetableFilter) {
                     val droppedEvent = draggedEvent.value ?: return@UnscheduledPane
                     val location = dropLocation.value ?: return@UnscheduledPane
 
-                    logger.debug("Dropped ${droppedEvent.toShortString()} at $location" + ", persisting".takeIf { persist })
-                    if (persist) {
-                        timetableViewModel.schedule(droppedEvent.copy(day = location.day, startTime = location.minutes))
+                    if (location != DropLocation.REMOVE) {
+                        logger.debug("Dropped ${droppedEvent.toShortString()} at $location" + ", persisting".takeIf { persist })
+                        if (persist) {
+                            timetableViewModel.schedule(droppedEvent.copy(day = location.day, startTime = location.minutes))
+                        }
                     }
 
                     draggedEvent.value = null
@@ -189,7 +201,7 @@ private fun TimetablePane(
     numDays: Int,
     pointerOffset: Offset,
     draggedEvent: Event?,
-    dropLocation: MutableState<DropLocation?>,
+    onUpdateDropLocation: (DropLocation) -> Unit,
     onClick: (ScheduledEvent) -> Unit,
     onDrag: (ScheduledEvent) -> Unit,
     onDrop: (success: Boolean) -> Unit,
@@ -248,7 +260,7 @@ private fun TimetablePane(
                 draggedEvent.duration,
             )
 
-            dropLocation.value = location
+            onUpdateDropLocation(location)
 
             if (layoutModifier != null) {
                 IndicatorCard(modifier = layoutModifier)
@@ -367,10 +379,10 @@ private fun calculateHoverLocation(
     numDays: Int,
     timeslots: List<Timeslot>,
     eventDuration: Int,
-): Pair<DropLocation?, Modifier?> {
+): Pair<DropLocation, Modifier?> {
     // Abort drag over unscheduled events panel
     if (pointerOffset.x > columnWidth * numDays) {
-        return null to null
+        return DropLocation.REMOVE to null
     }
 
     // Calculate hovered day
@@ -414,4 +426,8 @@ private data class DropLocation(
     val minutes: Int,
 ) {
     override fun toString(): String = "$day / ${formatMinutesOfDay(minutes)}"
+
+    companion object {
+        val REMOVE = DropLocation(DayOfWeek.MONDAY, Int.MIN_VALUE)
+    }
 }

@@ -110,4 +110,11 @@ class ScheduleRepository(
     } catch (e: SQLException) {
         false
     }
+
+    fun unscheduleEvent(event: ScheduledEvent): Boolean = try {
+        scheduleQueries.unscheduleEvent(event.semester.code, event.event.id, event.day.value, event.startTime)
+        standardQueries.changes().executeAsOne() == 1L
+    } catch (e: SQLException) {
+        false
+    }
 }

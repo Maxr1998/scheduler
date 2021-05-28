@@ -40,3 +40,7 @@ rescheduleEvent:
 UPDATE Schedule
 SET day = :newDay, start_time = :newStart
 WHERE semester = ? AND event = ? AND day = ? AND start_time = ?;
+
+unscheduleEvent:
+DELETE FROM Schedule
+WHERE semester = ? AND event = ? AND day = ? AND start_time = ?;

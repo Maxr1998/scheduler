@@ -198,6 +198,37 @@ class TimetableViewModel(
         }
     }
 
+    fun unschedule(event: ScheduledEvent) = coroutineScope.launch {
+        logger.debug { "Removing $event from schedule" }
+
+        // Get event index and check if present
+        val index = events.binarySearch(event)
+        if (index < 0) {
+            // Abort if invalid event
+            logger.error { "$event not in list" }
+            return@launch
+        }
+
+        // Apply changes to ViewModel
+        events.removeAt(index)
+
+        // Persist to database and update events
+        val changed = withContext(Dispatchers.IO) {
+            scheduleRepository.unscheduleEvent(event)
+        }
+
+        // Log result and revert changes on failure
+        if (changed) {
+            logger.debug { "Successfully unscheduled $event" }
+            unscheduledEvents.add(event.studycourseEvent)
+        } else {
+            logger.debug { "Failed to unschedule $event" }
+
+            // Rollback changes
+            events.binaryInsert(event)
+        }
+    }
+
     suspend fun getSuggestion(semester: Semester, event: Event): Suggestion? = withContext(Dispatchers.IO) {
         suggestionRepository.querySuggestionBySemesterAndEvent(semester, event)
     }
