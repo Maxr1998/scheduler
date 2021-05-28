@@ -165,7 +165,7 @@ class TimetableViewModel(
 
         // Assert start and end times
         require(startTime in 0..MAX_MINUTES_IN_DAY)
-        require(event.endTime in 0..MAX_MINUTES_IN_DAY)
+        require(startTime + event.duration in 0..MAX_MINUTES_IN_DAY)
 
         // Get event index and check if present
         val index = events.binarySearch(event)
