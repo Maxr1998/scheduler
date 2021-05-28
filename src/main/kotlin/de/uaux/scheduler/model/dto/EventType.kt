@@ -13,4 +13,5 @@ enum class EventType {
     LECTURE,
     TUTORIAL,
     SEMINAR,
+    PRACTICAL,
 }
