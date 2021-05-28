@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
 fun SaveButton(
@@ -25,15 +26,26 @@ fun SaveButton(
 }
 
 @Composable
-fun EditButton(onClick: () -> Unit) {
+fun ThemedIconButton(
+    icon: ImageVector,
+    onClick: () -> Unit,
+) {
     CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
         IconButton(
             onClick = onClick,
         ) {
             Icon(
-                imageVector = Icons.Outlined.Edit,
+                imageVector = icon,
                 contentDescription = null,
             )
         }
     }
+}
+
+@Composable
+fun EditButton(onClick: () -> Unit) {
+    ThemedIconButton(
+        icon = Icons.Outlined.Edit,
+        onClick = onClick,
+    )
 }
