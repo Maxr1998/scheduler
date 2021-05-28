@@ -113,6 +113,7 @@ fun StudycourseEventDialog(
 
                 SearchableSelectionDropdown(
                     label = l("input_label_studycourse_event_event"),
+                    placeholder = l("input_hint_studycourse_event_event"),
                     onSearch = { query ->
                         event.value = null
                         searchQuery.value = query

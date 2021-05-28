@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun <T : Any> SearchableSelectionDropdown(
     label: String,
+    placeholder: String,
     onSearch: (String) -> Unit,
     searchResults: List<T>,
     onSelect: (T) -> Unit,
@@ -59,6 +60,9 @@ fun <T : Any> SearchableSelectionDropdown(
                 .fillMaxWidth(),
             label = {
                 Text(text = label)
+            },
+            placeholder = {
+                Text(text = placeholder)
             },
             value = searchText.value,
             onValueChange = { value ->
