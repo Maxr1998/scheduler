@@ -27,12 +27,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run package task
-        run: .\gradlew.bat --no-daemon --info minify packageAppImage
+        run: .\gradlew.bat --no-daemon --info minify
       - name: Collect artifacts
         run: |
           mkdir build\artifacts
           move build\compose\jars\*.min.jar build\artifacts\
-          move build\compose\binaries\main\app\* build\artifacts\
       - uses: actions/upload-artifact@v2
         with:
           name: scheduler-${{ runner.os }}
