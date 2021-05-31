@@ -71,6 +71,7 @@ compose.desktop {
 sqldelight {
     database("Database") {
         packageName = "$group.${project.name}.model"
+        schemaOutputDirectory = file("$buildDir/schemas/")
     }
 }
 

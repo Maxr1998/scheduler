@@ -30,11 +30,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run package task
-        run: ./gradlew --no-daemon --info minify
+        run: ./gradlew --no-daemon --info minify generateMainDatabaseSchema
       - name: Collect artifacts
         run: |
           mkdir build/artifacts
           mv build/compose/jars/*.min.jar build/artifacts/
+          mv build/schemas/1.db build/artifacts/scheduler.db
+          sqlite3 build/artifacts/scheduler.db 'PRAGMA user_version = 1;'
+          sqlite3 build/artifacts/scheduler.db < sample_data.sql
       - uses: actions/upload-artifact@v2
         with:
           name: scheduler-${{ runner.os }}
