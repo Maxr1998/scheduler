@@ -4,7 +4,7 @@ coroutines = "1.5.0"
 sqlDelight = "1.4.4"
 kotlinLogging = "2.0.6"
 logback = "1.2.3"
-junit = "5.7.0"
+junit = "5.7.2"
 
 [libraries]
 koin = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
