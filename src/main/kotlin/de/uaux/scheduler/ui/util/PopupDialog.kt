@@ -35,7 +35,7 @@ import androidx.compose.ui.window.Popup
 fun PopupDialog(
     title: String? = null,
     onDismissRequest: (() -> Unit),
-    actions: @Composable RowScope.() -> Unit = {},
+    actions: (@Composable RowScope.() -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit,
 ) {
     Popup(
@@ -83,12 +83,14 @@ fun PopupDialog(
                         content()
                     }
 
-                    Row(
-                        modifier = Modifier.height(52.dp).fillMaxWidth().padding(8.dp),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        actions()
+                    if (actions != null) {
+                        Row(
+                            modifier = Modifier.height(52.dp).fillMaxWidth().padding(8.dp),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            actions()
+                        }
                     }
                 }
             }
