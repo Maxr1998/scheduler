@@ -7,8 +7,8 @@ object Plugins {
 
     object Versions {
         const val proguardGradle = "7.1.0-beta5"
-        const val kotlin = "1.4.32"
-        const val composePlugin = "0.4.0-build184"
+        const val kotlin = "1.5.10"
+        const val composePlugin = "0.4.0"
         const val sqlDelight = "1.5.0"
         const val dependencyUpdatesPlugin = "0.38.0"
     }

@@ -1,6 +1,6 @@
 package de.uaux.scheduler.ui
 
-import androidx.compose.foundation.ScrollbarStyleAmbient
+import androidx.compose.foundation.LocalScrollbarStyle
 import androidx.compose.foundation.defaultScrollbarStyle
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -67,7 +67,7 @@ fun AppContent(darkTheme: Boolean = false) {
             scrollbarStyle = scrollbarStyle.copy(hoverColor = scrollbarColor, unhoverColor = scrollbarColor)
         }
         CompositionLocalProvider(
-            ScrollbarStyleAmbient provides scrollbarStyle,
+            LocalScrollbarStyle provides scrollbarStyle,
         ) {
             Box {
                 Row {
