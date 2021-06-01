@@ -10,6 +10,6 @@ object Plugins {
         const val kotlin = "1.5.10"
         const val composePlugin = "0.4.0"
         const val sqlDelight = "1.5.0"
-        const val dependencyUpdatesPlugin = "0.38.0"
+        const val dependencyUpdatesPlugin = "0.39.0"
     }
 }
