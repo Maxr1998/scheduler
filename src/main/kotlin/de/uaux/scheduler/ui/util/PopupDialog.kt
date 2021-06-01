@@ -71,7 +71,7 @@ fun PopupDialog(
                     }
 
                     Box(
-                        modifier = Modifier.padding(horizontal = 24.dp),
+                        modifier = Modifier.weight(1f, fill = false).padding(horizontal = 24.dp),
                     ) {
                         content()
                     }
