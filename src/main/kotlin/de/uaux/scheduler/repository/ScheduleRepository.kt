@@ -24,8 +24,8 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month.DECEMBER
 import java.time.Month.JANUARY
+import java.time.Month.JULY
 import java.time.Month.JUNE
-import java.time.Month.MAY
 import java.time.Month.NOVEMBER
 
 class ScheduleRepository(
@@ -54,8 +54,8 @@ class ScheduleRepository(
     fun computeNextSemester(): Semester {
         val now = LocalDate.now()
         return when (now.month) {
-            in JANUARY..MAY -> Semester(SS, now.year)
-            in JUNE..NOVEMBER -> Semester(WS, now.year)
+            in JANUARY..JUNE -> Semester(SS, now.year)
+            in JULY..NOVEMBER -> Semester(WS, now.year)
             DECEMBER -> Semester(SS, now.year + 1)
             else -> throw IllegalStateException("Month outside of possible range")
         }
