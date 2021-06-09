@@ -126,6 +126,7 @@ fun StudycourseEventDialog(
                         }
                     },
                     selected = event.value,
+                    itemKey = Event::id,
                     itemLabel = Event::name
                 ) { event ->
                     Text(text = event.name)

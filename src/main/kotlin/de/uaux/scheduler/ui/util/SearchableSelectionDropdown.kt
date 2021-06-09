@@ -35,6 +35,7 @@ fun <T : Any> SearchableSelectionDropdown(
     searchResults: List<T>,
     onSelect: (T) -> Unit,
     selected: T?,
+    itemKey: ((T) -> Any)? = null,
     itemLabel: (T) -> String = Any::toString,
     itemContent: @Composable (T) -> Unit,
 ) {
@@ -89,7 +90,7 @@ fun <T : Any> SearchableSelectionDropdown(
             LazyColumn(
                 modifier = Modifier.fillMaxWidth().heightIn(0.dp, 260.dp),
             ) {
-                items(searchResults) { item ->
+                items(searchResults, key = itemKey) { item ->
                     DropdownMenuItem(onClick = {
                         onSelect(item)
                     }) {
