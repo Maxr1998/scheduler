@@ -90,7 +90,10 @@ fun <T : Any> SearchableSelectionDropdown(
             LazyColumn(
                 modifier = Modifier.fillMaxWidth().heightIn(0.dp, 260.dp),
             ) {
-                items(searchResults, key = itemKey) { item ->
+                val key: ((T) -> Any)? = itemKey?.let { key ->
+                    { item -> searchResults to key(item) }
+                }
+                items(searchResults, key = key) { item ->
                     DropdownMenuItem(onClick = {
                         onSelect(item)
                     }) {

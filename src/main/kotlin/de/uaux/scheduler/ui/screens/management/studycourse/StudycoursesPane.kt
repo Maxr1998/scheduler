@@ -23,10 +23,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Studycourse
+import de.uaux.scheduler.ui.model.Selection
 import de.uaux.scheduler.ui.util.EditButton
 import de.uaux.scheduler.ui.util.SelectableListItem
 import de.uaux.scheduler.ui.util.l
-import de.uaux.scheduler.ui.model.Selection
 import de.uaux.scheduler.viewmodel.EventManagementViewModel
 import org.koin.androidx.compose.get
 
@@ -52,7 +52,7 @@ fun StudycoursesPane(
                     style = MaterialTheme.typography.caption,
                 )
             }
-            items(studycourses) { studycourse ->
+            items(studycourses, key = { studycourse -> selection to studycourse }) { studycourse ->
                 val selected = selection.isActive(studycourse)
                 StudycourseListItem(
                     modifier = Modifier.selectable(selected) {
