@@ -2,9 +2,7 @@ INSERT OR
 REPLACE INTO Studycourse (id, name, revision)
 VALUES (1, 'B.Sc. Informatik', 'PO 2018'),
        (2, 'B.Sc. Ingenieurinformatik', 'PO 2018'),
-       (3, 'B.Sc. Medizinische Informatik', ''),
-       (4, 'M.Sc. Informatik', 'PO 2018'),
-       (5, 'M.Sc. Ingenieurinformatik', 'PO 2016');
+       (3, 'B.Sc. Medizinische Informatik', '');
 
 INSERT OR
 REPLACE INTO Event (id, name, module, duration)
