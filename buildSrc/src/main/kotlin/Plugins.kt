@@ -6,7 +6,7 @@ object Plugins {
     const val dependencyUpdates = "com.github.ben-manes.versions"
 
     object Versions {
-        const val proguardGradle = "7.1.0-beta5"
+        const val proguardGradle = "7.1.0"
         const val kotlin = "1.5.10"
         const val composePlugin = "0.4.0"
         const val sqlDelight = "1.5.0"
