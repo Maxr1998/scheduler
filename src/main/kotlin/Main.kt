@@ -1,8 +1,11 @@
 @file:JvmName("scheduler")
 
-import androidx.compose.desktop.Window
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowSize
+import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberWindowState
 import de.uaux.scheduler.appModule
 import de.uaux.scheduler.controller.StartupController
 import de.uaux.scheduler.ui.AppContent
@@ -21,13 +24,16 @@ fun main() {
 
     val startupController: StartupController = koin.get()
 
-    Window(
-        title = koin.get<LocalizationUtil>()["app_name"],
-        size = IntSize(1600, 900),
-    ) {
-        val initialized by startupController.initialize()
-        if (initialized) {
-            AppContent()
+    application {
+        Window(
+            onCloseRequest = ::exitApplication,
+            state = rememberWindowState(size = WindowSize(1600.dp, 900.dp)),
+            title = koin.get<LocalizationUtil>()["app_name"],
+        ) {
+            val initialized by startupController.initialize()
+            if (initialized) {
+                AppContent()
+            }
         }
     }
 }
