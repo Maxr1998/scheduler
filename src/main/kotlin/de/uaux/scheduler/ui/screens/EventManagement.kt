@@ -28,6 +28,7 @@ import de.uaux.scheduler.ui.util.EditButton
 import de.uaux.scheduler.ui.util.ThemedIconButton
 import de.uaux.scheduler.ui.util.Toolbar
 import de.uaux.scheduler.ui.util.l
+import de.uaux.scheduler.util.formatMinutesOfDay
 import de.uaux.scheduler.viewmodel.DialogViewModel
 import de.uaux.scheduler.viewmodel.EventManagementViewModel
 import org.koin.androidx.compose.get
@@ -96,6 +97,16 @@ private fun EventListItem(
         modifier = modifier,
         text = {
             Text(text = event.name)
+        },
+        secondaryText = {
+            val entries = listOfNotNull(
+                // TODO: add type when implemented
+                event.module.takeIf(String::isNotEmpty),
+                formatMinutesOfDay(event.duration),
+                event.participants?.let { participants -> "$participants ${l("event_text_participants")}" }
+            )
+
+            Text(text = entries.joinToString(separator = " • "))
         },
         trailing = {
             Row {
