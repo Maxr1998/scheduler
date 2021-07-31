@@ -11,4 +11,4 @@ fun <T : Comparable<T>> MutableList<T>.binaryInsert(element: T) {
     add(binaryInsertIndex(element), element)
 }
 
-fun formatMinutesOfDay(minutes: Int) = "%d:%02d".format(minutes / 60, minutes % 60)
+fun formatMinutesOfDay(minutes: Int) = "%d:%02dh".format(minutes / 60, minutes % 60)
