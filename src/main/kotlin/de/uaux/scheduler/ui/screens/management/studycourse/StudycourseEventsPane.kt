@@ -12,15 +12,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.dto.StudycourseEvent
+import de.uaux.scheduler.ui.model.Loading
+import de.uaux.scheduler.ui.model.None
+import de.uaux.scheduler.ui.model.Selected
+import de.uaux.scheduler.ui.model.Selection
 import de.uaux.scheduler.ui.screens.management.EventListContent
 import de.uaux.scheduler.ui.util.CenteredTextBox
 import de.uaux.scheduler.ui.util.EditButton
 import de.uaux.scheduler.ui.util.LoadingBox
 import de.uaux.scheduler.ui.util.l
-import de.uaux.scheduler.ui.model.Loading
-import de.uaux.scheduler.ui.model.None
-import de.uaux.scheduler.ui.model.Selected
-import de.uaux.scheduler.ui.model.Selection
 import de.uaux.scheduler.viewmodel.EventManagementViewModel
 import org.koin.androidx.compose.get
 
@@ -66,12 +66,9 @@ private fun StudycourseEventListItem(
             Text(text = event.name)
         },
         secondaryText = {
-            val fields = listOfNotNull(
-                l("event_panel_event_summary_semester").format(studycourseEvent.semester),
-                if (studycourseEvent.required) l("studycourse_domain_required") else l("studycourse_domain_voluntary"),
-                "-", // TODO: list lecturers
-            )
-            Text(text = fields.joinToString(" • "))
+            val semester = l("event_panel_event_summary_semester").format(studycourseEvent.semester)
+            val required = if (studycourseEvent.required) l("studycourse_domain_required") else l("studycourse_domain_voluntary")
+            Text(text = "$semester • $required")
         },
         trailing = {
             EditButton(
