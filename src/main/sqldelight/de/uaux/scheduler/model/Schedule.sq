@@ -17,6 +17,19 @@ CREATE INDEX idx_schedule_semester ON Schedule (semester);
 CREATE INDEX idx_schedule_event ON Schedule (event);
 CREATE INDEX idx_schedule_room ON Schedule (room);
 
+CREATE TABLE ScheduleCount (
+    -- Contains semester in the format <year><1>/<2>
+    -- e.g. 20211 for SS2021 and 20212 for WS21/22
+    semester INTEGER AS Int NOT NULL,
+    event INTEGER NOT NULL REFERENCES Event(id) ON DELETE CASCADE,
+    count INTEGER AS Int NOT NULL,
+    -- If count is 1, no entry is necessary
+    CHECK (count > 1)
+);
+
+CREATE INDEX idx_schedule_count_semester ON ScheduleCount (semester);
+CREATE INDEX idx_schedule_count_event ON ScheduleCount (event);
+
 insert:
 INSERT INTO Schedule VALUES ?;
 
