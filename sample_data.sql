@@ -82,6 +82,16 @@ VALUES
     (20212, 1095, 1185);
 
 INSERT OR
+REPLACE INTO ScheduleCount (semester, event, count)
+VALUES
+    /* Matches or exceeds counts for schedule below */
+    (20211, 1, 2),
+    (20211, 2, 10),
+    (20211, 3, 2),
+    (20211, 4, 2),
+    (20211, 5, 6);
+
+INSERT OR
 REPLACE INTO Schedule (semester, event, day, start_time, room)
 VALUES
     /* Informatik II Tue & Thu */
