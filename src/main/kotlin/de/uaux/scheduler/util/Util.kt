@@ -11,4 +11,13 @@ fun <T : Comparable<T>> MutableList<T>.binaryInsert(element: T) {
     add(binaryInsertIndex(element), element)
 }
 
+fun <T> List<T>.binaryInsertIndex(comparison: (T) -> Int): Int {
+    val searchIndex = binarySearch(comparison = comparison)
+    return if (searchIndex < 0) -(searchIndex + 1) else searchIndex
+}
+
+fun <T> MutableList<T>.binaryInsert(element: T, comparison: (T) -> Int) {
+    add(binaryInsertIndex(comparison), element)
+}
+
 fun formatMinutesOfDay(minutes: Int) = "%d:%02dh".format(minutes / 60, minutes % 60)

@@ -51,6 +51,7 @@ import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.dto.StudycourseEvent
+import de.uaux.scheduler.model.dto.UnscheduledEvent
 import de.uaux.scheduler.model.duration
 import de.uaux.scheduler.ui.model.DialogState
 import de.uaux.scheduler.ui.model.ShowWeekend
@@ -171,11 +172,11 @@ fun TimetableScreenContent(filter: TimetableFilter) {
             VerticalDivider(modifier = Modifier.zIndex(ZIndex.DIVIDER))
             UnscheduledPane(
                 modifier = Modifier.weight(1f).fillMaxHeight(),
-                onClick = { studycourseEvent ->
-                    showSuggestion(studycourseEvent, null)
+                onClick = { unscheduledEvent ->
+                    showSuggestion(unscheduledEvent.studycourseEvent, null)
                 },
-                onDragStart = { studycourseEvent ->
-                    draggedEvent.value = ScheduledEvent(filter.semester, studycourseEvent, DayOfWeek.MONDAY, 0, null)
+                onDragStart = { unscheduledEvent ->
+                    draggedEvent.value = ScheduledEvent(filter.semester, unscheduledEvent.studycourseEvent, DayOfWeek.MONDAY, 0, null)
                 },
                 onDrop = { persist ->
                     val droppedEvent = draggedEvent.value ?: return@UnscheduledPane
@@ -324,17 +325,17 @@ private fun TimetablePane(
 @Composable
 private fun UnscheduledPane(
     modifier: Modifier = Modifier,
-    onClick: (StudycourseEvent) -> Unit,
-    onDragStart: (StudycourseEvent) -> Unit,
+    onClick: (UnscheduledEvent) -> Unit,
+    onDragStart: (UnscheduledEvent) -> Unit,
     onDrop: (success: Boolean) -> Unit,
 ) {
     val timetableViewModel: TimetableViewModel = get()
     LazyColumn(
         modifier = modifier,
     ) {
-        items(timetableViewModel.unscheduledEvents, key = { studycourseEvent -> studycourseEvent.event.id }) { unscheduled ->
+        items(timetableViewModel.unscheduledEvents, key = { studycourseEvent -> studycourseEvent.studycourseEvent.event.id }) { unscheduled ->
             UnscheduledEventCard(
-                studycourseEvent = unscheduled,
+                unscheduledEvent = unscheduled,
                 onClick = {
                     onClick(unscheduled)
                 },

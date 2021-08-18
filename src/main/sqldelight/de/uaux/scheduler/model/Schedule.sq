@@ -43,11 +43,15 @@ WHERE se.studycourse = ? AND s.semester = ?
 ORDER BY s.day, s.start_time, e.duration DESC;
 
 queryUnscheduledEventsInStudycourseBySemester:
-SELECT e.*, se.semester AS studycourseSemester, se.required
-FROM StudycourseEvent se JOIN Event e ON se.event = e.id
-WHERE se.studycourse = ? AND e.id NOT IN (
-    SELECT s.event FROM Schedule s WHERE s.semester = ?
-) ORDER BY e.name;
+SELECT e.*, se.semester AS studycourseSemester, se.required, coalesce(sc.count, 1) - count(s.semester) AS remaining
+FROM Event e
+    JOIN StudycourseEvent se ON e.id = se.event
+    LEFT JOIN ScheduleCount sc ON e.id = sc.event
+    LEFT JOIN Schedule s ON e.id = s.event
+WHERE se.studycourse = ? AND (sc.semester IS NULL OR sc.semester = ?) AND (s.semester IS NULL OR s.semester = ?)
+-- TODO: missing 'remaining > 0' due to bug in SQLdelight
+GROUP BY e.id, e.name
+ORDER BY e.name;
 
 rescheduleEvent:
 UPDATE Schedule

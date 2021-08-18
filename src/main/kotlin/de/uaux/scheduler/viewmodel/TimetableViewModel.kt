@@ -10,8 +10,8 @@ import de.uaux.scheduler.model.Semester
 import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.model.dto.ScheduledEvent
-import de.uaux.scheduler.model.dto.StudycourseEvent
 import de.uaux.scheduler.model.dto.Suggestion
+import de.uaux.scheduler.model.dto.UnscheduledEvent
 import de.uaux.scheduler.repository.ScheduleRepository
 import de.uaux.scheduler.repository.StudycourseRepository
 import de.uaux.scheduler.repository.SuggestionRepository
@@ -59,7 +59,7 @@ class TimetableViewModel(
     /**
      * Contains [Event]s for the studycourse and semester that are currently not scheduled
      */
-    val unscheduledEvents: SnapshotStateList<StudycourseEvent> = mutableStateListOf()
+    val unscheduledEvents: SnapshotStateList<UnscheduledEvent> = mutableStateListOf()
 
     /**
      * Whether to show the weekend in the timetable interface
@@ -122,7 +122,9 @@ class TimetableViewModel(
         val unscheduledJob = launch {
             // Refresh unscheduled events
             val unscheduled = withContext(Dispatchers.IO) {
-                scheduleRepository.queryUnscheduledEvents(studycourse, semester)
+                scheduleRepository.queryUnscheduledEvents(studycourse, semester).filter { unscheduledEvent ->
+                    unscheduledEvent.count > 0 // TODO: should be filtered in database
+                }
             }
 
             unscheduledEvents.clear()
@@ -153,7 +155,15 @@ class TimetableViewModel(
         // Log result and revert changes on failure
         if (changed) {
             logger.debug { "Successfully added $event to schedule" }
-            unscheduledEvents.remove(event.studycourseEvent)
+            val removeOrReplaceIndex = unscheduledEvents.binarySearch { ue ->
+                unscheduledEventsComparator.compare(ue.event, event.event)
+            }
+            require(removeOrReplaceIndex >= 0)
+            val unscheduledEvent = unscheduledEvents[removeOrReplaceIndex]
+            when (unscheduledEvent.count) {
+                1 -> unscheduledEvents.removeAt(removeOrReplaceIndex)
+                else -> unscheduledEvents[removeOrReplaceIndex] = unscheduledEvent.copy(count = unscheduledEvent.count - 1)
+            }
         } else {
             logger.debug { "Failed to add $event to schedule" }
             events.removeAt(insertIndex)
@@ -220,7 +230,10 @@ class TimetableViewModel(
         // Log result and revert changes on failure
         if (changed) {
             logger.debug { "Successfully unscheduled $event" }
-            unscheduledEvents.add(event.studycourseEvent)
+            val unscheduledEvent = UnscheduledEvent(event.semester, event.studycourseEvent, 1)
+            unscheduledEvents.binaryInsert(unscheduledEvent) { ue ->
+                unscheduledEventsComparator.compare(ue.event, event.event)
+            }
         } else {
             logger.debug { "Failed to unschedule $event" }
 
@@ -237,5 +250,7 @@ class TimetableViewModel(
         const val MAX_MINUTES_IN_DAY = 1439
         const val TIMETABLE_DEFAULT_START_OF_DAY = 420
         const val TIMETABLE_DEFAULT_END_OF_DAY = 1200
+
+        val unscheduledEventsComparator: Comparator<Event> = compareBy(Event::name, Event::id)
     }
 }

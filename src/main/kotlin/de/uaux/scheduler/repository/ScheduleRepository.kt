@@ -11,9 +11,10 @@ import de.uaux.scheduler.model.Studycourse
 import de.uaux.scheduler.model.Timeslot
 import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.dto.StudycourseEvent
+import de.uaux.scheduler.model.dto.UnscheduledEvent
 import de.uaux.scheduler.util.LocalizationUtil
 import de.uaux.scheduler.util.ScheduledEventMapper
-import de.uaux.scheduler.util.StudycourseEventMapper
+import de.uaux.scheduler.util.UnscheduledEventMapper
 import de.uaux.scheduler.util.executeAsMappedList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -81,12 +82,13 @@ class ScheduleRepository(
         return scheduleQueries.queryScheduledEventsInStudycourseBySemester(studycourse.id, semester.code, mapper = mapper).executeAsList()
     }
 
-    fun queryUnscheduledEvents(studycourse: Studycourse, semester: Semester): List<StudycourseEvent> {
-        val mapper: StudycourseEventMapper = { id, name, type, module, duration, participants, studycourseSemester, required ->
+    fun queryUnscheduledEvents(studycourse: Studycourse, semester: Semester): List<UnscheduledEvent> {
+        val mapper: UnscheduledEventMapper = { id, name, type, module, duration, participants, studycourseSemester, required, count ->
             val event = Event(id, name, type, module, duration, participants)
-            StudycourseEvent(event, studycourseSemester, required)
+            val studycourseEvent = StudycourseEvent(event, studycourseSemester, required)
+            UnscheduledEvent(semester, studycourseEvent, count.toInt())
         }
-        return scheduleQueries.queryUnscheduledEventsInStudycourseBySemester(studycourse.id, semester.code, mapper = mapper).executeAsList()
+        return scheduleQueries.queryUnscheduledEventsInStudycourseBySemester(studycourse.id, semester.code, semester.code, mapper = mapper).executeAsList()
     }
 
     fun queryRoom(id: Long, cache: Map<Long, Room> = emptyMap()): Room? = when (id) {
