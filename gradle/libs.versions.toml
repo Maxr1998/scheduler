@@ -1,10 +1,22 @@
 [versions]
+proguard-gradle = "7.1.0"
+kotlin = "1.5.21"
+compose = "0.5.0-build270"
+sqldelight = "1.5.0"
+dependencyupdates = "0.39.0"
+
 koin = "2.2.2"
 coroutines = "1.5.0"
 sqlDelight = "1.4.4"
 kotlinLogging = "2.0.10"
 logback = "1.2.4"
 junit = "5.7.2"
+
+[plugins]
+proguard-gradle = { id = "com.guardsquare:proguard-gradle", version.ref = "proguard-gradle" }
+compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
+dependencyupdates = { id = "com.github.ben-manes.versions", version.ref = "dependencyupdates" }
 
 [libraries]
 koin = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }

@@ -1,7 +1,6 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 import org.jetbrains.compose.compose
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import proguard.gradle.ProGuardTask
 
@@ -16,11 +15,12 @@ buildscript {
     }
 }
 
+@Suppress("UnstableApiUsage")
 plugins {
-    kotlin(Plugins.kotlinJvm) version Plugins.Versions.kotlin
-    id(Plugins.compose) version Plugins.Versions.composePlugin
-    id(Plugins.sqlDelight) version Plugins.Versions.sqlDelight
-    id(Plugins.dependencyUpdates) version Plugins.Versions.dependencyUpdatesPlugin
+    kotlin("jvm") version libs.versions.kotlin
+    alias(libs.plugins.compose)
+    alias(libs.plugins.sqldelight)
+    alias(libs.plugins.dependencyupdates)
 }
 
 group = "de.uaux"
