@@ -20,11 +20,13 @@ import de.uaux.scheduler.ui.model.None
 import de.uaux.scheduler.ui.model.Selection
 import de.uaux.scheduler.ui.model.ShowWeekend
 import de.uaux.scheduler.ui.model.TimetableFilter
+import de.uaux.scheduler.ui.model.ValidationState
 import de.uaux.scheduler.util.binaryInsert
 import de.uaux.scheduler.util.binaryInsertIndex
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.joinAll
@@ -65,6 +67,12 @@ class TimetableViewModel(
      * Whether to show the weekend in the timetable interface
      */
     val showWeekend: MutableState<ShowWeekend> = mutableStateOf(ShowWeekend.FALSE)
+
+    /**
+     * Indicates the validation state for the current studycourse
+     */
+    val validationState: State<ValidationState> get() = _validationState
+    private val _validationState: MutableState<ValidationState> = mutableStateOf(ValidationState.UNKNOWN)
 
     /**
      * Contains times for the start and end of the day so that all events in [events] are contained
@@ -244,6 +252,26 @@ class TimetableViewModel(
 
     suspend fun getSuggestion(semester: Semester, event: Event): Suggestion? = withContext(Dispatchers.IO) {
         suggestionRepository.querySuggestionBySemesterAndEvent(semester, event)
+    }
+
+    fun validate() {
+        val current = _validationState.value
+        if (current != ValidationState.UNKNOWN && current != ValidationState.OUTDATED) {
+            return
+        }
+
+        coroutineScope.launch {
+            validateInternal()
+        }
+    }
+
+    private suspend fun validateInternal() {
+        _validationState.value = ValidationState.VALIDATING
+
+        // Validate timetable
+        delay(1500) // TODO: implement validation
+
+        _validationState.value = ValidationState.OK
     }
 
     companion object {
