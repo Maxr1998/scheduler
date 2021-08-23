@@ -20,10 +20,16 @@ queryEventCount:
 SELECT count(id) FROM Event;
 
 queryAllByName:
-SELECT * FROM Event WHERE LOWER(name) LIKE LOWER(:name) ORDER BY name;
+SELECT *
+FROM Event
+WHERE LOWER(name) LIKE LOWER(:name)
+ORDER BY name;
 
 queryAllInStudycourse:
-SELECT e.*, s.semester, s.required FROM Event e JOIN StudycourseEvent s ON e.id = s.event WHERE s.studycourse = ? ORDER BY name;
+SELECT e.*, s.semester, s.required
+FROM Event e JOIN StudycourseEvent s ON e.id = s.event
+WHERE s.studycourse = ?
+ORDER BY name;
 
 queryAllNotInStudycourse:
 SELECT *
