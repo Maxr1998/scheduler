@@ -142,6 +142,8 @@ class TimetableViewModel(
         joinAll(eventsJob, timeslotsJob, unscheduledJob)
 
         _timetableSelection.value = Selection(TimetableFilter(semester, studycourse))
+
+        _validationState.value = ValidationState.UNKNOWN
     }
 
     fun schedule(event: ScheduledEvent) = coroutineScope.launch {
@@ -176,6 +178,8 @@ class TimetableViewModel(
             logger.debug { "Failed to add $event to schedule" }
             events.removeAt(insertIndex)
         }
+
+        _validationState.value = ValidationState.OUTDATED
     }
 
     fun reschedule(event: ScheduledEvent, day: DayOfWeek, startTime: Int) = coroutineScope.launch {
@@ -214,6 +218,8 @@ class TimetableViewModel(
             events.removeAt(insertIndex)
             events.binaryInsert(event)
         }
+
+        _validationState.value = ValidationState.OUTDATED
     }
 
     fun unschedule(event: ScheduledEvent) = coroutineScope.launch {
@@ -248,6 +254,8 @@ class TimetableViewModel(
             // Rollback changes
             events.binaryInsert(event)
         }
+
+        _validationState.value = ValidationState.OUTDATED
     }
 
     suspend fun getSuggestion(semester: Semester, event: Event): Suggestion? = withContext(Dispatchers.IO) {
