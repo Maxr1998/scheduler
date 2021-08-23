@@ -1,3 +1,3 @@
 object Plugins {
-    const val proguardGradle = "com.guardsquare:proguard-gradle:7.1.0"
+    const val proguardGradle = "com.guardsquare:proguard-gradle:7.1.1"
 }
