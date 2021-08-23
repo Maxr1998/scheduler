@@ -6,7 +6,7 @@ sqldelight = "1.5.0"
 dependencyupdates = "0.39.0"
 
 koin = "2.2.2"
-coroutines = "1.5.0"
+coroutines = "1.5.1"
 sqlDelight = "1.4.4"
 kotlinLogging = "2.0.10"
 logback = "1.2.4"
