@@ -10,7 +10,6 @@ coroutines = "1.5.1"
 sqlDelight = "1.4.4"
 kotlinLogging = "2.0.10"
 logback = "1.2.4"
-junit = "5.7.2"
 
 [plugins]
 proguard-gradle = { id = "com.guardsquare:proguard-gradle", version.ref = "proguard-gradle" }
@@ -27,9 +26,6 @@ sqlDelight-coroutinesExtension = { group = "com.squareup.sqldelight", name = "co
 
 kotlinLogging = { group = "io.github.microutils", name = "kotlin-logging", version.ref = "kotlinLogging" }
 logback = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
-
-junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
-junit-runtime = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
 
 [bundles]
 sqlDelight = ["sqlDelight-sqliteDriver", "sqlDelight-coroutinesExtension"]

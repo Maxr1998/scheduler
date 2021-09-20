@@ -46,11 +46,6 @@ dependencies {
 
     // Logging
     implementation(libs.bundles.logging)
-
-    // Tests
-    testImplementation(kotlin("test-junit5"))
-    testImplementation(libs.junit.api)
-    testRuntimeOnly(libs.junit.runtime)
 }
 
 compose.desktop {
