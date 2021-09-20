@@ -54,7 +54,6 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
     val eventName = remember { mutableStateOf(TextFieldValue(event?.name.orEmpty())) }
     val eventType = remember { mutableStateOf(event?.type?.let { i -> EventType.values()[i] } ?: EventType.UNDEFINED) }
     val eventModule = remember { mutableStateOf(TextFieldValue(event?.module.orEmpty())) }
-    //val eventLecturer = remember { mutableStateOf(lecturerRepository.queryLecturersByEvent(event)) }
     val eventDurationText = remember { mutableStateOf(TextFieldValue(event?.duration?.toString().orEmpty())) }
     val (eventDuration, eventDurationError) = calculateNumberInputError(
         eventDurationText.value.text,
