@@ -22,12 +22,13 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
@@ -46,20 +47,25 @@ import de.uaux.scheduler.ui.model.Selection
 import de.uaux.scheduler.ui.util.LabeledTextField
 import de.uaux.scheduler.ui.util.PopupDialog
 import de.uaux.scheduler.ui.util.l
+import de.uaux.scheduler.ui.util.parseNumberInput
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import mu.KotlinLogging
 import org.koin.androidx.compose.get
+
+private val logger = KotlinLogging.logger {}
 
 @Composable
 fun EditSuggestionDialog(event: Event, onDismissRequest: () -> Unit) {
-    val coroutineScope = rememberCoroutineScope()
+    val coroutineScope = MainScope()
     val scheduleRepository: ScheduleRepository = get()
     val suggestionRepository: SuggestionRepository = get()
 
     PopupDialog(
-        title = l("dialog_title_suggestions"),
+        title = l("dialog_title_event_dates_and_notes"),
         onDismissRequest = onDismissRequest,
         actions = {
             TextButton(
@@ -86,7 +92,41 @@ fun EditSuggestionDialog(event: Event, onDismissRequest: () -> Unit) {
 
             val semester = (semesterSelection as? Selected<Semester>)?.value
             if (semester != null) {
-                var selectedSuggestion: Selection<Suggestion> by remember { mutableStateOf(Loading) }
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Divider()
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                val eventCountText = remember { mutableStateOf(TextFieldValue("1")) }
+
+                LaunchedEffect(semester) {
+                    val queryResult = withContext(Dispatchers.IO) {
+                        scheduleRepository.getEventCount(event, semester)
+                    }
+                    eventCountText.value = TextFieldValue(queryResult.toString())
+                }
+
+                val eventCount by derivedStateOf {
+                    parseNumberInput(
+                        eventCountText.value.text,
+                        1..100L,
+                        "input_error_invalid_frequency",
+                    )
+                }
+
+                LabeledTextField(
+                    text = eventCountText,
+                    label = l("input_label_event_frequency"),
+                    placeholder = l("input_hint_event_frequency"),
+                    errorMessage = eventCount.error?.let { error -> l(error) },
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Divider()
+
+                var selectedSuggestion by remember { mutableStateOf<Selection<Suggestion>>(Loading) }
                 val inEditMode = remember { mutableStateOf(false) }
 
                 LaunchedEffect(semester) {
@@ -95,10 +135,6 @@ fun EditSuggestionDialog(event: Event, onDismissRequest: () -> Unit) {
                     }
                     selectedSuggestion = Selection.fromNullable(queryResult)
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Divider()
 
                 when {
                     selectedSuggestion is Selected || inEditMode.value -> SuggestionDetails(
@@ -123,6 +159,15 @@ fun EditSuggestionDialog(event: Event, onDismissRequest: () -> Unit) {
                         contentAlignment = Alignment.Center,
                     ) {
                         CircularProgressIndicator()
+                    }
+                }
+
+                DisposableEffect(semester) {
+                    onDispose {
+                        val count = eventCount.value
+                        coroutineScope.launch {
+                            if (count != null) scheduleRepository.setEventCount(event, semester, count.toInt())
+                        }
                     }
                 }
             }

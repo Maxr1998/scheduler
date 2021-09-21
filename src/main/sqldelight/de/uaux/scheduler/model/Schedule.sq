@@ -23,6 +23,7 @@ CREATE TABLE ScheduleCount (
     semester INTEGER AS Int NOT NULL,
     event INTEGER NOT NULL REFERENCES Event(id) ON DELETE CASCADE,
     count INTEGER AS Int NOT NULL,
+    UNIQUE (semester, event),
     -- If count is 1, no entry is necessary
     CHECK (count > 1)
 );
@@ -61,6 +62,18 @@ FROM Event e
 WHERE se.studycourse != :studycourse AND se.studycourse IN (SELECT se2.studycourse FROM StudycourseEvent se2 WHERE se2.event = :event)
 AND e.id != :event
 AND s.semester = :semester AND s.day = :day AND ((s.start_time BETWEEN :start AND :end) OR (s.start_time + e.duration BETWEEN :start AND :end));
+
+getEventCount:
+SELECT count FROM ScheduleCount
+WHERE semester = :semester AND event = :event;
+
+setEventCount:
+INSERT OR REPLACE INTO ScheduleCount
+VALUES (:semester, :event, :count);
+
+unsetEventCount:
+DELETE FROM ScheduleCount
+WHERE semester = :semester AND event = :event;
 
 rescheduleEvent:
 UPDATE Schedule

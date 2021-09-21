@@ -114,6 +114,18 @@ class ScheduleRepository(
         else -> roomQueries.queryRoomById(id).executeAsOneOrNull()
     }
 
+    fun getEventCount(event: Event, semester: Semester): Int {
+        return scheduleQueries.getEventCount(semester = semester.code, event = event.id).executeAsOneOrNull() ?: 1
+    }
+
+    fun setEventCount(event: Event, semester: Semester, count: Int) {
+        require(count >= 1)
+        when (count) {
+            1 -> scheduleQueries.unsetEventCount(semester = semester.code, event = event.id)
+            else -> scheduleQueries.setEventCount(semester = semester.code, event = event.id, count = count)
+        }
+    }
+
     fun scheduleEvent(event: ScheduledEvent): Boolean {
         scheduleQueries.insert(event.persist())
         return standardQueries.changes().executeAsOne() == 1L
