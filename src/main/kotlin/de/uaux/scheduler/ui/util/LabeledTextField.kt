@@ -11,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Error
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,13 +70,21 @@ fun LabeledTextField(
     }
 }
 
-@Composable
-fun calculateNumberInputError(value: String, allowedRange: LongRange, outOfRangeError: String): Pair<Long?, String?> {
-    val number = value.trim().toLongOrNull()
-    return number to when {
-        value.isBlank() -> null
-        number == null -> l("input_error_only_numbers")
-        number !in allowedRange -> l(outOfRangeError)
-        else -> null
-    }
+@Immutable
+data class NumberInputResult(
+    val value: Long?,
+    val error: String?,
+)
+
+fun parseNumberInput(value: String, allowedRange: LongRange, outOfRangeError: String): NumberInputResult {
+    val parsed = value.trim().toLongOrNull()
+    return NumberInputResult(
+        value = parsed,
+        error = when {
+            value.isBlank() -> null
+            parsed == null -> "input_error_only_numbers"
+            parsed !in allowedRange -> outOfRangeError
+            else -> null
+        },
+    )
 }

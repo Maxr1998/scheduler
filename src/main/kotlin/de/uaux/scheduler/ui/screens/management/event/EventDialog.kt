@@ -22,6 +22,7 @@ import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -40,8 +41,8 @@ import de.uaux.scheduler.ui.util.LabeledTextField
 import de.uaux.scheduler.ui.util.PopupDialog
 import de.uaux.scheduler.ui.util.SaveButton
 import de.uaux.scheduler.ui.util.SearchableSelectionDropdown
-import de.uaux.scheduler.ui.util.calculateNumberInputError
 import de.uaux.scheduler.ui.util.l
+import de.uaux.scheduler.ui.util.parseNumberInput
 import de.uaux.scheduler.viewmodel.TimetableViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
@@ -55,18 +56,22 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
     val eventType = remember { mutableStateOf(event?.type?.let { i -> EventType.values()[i] } ?: EventType.UNDEFINED) }
     val eventModule = remember { mutableStateOf(TextFieldValue(event?.module.orEmpty())) }
     val eventDurationText = remember { mutableStateOf(TextFieldValue(event?.duration?.toString().orEmpty())) }
-    val (eventDuration, eventDurationError) = calculateNumberInputError(
-        eventDurationText.value.text,
-        0L..TimetableViewModel.MAX_MINUTES_IN_DAY,
-        "input_error_invalid_duration",
-    )
+    val eventDuration by derivedStateOf {
+        parseNumberInput(
+            eventDurationText.value.text,
+            0L..TimetableViewModel.MAX_MINUTES_IN_DAY,
+            "input_error_invalid_duration",
+        )
+    }
 
     val eventParticipantsText = remember { mutableStateOf(TextFieldValue(event?.participants?.toString().orEmpty())) }
-    val (eventParticipants, eventParticipantsError) = calculateNumberInputError(
-        eventParticipantsText.value.text,
-        1..100000L,
-        "input_error_invalid_participant_count",
-    )
+    val eventParticipants by derivedStateOf {
+        parseNumberInput(
+            eventParticipantsText.value.text,
+            1..100000L,
+            "input_error_invalid_participant_count",
+        )
+    }
 
     PopupDialog(
         title = l(if (event == null) "dialog_title_add_event" else "dialog_title_edit_event"),
@@ -80,8 +85,8 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
 
             SaveButton(
                 enabled = eventName.value.text.isNotBlank() &&
-                    eventDuration != null && eventDurationError == null &&
-                    eventParticipantsError == null,
+                    eventDuration.value != null && eventDuration.error == null &&
+                    eventParticipants.error == null,
                 onSave = {
                     coroutineScope.launch {
                         val updated = Event(
@@ -89,8 +94,8 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
                             eventName.value.text.trim(),
                             eventType.value.ordinal,
                             eventModule.value.text.trim(),
-                            eventDuration!!.toInt(),
-                            eventParticipants?.toInt(),
+                            eventDuration.value!!.toInt(),
+                            eventParticipants.value?.toInt(),
                         )
                         eventRepository.insertOrUpdate(updated)
                         onDismissRequest()
@@ -120,7 +125,7 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
                 text = eventDurationText,
                 label = l("input_label_event_duration"),
                 placeholder = l("input_hint_event_duration"),
-                errorMessage = eventDurationError,
+                errorMessage = eventDuration.error?.let { error -> l(error) },
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -129,7 +134,7 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
                 text = eventParticipantsText,
                 label = l("input_label_event_participants"),
                 placeholder = l("input_hint_event_participants"),
-                errorMessage = eventParticipantsError,
+                errorMessage = eventParticipants.error?.let { error -> l(error) },
             )
 
             if (event != null) {
