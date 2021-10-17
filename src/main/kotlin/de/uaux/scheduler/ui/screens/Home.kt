@@ -23,7 +23,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -57,7 +56,7 @@ private fun HomeScreenContent() {
     val suggestionsProgress by homeViewModel.getSuggestionProgress(currentSemester).collectAsState(null)
 
     val navigationController: NavigationController = get()
-    var currentScreen by navigationController.currentScreen
+    val (_, showScreen) = navigationController.currentScreen
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -68,7 +67,7 @@ private fun HomeScreenContent() {
             studycourseCount?.let { count ->
                 DetailsItem(
                     modifier = Modifier.clickable {
-                        currentScreen = NavigationController.Screen.Studycourses
+                        showScreen(NavigationController.Screen.Studycourses)
                     },
                     label = l("home_screen_label_studycourses"),
                     count = count,
@@ -80,7 +79,7 @@ private fun HomeScreenContent() {
             eventCount?.let { count ->
                 DetailsItem(
                     modifier = Modifier.clickable {
-                        currentScreen = NavigationController.Screen.Events
+                        showScreen(NavigationController.Screen.Events)
                     },
                     label = l("home_screen_label_events"),
                     count = count,
@@ -92,7 +91,7 @@ private fun HomeScreenContent() {
             suggestionsProgress?.let { progress ->
                 Progress(
                     modifier = Modifier.clickable {
-                        currentScreen = NavigationController.Screen.Timetable
+                        showScreen(NavigationController.Screen.Timetable)
                     },
                     progress = progress,
                 )
