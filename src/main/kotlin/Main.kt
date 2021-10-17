@@ -3,7 +3,6 @@
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowSize
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import de.uaux.scheduler.appModule
@@ -27,7 +26,7 @@ fun main() {
     application {
         Window(
             onCloseRequest = ::exitApplication,
-            state = rememberWindowState(size = WindowSize(1600.dp, 900.dp)),
+            state = rememberWindowState(width = 1600.dp, height = 900.dp),
             title = koin.get<LocalizationUtil>()["app_name"],
         ) {
             val initialized by startupController.initialize()
