@@ -1,12 +1,12 @@
 [versions]
 proguard-gradle = "7.1.0"
-kotlin = "1.5.21"
-compose = "1.0.0-alpha3"
+kotlin = "1.5.31"
+compose = "1.0.0-alpha4-build398"
 sqldelight = "1.5.0"
 dependencyupdates = "0.39.0"
 
 koin = "2.2.2"
-coroutines = "1.5.1"
+coroutines = "1.5.2"
 sqlDelight = "1.4.4"
 kotlinLogging = "2.0.10"
 logback = "1.2.4"
