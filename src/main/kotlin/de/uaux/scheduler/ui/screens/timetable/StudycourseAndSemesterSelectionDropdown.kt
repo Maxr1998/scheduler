@@ -26,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.ui.model.TimetableFilter
 import de.uaux.scheduler.ui.util.FixUnsupportedIntrinsicMeasurementsLayoutModifier
