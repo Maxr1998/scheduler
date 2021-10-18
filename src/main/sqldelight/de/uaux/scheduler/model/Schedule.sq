@@ -39,7 +39,7 @@ SELECT DISTINCT s.semester FROM Schedule s ORDER BY s.semester DESC;
 queryScheduledEventsInStudycourseBySemester:
 SELECT e.*, se.semester AS studycourseSemester, se.required, s.day, s.start_time AS startTime, s.room
 FROM StudycourseEvent se JOIN Event e JOIN Schedule s ON se.event = e.id AND e.id = s.event
-WHERE se.studycourse = ? AND s.semester = ?
+WHERE se.studycourse = :studycourse AND s.semester = :semester
 ORDER BY s.day, s.start_time, e.duration DESC;
 
 queryUnscheduledEventsInStudycourseBySemester:
@@ -48,7 +48,7 @@ FROM Event e
     JOIN StudycourseEvent se ON e.id = se.event
     LEFT JOIN ScheduleCount sc ON e.id = sc.event
     LEFT JOIN Schedule s ON e.id = s.event
-WHERE se.studycourse = ? AND (sc.semester IS NULL OR sc.semester = ?) AND (s.semester IS NULL OR s.semester = ?)
+WHERE se.studycourse = :studycourse AND (sc.semester IS NULL OR sc.semester = :semester) AND (s.semester IS NULL OR s.semester = :semester)
 -- TODO: missing 'remaining > 0' due to bug in SQLdelight
 GROUP BY e.id, e.name
 ORDER BY e.name;
@@ -56,8 +56,8 @@ ORDER BY e.name;
 rescheduleEvent:
 UPDATE Schedule
 SET day = :newDay, start_time = :newStart
-WHERE semester = ? AND event = ? AND day = ? AND start_time = ?;
+WHERE semester = :semester AND event = :event AND day = :day AND start_time = :startTime;
 
 unscheduleEvent:
 DELETE FROM Schedule
-WHERE semester = ? AND event = ? AND day = ? AND start_time = ?;
+WHERE semester = :semester AND event = :event AND day = :day AND start_time = :startTime;

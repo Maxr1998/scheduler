@@ -88,7 +88,7 @@ class ScheduleRepository(
             val studycourseEvent = StudycourseEvent(event, studycourseSemester, required)
             UnscheduledEvent(semester, studycourseEvent, count.toInt())
         }
-        return scheduleQueries.queryUnscheduledEventsInStudycourseBySemester(studycourse.id, semester.code, semester.code, mapper = mapper).executeAsList()
+        return scheduleQueries.queryUnscheduledEventsInStudycourseBySemester(studycourse.id, semester.code, mapper = mapper).executeAsList()
     }
 
     fun queryRoom(id: Long, cache: Map<Long, Room> = emptyMap()): Room? = when (id) {
