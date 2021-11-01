@@ -24,6 +24,7 @@ import de.uaux.scheduler.ui.model.ValidationState
 import de.uaux.scheduler.util.binaryInsert
 import de.uaux.scheduler.util.binaryInsertIndex
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -72,7 +73,9 @@ class TimetableViewModel(
      * Indicates the validation state for the current studycourse
      */
     val validationState: State<ValidationState> get() = _validationState
-    private val _validationState: MutableState<ValidationState> = mutableStateOf(ValidationState.UNKNOWN)
+    private val _validationState: MutableState<ValidationState> = mutableStateOf(ValidationState.Unknown)
+
+    private var validationJob: Job? = null
 
     /**
      * Contains times for the start and end of the day so that all events in [events] are contained
@@ -143,7 +146,7 @@ class TimetableViewModel(
 
         _timetableSelection.value = Selection(TimetableFilter(semester, studycourse))
 
-        _validationState.value = ValidationState.UNKNOWN
+        validate(now = false)
     }
 
     fun schedule(event: ScheduledEvent) = coroutineScope.launch {
@@ -179,7 +182,7 @@ class TimetableViewModel(
             events.removeAt(insertIndex)
         }
 
-        _validationState.value = ValidationState.OUTDATED
+        validate(now = false)
     }
 
     fun reschedule(event: ScheduledEvent, day: DayOfWeek, startTime: Int) = coroutineScope.launch {
@@ -219,7 +222,7 @@ class TimetableViewModel(
             events.binaryInsert(event)
         }
 
-        _validationState.value = ValidationState.OUTDATED
+        validate(now = false)
     }
 
     fun unschedule(event: ScheduledEvent) = coroutineScope.launch {
@@ -255,31 +258,55 @@ class TimetableViewModel(
             events.binaryInsert(event)
         }
 
-        _validationState.value = ValidationState.OUTDATED
+        validate(now = false)
     }
 
     suspend fun getSuggestion(semester: Semester, event: Event): Suggestion? = withContext(Dispatchers.IO) {
         suggestionRepository.querySuggestionBySemesterAndEvent(semester, event)
     }
 
-    fun validate() {
-        val current = _validationState.value
-        if (current != ValidationState.UNKNOWN && current != ValidationState.OUTDATED) {
-            return
-        }
-
-        coroutineScope.launch {
+    fun validate(now: Boolean) {
+        validationJob?.cancel()
+        validationJob = coroutineScope.launch {
+            if (!now) {
+                _validationState.value = ValidationState.Outdated
+                delay(1000L)
+            }
             validateInternal()
         }
     }
 
     private suspend fun validateInternal() {
-        _validationState.value = ValidationState.VALIDATING
+        if (_validationState.value == ValidationState.Validating) {
+            return
+        }
+        _validationState.value = ValidationState.Validating
 
         // Validate timetable
-        delay(1500) // TODO: implement validation
 
-        _validationState.value = ValidationState.OK
+        val studycourse = timetableSelection.value.orNull()?.studycourse ?: run {
+            _validationState.value = ValidationState.Ok
+            return
+        }
+        val events = ArrayList(events).ifEmpty {
+            _validationState.value = ValidationState.Ok
+            return
+        }
+
+        val conflicts = mutableListOf<Pair<ScheduledEvent, List<ScheduledEvent>>>()
+
+        withContext(Dispatchers.IO) {
+            for (event in events) {
+                // Find all conflicts for event in timetable
+                val eventConflicts = scheduleRepository.queryConflictsWithEvent(studycourse, event)
+                if (eventConflicts.isNotEmpty()) conflicts.add(event to eventConflicts)
+            }
+        }
+
+        _validationState.value = when {
+            conflicts.isEmpty() -> ValidationState.Ok
+            else -> ValidationState.FoundProblems(conflicts)
+        }
     }
 
     companion object {

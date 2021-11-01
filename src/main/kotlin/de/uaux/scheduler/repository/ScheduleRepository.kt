@@ -70,16 +70,11 @@ class ScheduleRepository(
      * pre-sorted by [day][ScheduledEvent.day] and [start time][ScheduledEvent.startTime]
      */
     fun queryScheduledEvents(studycourse: Studycourse, semester: Semester): List<ScheduledEvent> {
-        val roomCache = HashMap<Long, Room>()
-        val mapper: ScheduledEventMapper = { id, name, type, module, duration, participants, studycourseSemester, required, day, startTime, roomId ->
-            val room = queryRoom(roomId, roomCache)?.also { room ->
-                roomCache.putIfAbsent(roomId, room)
-            }
-            val event = Event(id, name, type, module, duration, participants)
-            val studycourseEvent = StudycourseEvent(event, studycourseSemester, required)
-            ScheduledEvent(semester, studycourseEvent, DayOfWeek.of(day), startTime, room)
-        }
-        return scheduleQueries.queryScheduledEventsInStudycourseBySemester(studycourse.id, semester.code, mapper = mapper).executeAsList()
+        return scheduleQueries.queryScheduledEventsInStudycourseBySemester(
+            studycourse = studycourse.id,
+            semester = semester.code,
+            mapper = getScheduledEventMapper(semester),
+        ).executeAsList()
     }
 
     fun queryUnscheduledEvents(studycourse: Studycourse, semester: Semester): List<UnscheduledEvent> {
@@ -89,6 +84,19 @@ class ScheduleRepository(
             UnscheduledEvent(semester, studycourseEvent, count.toInt())
         }
         return scheduleQueries.queryUnscheduledEventsInStudycourseBySemester(studycourse.id, semester.code, mapper = mapper).executeAsList()
+    }
+
+    fun queryConflictsWithEvent(studycourse: Studycourse, scheduledEvent: ScheduledEvent): List<ScheduledEvent> {
+        val semester = scheduledEvent.semester
+        return scheduleQueries.queryConflictsWithEvent(
+            studycourse = studycourse.id,
+            event = scheduledEvent.event.id,
+            semester = semester.code,
+            day = scheduledEvent.day.value,
+            start = scheduledEvent.startTime,
+            end = scheduledEvent.startTime + scheduledEvent.duration,
+            mapper = getScheduledEventMapper(semester),
+        ).executeAsList()
     }
 
     fun queryRoom(id: Long, cache: Map<Long, Room> = emptyMap()): Room? = when (id) {
@@ -118,5 +126,17 @@ class ScheduleRepository(
         standardQueries.changes().executeAsOne() == 1L
     } catch (e: SQLException) {
         false
+    }
+
+    private fun getScheduledEventMapper(semester: Semester): ScheduledEventMapper {
+        val roomCache = HashMap<Long, Room>()
+        return { id, name, type, module, duration, participants, studycourseSemester, required, day, startTime, roomId ->
+            val room = queryRoom(roomId, roomCache)?.also { room ->
+                roomCache.putIfAbsent(roomId, room)
+            }
+            val event = Event(id, name, type, module, duration, participants)
+            val studycourseEvent = StudycourseEvent(event, studycourseSemester, required)
+            ScheduledEvent(semester, studycourseEvent, DayOfWeek.of(day), startTime, room)
+        }
     }
 }

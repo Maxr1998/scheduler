@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.ui.model.Loading
 import de.uaux.scheduler.ui.model.None
 import de.uaux.scheduler.ui.model.Selected
+import de.uaux.scheduler.ui.model.ValidationState
 import de.uaux.scheduler.ui.screens.timetable.ShowWeekendToggle
 import de.uaux.scheduler.ui.screens.timetable.StudycourseAndSemesterSelectionDropdown
 import de.uaux.scheduler.ui.screens.timetable.TimetableScreenContent
@@ -29,10 +32,15 @@ fun TimetableScreen() = Column {
         modifier = Modifier.fillMaxWidth().height(56.dp),
         title = l("screen_timetable"),
     ) {
+        val showDetails = remember { mutableStateOf(false) }
         ValidationInfo(
             validationState = timetableViewModel.validationState.value,
+            detailsState = showDetails,
             onClick = {
-                timetableViewModel.validate()
+                when (timetableViewModel.validationState.value) {
+                    is ValidationState.FoundProblems -> showDetails.value = true
+                    else -> timetableViewModel.validate(now = true)
+                }
             },
         )
 

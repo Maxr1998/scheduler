@@ -53,6 +53,15 @@ WHERE se.studycourse = :studycourse AND (sc.semester IS NULL OR sc.semester = :s
 GROUP BY e.id, e.name
 ORDER BY e.name;
 
+queryConflictsWithEvent:
+SELECT e.*, se.semester AS studycourseSemester, se.required, s.day, s.start_time AS startTime, s.room
+FROM Event e
+    JOIN StudycourseEvent se ON e.id = se.event
+    JOIN Schedule s ON e.id = s.event
+WHERE se.studycourse != :studycourse AND se.studycourse IN (SELECT se2.studycourse FROM StudycourseEvent se2 WHERE se2.event = :event)
+AND e.id != :event
+AND s.semester = :semester AND s.day = :day AND ((s.start_time BETWEEN :start AND :end) OR (s.start_time + e.duration BETWEEN :start AND :end));
+
 rescheduleEvent:
 UPDATE Schedule
 SET day = :newDay, start_time = :newStart
