@@ -16,7 +16,7 @@ import de.uaux.scheduler.model.dto.Suggestion
 import de.uaux.scheduler.ui.screens.management.event.suggestion.SuggestionDetails
 import de.uaux.scheduler.ui.util.PopupDialog
 import de.uaux.scheduler.ui.util.l
-import de.uaux.scheduler.util.formatMinutesOfDay
+import de.uaux.scheduler.util.formatTimeMinutesOfDay
 import java.time.format.TextStyle
 import java.util.*
 
@@ -51,7 +51,7 @@ fun EventDetailsDialog(
                 val day = remember(scheduledEvent.day) { scheduledEvent.day.getDisplayName(TextStyle.FULL, Locale.getDefault()) }
 
                 Text(
-                    text = "$day, ${formatMinutesOfDay(scheduledEvent.startTime)}-${formatMinutesOfDay(scheduledEvent.endTime)}",
+                    text = "$day, ${formatTimeMinutesOfDay(scheduledEvent.startTime)}-${formatTimeMinutesOfDay(scheduledEvent.endTime)}",
                     style = MaterialTheme.typography.body1,
                 )
 

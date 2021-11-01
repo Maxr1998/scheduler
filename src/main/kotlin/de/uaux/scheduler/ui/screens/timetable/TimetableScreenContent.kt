@@ -60,7 +60,7 @@ import de.uaux.scheduler.ui.util.VerticalDivider
 import de.uaux.scheduler.ui.util.ZIndex
 import de.uaux.scheduler.ui.util.l
 import de.uaux.scheduler.ui.util.lightenedBackground
-import de.uaux.scheduler.util.formatMinutesOfDay
+import de.uaux.scheduler.util.formatTimeMinutesOfDay
 import de.uaux.scheduler.util.size
 import de.uaux.scheduler.viewmodel.DialogViewModel
 import de.uaux.scheduler.viewmodel.TimetableViewModel
@@ -241,7 +241,7 @@ private fun TimetablePane(
                         .rotate(-90f)
                         .size(timetablePaddingStart, timeslotTextHeight)
                         .padding(4.dp),
-                    text = "${formatMinutesOfDay(timeslot.start_time)} - ${formatMinutesOfDay(timeslot.end_time)}",
+                    text = "${formatTimeMinutesOfDay(timeslot.start_time)} - ${formatTimeMinutesOfDay(timeslot.end_time)}",
                     fontSize = 10.sp,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
@@ -426,7 +426,7 @@ private data class DropLocation(
     val day: DayOfWeek,
     val minutes: Int,
 ) {
-    override fun toString(): String = "$day / ${formatMinutesOfDay(minutes)}"
+    override fun toString(): String = "$day / ${formatTimeMinutesOfDay(minutes)}"
 
     companion object {
         val REMOVE = DropLocation(DayOfWeek.MONDAY, Int.MIN_VALUE)

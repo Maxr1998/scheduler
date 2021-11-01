@@ -31,7 +31,7 @@ import de.uaux.scheduler.model.dto.ScheduledEvent
 import de.uaux.scheduler.model.dto.UnscheduledEvent
 import de.uaux.scheduler.ui.util.DraggableCard
 import de.uaux.scheduler.ui.util.l
-import de.uaux.scheduler.util.formatMinutesOfDay
+import de.uaux.scheduler.util.formatDurationMinutesOfDay
 
 private const val POINTER_KEY_PSEUDO_DRAGGABLE = "pseudo-draggable-card"
 
@@ -160,7 +160,7 @@ fun UnscheduledEventCard(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "${l("event_label_duration")}: ${formatMinutesOfDay(event.duration)}",
+                text = "${l("event_label_duration")}: ${formatDurationMinutesOfDay(event.duration)}",
                 fontSize = 10.sp,
                 style = MaterialTheme.typography.subtitle2,
             )

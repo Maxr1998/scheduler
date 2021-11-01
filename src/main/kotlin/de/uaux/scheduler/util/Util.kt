@@ -20,4 +20,6 @@ fun <T> MutableList<T>.binaryInsert(element: T, comparison: (T) -> Int) {
     add(binaryInsertIndex(comparison), element)
 }
 
-fun formatMinutesOfDay(minutes: Int) = "%d:%02dh".format(minutes / 60, minutes % 60)
+fun formatTimeMinutesOfDay(minutes: Int) = "%02d:%02d".format(minutes / 60, minutes % 60)
+
+fun formatDurationMinutesOfDay(minutes: Int) = "%d:%02dh".format(minutes / 60, minutes % 60)

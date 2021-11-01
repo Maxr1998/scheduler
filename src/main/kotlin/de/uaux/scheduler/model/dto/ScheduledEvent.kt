@@ -1,11 +1,10 @@
 package de.uaux.scheduler.model.dto
 
 import androidx.compose.runtime.Immutable
-import de.uaux.scheduler.model.Event
 import de.uaux.scheduler.model.Room
 import de.uaux.scheduler.model.Schedule
 import de.uaux.scheduler.model.Semester
-import de.uaux.scheduler.util.formatMinutesOfDay
+import de.uaux.scheduler.util.formatTimeMinutesOfDay
 import java.time.DayOfWeek
 
 @Immutable
@@ -21,7 +20,7 @@ data class ScheduledEvent(
     val endTime: Int = startTime + event.duration
 
     override fun toString(): String =
-        "ScheduledEvent(${event.name}, $semester, $day / ${formatMinutesOfDay(startTime)} - ${formatMinutesOfDay(endTime)}, room=${room?.id})"
+        "ScheduledEvent(${event.name}, $semester, $day / ${formatTimeMinutesOfDay(startTime)} - ${formatTimeMinutesOfDay(endTime)}, room=${room?.id})"
 
     fun toShortString(): String = "ScheduledEvent(${event.name})"
 
