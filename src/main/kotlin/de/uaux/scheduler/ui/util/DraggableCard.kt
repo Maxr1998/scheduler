@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ private const val POINTER_KEY_DRAGGABLE = "draggable-card"
 @Composable
 fun DraggableCard(
     modifier: Modifier = Modifier,
+    backgroundColor: Color,
     onClick: () -> Unit = { },
     onDragStart: () -> Unit = { },
     onDragUpdate: (offset: Offset) -> Unit = { },
@@ -60,6 +62,7 @@ fun DraggableCard(
                     },
                 )
             },
+        backgroundColor = backgroundColor,
         elevation = if (offset != Offset.Zero) 6.dp else 2.dp,
     ) {
         content()

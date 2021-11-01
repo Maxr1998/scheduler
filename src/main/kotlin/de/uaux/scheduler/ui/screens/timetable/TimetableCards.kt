@@ -38,6 +38,7 @@ private const val POINTER_KEY_PSEUDO_DRAGGABLE = "pseudo-draggable-card"
 @Composable
 fun TimetableEventCard(
     modifier: Modifier = Modifier,
+    backgroundColor: Color,
     event: ScheduledEvent,
     onClick: () -> Unit,
     onDrag: () -> Unit,
@@ -45,6 +46,7 @@ fun TimetableEventCard(
 ) {
     DraggableCard(
         modifier = modifier,
+        backgroundColor = backgroundColor,
         onClick = onClick,
         onDragStart = onDrag,
         onDragUpdate = { },

@@ -69,7 +69,7 @@ import mu.KotlinLogging
 import org.koin.androidx.compose.get
 import java.time.DayOfWeek
 import java.time.format.TextStyle
-import java.util.*
+import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -269,6 +269,8 @@ private fun TimetablePane(
         }
 
         // Draw events
+        val surfaceColor = MaterialTheme.colors.surface
+        val timetableColors = remember(surfaceColor) { TimetableColors(surfaceColor) }
         var overlap = -1..-1
         for (i in events.indices) {
             val event = events[i]
@@ -308,6 +310,7 @@ private fun TimetablePane(
                 }
                 TimetableEventCard(
                     modifier = layoutModifier,
+                    backgroundColor = timetableColors[event],
                     event = event,
                     onClick = {
                         onClick(event)
