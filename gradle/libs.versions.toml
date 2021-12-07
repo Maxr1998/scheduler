@@ -1,7 +1,7 @@
 [versions]
 proguard-gradle = "7.1.0"
 kotlin = "1.5.31"
-compose = "1.0.0-beta5"
+compose = "1.0.0"
 sqldelight = "1.5.0"
 dependencyupdates = "0.39.0"
 
