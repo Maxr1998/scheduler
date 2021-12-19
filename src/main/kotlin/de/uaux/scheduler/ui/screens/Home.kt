@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.DisableSelection
+import androidx.compose.material.Divider
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
@@ -59,11 +60,16 @@ private fun HomeScreenContent() {
     val (_, showScreen) = navigationController.currentScreen
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier.fillMaxSize(),
     ) {
-        HeaderText(currentSemester)
+        HeaderText(
+            modifier = Modifier.padding(horizontal = 16.dp).padding(top = 16.dp, bottom = 8.dp),
+            semester = currentSemester,
+        )
 
-        Row {
+        Row(
+            modifier = Modifier.padding(16.dp),
+        ) {
             studycourseCount?.let { count ->
                 DetailsItem(
                     modifier = Modifier.clickable {
@@ -97,13 +103,18 @@ private fun HomeScreenContent() {
                 )
             }
         }
+
+        Divider()
     }
 }
 
 @Composable
-private fun HeaderText(semester: Semester) {
+private fun HeaderText(
+    modifier: Modifier = Modifier,
+    semester: Semester,
+) {
     Text(
-        modifier = Modifier.padding(bottom = 24.dp),
+        modifier = modifier,
         text = l("home_screen_header").format(semester),
         style = MaterialTheme.typography.h5,
     )
