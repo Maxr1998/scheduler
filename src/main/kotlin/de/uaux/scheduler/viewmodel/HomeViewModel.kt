@@ -19,12 +19,12 @@ class HomeViewModel(
 
     fun getSemester(): Semester = scheduleRepository.computeNextSemester()
 
-    fun getSuggestionProgress(semester: Semester): Flow<Pair<Long, Long>> {
+    fun getSuggestionProgress(semester: Semester): Flow<Pair<Long, Long>?> {
         val unprocessedSuggestionCount = suggestionRepository.queryUnprocessedSuggestionCountBySemesterAsFlow(semester)
         val suggestionCount = suggestionRepository.querySuggestionCountBySemesterAsFlow(semester)
 
         return unprocessedSuggestionCount.combine(suggestionCount) { unprocessed, all ->
-            unprocessed to all
+            if (all > 0) unprocessed to all else null
         }
     }
 }

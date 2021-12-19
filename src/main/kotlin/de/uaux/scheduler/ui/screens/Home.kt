@@ -164,7 +164,7 @@ private fun Progress(
 
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth().align(Alignment.BottomStart),
-                progress = if (progress.second > 0) progress.first.toFloat() / progress.second else 1f,
+                progress = progress.first.toFloat() / progress.second,
                 color = MaterialTheme.colors.onPrimary,
             )
         }
