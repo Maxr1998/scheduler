@@ -112,21 +112,7 @@ fun TimetableScreenContent(filter: TimetableFilter) {
                 }
             },
     ) {
-        // Header
-        Row(
-            modifier = Modifier.fillMaxWidth().height(32.dp),
-        ) {
-            Row(
-                modifier = Modifier.weight(numDays.toFloat(), true).padding(start = timetablePaddingStart),
-            ) {
-                for (day in DayOfWeek.values().take(numDays)) {
-                    WeightedTextBox(
-                        text = remember(day) { day.getDisplayName(TextStyle.FULL, Locale.getDefault()) },
-                    )
-                }
-            }
-            WeightedTextBox(text = l("timetable_unscheduled_events_header"))
-        }
+        DayHeader(numDays = numDays)
 
         Divider(modifier = Modifier.zIndex(ZIndex.DIVIDER))
 
@@ -193,6 +179,24 @@ fun TimetableScreenContent(filter: TimetableFilter) {
                 },
             )
         }
+    }
+}
+
+@Composable
+private fun DayHeader(numDays: Int) {
+    Row(
+        modifier = Modifier.fillMaxWidth().height(32.dp),
+    ) {
+        Row(
+            modifier = Modifier.weight(numDays.toFloat(), true).padding(start = timetablePaddingStart),
+        ) {
+            for (day in DayOfWeek.values().take(numDays)) {
+                WeightedTextBox(
+                    text = remember(day) { day.getDisplayName(TextStyle.FULL, Locale.getDefault()) },
+                )
+            }
+        }
+        WeightedTextBox(text = l("timetable_unscheduled_events_header"))
     }
 }
 
