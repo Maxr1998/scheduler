@@ -40,6 +40,10 @@ import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
@@ -120,41 +124,54 @@ fun TimetableScreenContent(filter: TimetableFilter) {
         Row(
             modifier = Modifier.fillMaxWidth().weight(1f),
         ) {
-            TimetablePane(
+            Column(
                 modifier = Modifier.weight(numDays.toFloat(), true).fillMaxHeight(),
-                numDays = numDays,
-                pointerOffset = pointerOffset.value,
-                draggedEvent = draggedEvent.value?.event,
-                onUpdateDropLocation = { location ->
-                    dropLocation.value = location
-                },
-                onClick = { event ->
-                    showSuggestion(event.studycourseEvent, event)
-                },
-                onDrag = { event ->
-                    draggedEvent.value = event
-                },
-                onDrop = { persist ->
-                    val droppedEvent = draggedEvent.value ?: return@TimetablePane
-                    val location = dropLocation.value ?: return@TimetablePane
+            ) {
+                TimetablePane(
+                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    numDays = numDays,
+                    pointerOffset = pointerOffset.value,
+                    draggedEvent = draggedEvent.value?.event,
+                    onUpdateDropLocation = { location ->
+                        dropLocation.value = location
+                    },
+                    onClick = { event ->
+                        showSuggestion(event.studycourseEvent, event)
+                    },
+                    onDrag = { event ->
+                        draggedEvent.value = event
+                    },
+                    onDrop = { persist ->
+                        val droppedEvent = draggedEvent.value ?: return@TimetablePane
+                        val location = dropLocation.value ?: return@TimetablePane
 
-                    if (location == DropLocation.REMOVE) {
-                        // Remove from timetable when dropped over unscheduled events
-                        logger.debug("Dropped $droppedEvent over unscheduled events" + ", persisting".takeIf { persist })
+                        if (location == DropLocation.REMOVE) {
+                            // Remove from timetable when dropped over unscheduled events
+                            logger.debug("Dropped $droppedEvent over unscheduled events" + ", persisting".takeIf { persist })
 
-                        if (persist) {
-                            timetableViewModel.unschedule(droppedEvent)
+                            if (persist) {
+                                timetableViewModel.unschedule(droppedEvent)
+                            }
+                        } else {
+                            logger.debug("Dropped $droppedEvent at $location" + ", persisting".takeIf { persist })
+                            if (persist) {
+                                timetableViewModel.reschedule(droppedEvent, location.day, location.minutes)
+                            }
                         }
-                    } else {
-                        logger.debug("Dropped $droppedEvent at $location" + ", persisting".takeIf { persist })
-                        if (persist) {
-                            timetableViewModel.reschedule(droppedEvent, location.day, location.minutes)
-                        }
+
+                        draggedEvent.value = null
                     }
+                )
 
-                    draggedEvent.value = null
-                }
-            )
+                Divider()
+
+                StatusLine(
+                    status = buildAnnotatedString {
+                        append("Idle.")
+                        addStyle(SpanStyle(fontStyle = FontStyle.Italic), 0, length)
+                    },
+                )
+            }
             VerticalDivider(modifier = Modifier.zIndex(ZIndex.DIVIDER))
             UnscheduledPane(
                 modifier = Modifier.weight(1f).fillMaxHeight(),
@@ -326,6 +343,19 @@ private fun TimetablePane(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun StatusLine(status: AnnotatedString) {
+    Box(
+        modifier = Modifier.fillMaxWidth().height(32.dp).padding(horizontal = 8.dp),
+        contentAlignment = Alignment.CenterStart,
+    ) {
+        Text(
+            text = status,
+            style = MaterialTheme.typography.caption,
+        )
     }
 }
 
