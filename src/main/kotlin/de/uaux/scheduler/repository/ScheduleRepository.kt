@@ -44,10 +44,18 @@ class ScheduleRepository(
             .asFlow()
             .map { query ->
                 withContext(Dispatchers.IO) {
-                    query.executeAsMappedList { semester ->
-                        Semester(semester)
-                    }.ifEmpty {
-                        listOf(computeNextSemester())
+                    val semesters = query.executeAsMappedList { semester -> Semester(semester) }
+
+                    // Add "next" semester if not in database already
+                    val nextSemester = computeNextSemester()
+                    val insertIndex = semesters.binarySearch { s ->
+                        nextSemester.code - s.code // Inverted comparison as the list is sorted in descending order
+                    }
+                    when {
+                        insertIndex < 0 -> semesters.toMutableList().apply {
+                            add(-(insertIndex + 1), nextSemester)
+                        }
+                        else -> semesters
                     }
                 }
             }
