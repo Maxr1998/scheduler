@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
@@ -23,10 +23,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.uaux.scheduler.model.Studycourse
+import de.uaux.scheduler.ui.model.Selection
 import de.uaux.scheduler.ui.util.EditButton
 import de.uaux.scheduler.ui.util.SelectableListItem
 import de.uaux.scheduler.ui.util.l
-import de.uaux.scheduler.ui.model.Selection
 import de.uaux.scheduler.viewmodel.EventManagementViewModel
 import org.koin.androidx.compose.get
 
@@ -64,18 +64,16 @@ fun StudycoursesPane(
                 )
             }
         }
-        Surface(
-            modifier = Modifier.fillMaxWidth().height(48.dp)
+        Divider()
+        IconButton(
+            modifier = Modifier.fillMaxWidth().height(48.dp),
+            onClick = { openDialog(null) },
         ) {
-            IconButton(
-                onClick = { openDialog(null) },
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Add,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.onSurface,
-                )
-            }
+            Icon(
+                imageVector = Icons.Outlined.Add,
+                contentDescription = null,
+                tint = MaterialTheme.colors.onSurface,
+            )
         }
     }
 }
