@@ -1,15 +1,15 @@
 [versions]
 proguard-gradle = "7.1.0"
-kotlin = "1.5.31"
-compose = "1.0.0"
+kotlin = "1.6.10"
+compose = "1.0.1"
 sqldelight = "1.5.0"
 dependencyupdates = "0.39.0"
 
 koin = "3.1.4"
-coroutines = "1.5.2"
+coroutines = "1.6.0"
 sqlDelight = "1.4.4"
-kotlinLogging = "2.0.10"
-logback = "1.2.4"
+kotlinLogging = "2.1.21"
+logback = "1.2.10"
 
 [plugins]
 proguard-gradle = { id = "com.guardsquare:proguard-gradle", version.ref = "proguard-gradle" }

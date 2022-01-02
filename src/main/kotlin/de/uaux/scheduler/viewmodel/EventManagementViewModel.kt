@@ -14,7 +14,6 @@ import de.uaux.scheduler.ui.model.Selection
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class EventManagementViewModel(
