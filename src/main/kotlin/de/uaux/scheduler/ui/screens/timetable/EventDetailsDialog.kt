@@ -18,7 +18,7 @@ import de.uaux.scheduler.ui.util.PopupDialog
 import de.uaux.scheduler.ui.util.l
 import de.uaux.scheduler.util.formatTimeMinutesOfDay
 import java.time.format.TextStyle
-import java.util.*
+import java.util.Locale
 
 @Composable
 fun EventDetailsDialog(
