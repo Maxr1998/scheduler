@@ -14,7 +14,7 @@ The app is built on GitHub Actions for every commit, artifacts (JARs - all platf
 ## License
     
     Maxr1998/scheduler - a timetable and scheduling application
-    Copyright (C) 2021  Max Rumpf (Maxr1998)
+    Copyright (C) 2021-2022  Max Rumpf (Maxr1998)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
