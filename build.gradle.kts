@@ -39,6 +39,9 @@ compose.desktop {
         mainClass = "scheduler"
         nativeDistributions {
             packageName = project.name
+            copyright = "Copyright (C) 2021-2022  Max Rumpf (Maxr1998)"
+            vendor = "Maxr1998"
+            licenseFile.set(file("LICENSE"))
             modules("java.instrument", "java.management", "java.naming", "java.sql", "jdk.unsupported")
             targetFormats(TargetFormat.Exe)
         }
