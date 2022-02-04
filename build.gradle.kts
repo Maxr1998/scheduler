@@ -10,9 +10,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath(Plugins.proguardGradle) {
-            exclude("com.android.tools.build")
-        }
+        classpath(Plugins.proguardGradle)
     }
 }
 
