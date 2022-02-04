@@ -14,6 +14,14 @@ buildscript {
     }
 }
 
+allprojects {
+    repositories {
+        mavenCentral()
+        maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
+        google()
+    }
+}
+
 @Suppress("UnstableApiUsage")
 plugins {
     kotlin("jvm") version libs.versions.kotlin
@@ -24,28 +32,6 @@ plugins {
 
 group = "de.uaux"
 version = "1.0.0"
-
-repositories {
-    mavenCentral()
-    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
-    google()
-}
-
-dependencies {
-    // Core
-    implementation(libs.koin)
-    implementation(libs.coroutines)
-
-    // UI
-    implementation(compose.desktop.currentOs)
-    implementation(compose("org.jetbrains.compose.material:material-icons-extended"))
-
-    // Persistence
-    implementation(libs.bundles.sqlDelight)
-
-    // Logging
-    implementation(libs.bundles.logging)
-}
 
 compose.desktop {
     application {
@@ -63,6 +49,22 @@ sqldelight {
         packageName = "$group.${project.name}.model"
         schemaOutputDirectory = file("$buildDir/schemas/")
     }
+}
+
+dependencies {
+    // Core
+    implementation(libs.koin)
+    implementation(libs.coroutines)
+
+    // UI
+    implementation(compose.desktop.currentOs)
+    implementation(compose("org.jetbrains.compose.material:material-icons-extended"))
+
+    // Persistence
+    implementation(libs.bundles.sqlDelight)
+
+    // Logging
+    implementation(libs.bundles.logging)
 }
 
 tasks {
