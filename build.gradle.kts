@@ -39,7 +39,7 @@ compose.desktop {
         mainClass = "scheduler"
         nativeDistributions {
             packageName = project.name
-            modules("java.naming", "java.sql")
+            modules("java.instrument", "java.management", "java.naming", "java.sql", "jdk.unsupported")
             targetFormats(TargetFormat.Exe)
         }
     }
