@@ -32,6 +32,7 @@ plugins {
 
 group = "de.uaux"
 version = "1.0.0"
+val javaVersion = JavaVersion.VERSION_11
 
 compose.desktop {
     application {
@@ -49,6 +50,11 @@ sqldelight {
         packageName = "$group.${project.name}.model"
         schemaOutputDirectory = file("$buildDir/schemas/")
     }
+}
+
+java {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
 }
 
 dependencies {
@@ -70,7 +76,7 @@ dependencies {
 tasks {
     withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_11.toString()
+            jvmTarget = javaVersion.toString()
             @Suppress("SuspiciousCollectionReassignment")
             freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn", "-Xinline-classes")
         }
