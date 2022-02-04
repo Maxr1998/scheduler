@@ -18,19 +18,11 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: 15
-      - name: Setup Gradle cache
-        uses: actions/cache@v2.1.4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          distribution: temurin
+          java-version: 17
+          cache: gradle
       - name: Run package task
-        run: ./gradlew --no-daemon --info minify generateMainDatabaseSchema
+        run: ./gradlew --no-daemon minify generateMainDatabaseSchema
       - name: Collect artifacts
         run: |
           mkdir build/artifacts

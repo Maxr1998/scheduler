@@ -15,21 +15,13 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: 15
+          distribution: temurin
+          java-version: 17
+          cache: gradle
       - name: Install sqlite3
         run: choco install sqlite
-      - name: Setup Gradle cache
-        uses: actions/cache@v2.1.4
-        with:
-          path: |
-            %USERPROFILE%\.gradle\caches
-            %USERPROFILE%\.gradle\wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Run package task
-        run: .\gradlew.bat --no-daemon --info minify packageExe generateMainDatabaseSchema
+        run: .\gradlew.bat --no-daemon minify packageExe generateMainDatabaseSchema
       - name: Collect artifacts
         run: |
           mkdir build\artifacts
