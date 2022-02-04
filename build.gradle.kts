@@ -1,6 +1,7 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 import org.jetbrains.compose.compose
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import proguard.gradle.ProGuardTask
 
@@ -54,6 +55,7 @@ compose.desktop {
         nativeDistributions {
             packageName = project.name
             modules("java.naming", "java.sql")
+            targetFormats(TargetFormat.Exe)
         }
     }
 }

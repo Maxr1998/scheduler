@@ -29,11 +29,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run package task
-        run: .\gradlew.bat --no-daemon --info minify generateMainDatabaseSchema
+        run: .\gradlew.bat --no-daemon --info minify packageExe generateMainDatabaseSchema
       - name: Collect artifacts
         run: |
           mkdir build\artifacts
           move build\compose\jars\*.min.jar build\artifacts\
+          move build\compose\binaries\main\exe\* build\artifacts\
           move build\schemas\1.db build\artifacts\scheduler.db
           sqlite3.exe build\artifacts\scheduler.db 'PRAGMA user_version = 1;'
           Get-Content sample_data.sql | sqlite3.exe build\artifacts\scheduler.db
