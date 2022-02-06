@@ -69,7 +69,7 @@
 # Library configuration #
 #########################
 
--keep class org.jetbrains.skija.** { *; }
+-keep class org.jetbrains.skia.** { *; }
 -keep class org.jetbrains.skiko.** { *; }
 -keep class org.sqlite.** { *; }
 -keep class ch.qos.logback.** { *; }
