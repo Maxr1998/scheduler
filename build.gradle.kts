@@ -1,7 +1,6 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
 import org.jetbrains.compose.compose
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import proguard.gradle.ProGuardTask
 
@@ -43,7 +42,6 @@ compose.desktop {
             vendor = "Maxr1998"
             licenseFile.set(file("LICENSE"))
             modules("java.instrument", "java.management", "java.naming", "java.sql", "jdk.unsupported")
-            targetFormats(TargetFormat.Exe)
         }
     }
 }
