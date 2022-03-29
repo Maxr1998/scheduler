@@ -9,7 +9,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath(Plugins.proguardGradle)
+        classpath(libs.proguard)
     }
 }
 

@@ -1,5 +1,5 @@
 [versions]
-proguard-gradle = "7.1.0"
+proguard = "7.2.0"
 kotlin = "1.6.10"
 compose = "1.0.1"
 sqldelight = "1.5.3"
@@ -12,12 +12,14 @@ kotlinLogging = "2.1.21"
 logback = "1.2.10"
 
 [plugins]
-proguard-gradle = { id = "com.guardsquare:proguard-gradle", version.ref = "proguard-gradle" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
 dependencyupdates = { id = "com.github.ben-manes.versions", version.ref = "dependencyupdates" }
 
 [libraries]
+# Proguard classpath plugin has to be in libraries section
+proguard = { group = "com.guardsquare", name = "proguard-gradle", version.ref = "proguard" }
+
 koin = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 
