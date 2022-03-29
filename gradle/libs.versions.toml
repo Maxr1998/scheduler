@@ -1,6 +1,7 @@
 [versions]
 proguard = "7.2.1"
 kotlin = "1.6.10"
+detekt = "1.19.0"
 compose = "1.1.1"
 sqldelight = "1.5.3"
 dependencyupdates = "0.42.0"
@@ -12,6 +13,7 @@ kotlinLogging = "2.1.21"
 logback = "1.2.11"
 
 [plugins]
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
 dependencyupdates = { id = "com.github.ben-manes.versions", version.ref = "dependencyupdates" }

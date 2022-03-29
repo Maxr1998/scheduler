@@ -1,5 +1,6 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.github.benmanes.gradle.versions.updates.gradle.GradleReleaseChannel
+import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.compose.compose
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import proguard.gradle.ProGuardTask
@@ -24,6 +25,7 @@ allprojects {
 @Suppress("UnstableApiUsage")
 plugins {
     kotlin("jvm") version libs.versions.kotlin
+    alias(libs.plugins.detekt)
     alias(libs.plugins.compose)
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.dependencyupdates)
@@ -32,6 +34,13 @@ plugins {
 group = "de.uaux"
 version = "1.0.0"
 val javaVersion = JavaVersion.VERSION_11
+
+detekt {
+    buildUponDefaultConfig = true
+    allRules = false
+    config = files("$projectDir/detekt.yml")
+    autoCorrect = true
+}
 
 compose.desktop {
     application {
@@ -75,6 +84,17 @@ dependencies {
 }
 
 tasks {
+    withType<Detekt> {
+        jvmTarget = javaVersion.toString()
+
+        reports {
+            html.required.set(true)
+            xml.required.set(false)
+            txt.required.set(true)
+            sarif.required.set(true)
+        }
+    }
+
     withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = javaVersion.toString()

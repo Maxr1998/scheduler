@@ -1,0 +1,38 @@
+build:
+  maxIssues: 0
+
+complexity:
+  LongMethod:
+    active: false
+  LongParameterList:
+    constructorThreshold: 8
+    functionThreshold: 10
+
+exceptions:
+  SwallowedException:
+    active: false
+  TooGenericExceptionCaught:
+    active: false
+
+formatting:
+  FinalNewline:
+    active: false
+  MaximumLineLength:
+    maxLineLength: 200
+  MultiLineIfElse:
+    autoCorrect: false
+
+naming:
+  FunctionNaming:
+    ignoreAnnotated: [ 'Composable' ]
+
+style:
+  ForbiddenComment:
+    # Allow TODOs
+    values: [ 'FIXME:', 'STOPSHIP:' ]
+  MaxLineLength:
+    maxLineLength: 200
+  NewLineAtEndOfFile:
+    active: false
+  ReturnCount:
+    excludeGuardClauses: true
