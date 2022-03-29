@@ -108,14 +108,14 @@ private fun StatusIconButton(
                     imageVector = when (validationState) {
                         ValidationState.Unknown -> Icons.Outlined.HelpOutline
                         ValidationState.Outdated -> Icons.Outlined.Schedule
-                        ValidationState.Validating -> throw RuntimeException()
+                        ValidationState.Validating -> throw IllegalStateException("state cannot be Validating here")
                         is ValidationState.FoundProblems -> Icons.Outlined.ErrorOutline
                         ValidationState.Ok -> Icons.Outlined.TaskAlt
                     },
                     tint = when (validationState) {
                         ValidationState.Unknown,
                         ValidationState.Outdated -> defaultIconColor
-                        ValidationState.Validating -> throw RuntimeException()
+                        ValidationState.Validating -> throw IllegalStateException("state cannot be Validating here")
                         is ValidationState.FoundProblems -> MaterialTheme.colors.error
                         ValidationState.Ok -> MaterialTheme.colors.success
                     },

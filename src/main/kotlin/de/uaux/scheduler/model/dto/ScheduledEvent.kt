@@ -26,6 +26,7 @@ data class ScheduledEvent(
 
     fun persist(): Schedule = Schedule(semester.code, event.id, day.value, startTime, room?.id ?: 0L)
 
+    @Suppress("ReturnCount")
     override fun compareTo(other: ScheduledEvent): Int {
         if (this == other) return 0
         val byDay = day.compareTo(other.day)

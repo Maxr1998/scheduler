@@ -399,6 +399,7 @@ private fun RowScope.WeightedTextBox(text: String) {
 }
 
 // Helper functions
+@Suppress("unused") // invalid warning
 private inline operator fun IntRange.contains(timeslot: Timeslot): Boolean =
     timeslot.start_time >= first && timeslot.end_time <= last
 
