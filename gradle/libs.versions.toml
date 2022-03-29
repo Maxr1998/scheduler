@@ -1,15 +1,15 @@
 [versions]
-proguard = "7.2.0"
+proguard = "7.2.1"
 kotlin = "1.6.10"
-compose = "1.0.1"
+compose = "1.1.1"
 sqldelight = "1.5.3"
-dependencyupdates = "0.41.0"
+dependencyupdates = "0.42.0"
 
-koin = "3.1.4"
+koin = "3.1.5"
 coroutines = "1.6.0"
 sqlDelight = "1.4.4"
 kotlinLogging = "2.1.21"
-logback = "1.2.10"
+logback = "1.2.11"
 
 [plugins]
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
@@ -21,7 +21,8 @@ dependencyupdates = { id = "com.github.ben-manes.versions", version.ref = "depen
 proguard = { group = "com.guardsquare", name = "proguard-gradle", version.ref = "proguard" }
 
 koin = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "coroutines" }
 
 sqlDelight-sqliteDriver = { group = "com.squareup.sqldelight", name = "sqlite-driver", version.ref = "sqlDelight" }
 sqlDelight-coroutinesExtension = { group = "com.squareup.sqldelight", name = "coroutines-extensions-jvm", version.ref = "sqlDelight" }
@@ -30,5 +31,6 @@ kotlinLogging = { group = "io.github.microutils", name = "kotlin-logging", versi
 logback = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
 
 [bundles]
+coroutines = ["coroutines-core", "coroutines-swing"]
 sqlDelight = ["sqlDelight-sqliteDriver", "sqlDelight-coroutinesExtension"]
 logging = ["kotlinLogging", "logback"]

@@ -61,7 +61,7 @@ java {
 dependencies {
     // Core
     implementation(libs.koin)
-    implementation(libs.coroutines)
+    implementation(libs.bundles.coroutines)
 
     // UI
     implementation(compose.desktop.currentOs)
@@ -72,22 +72,6 @@ dependencies {
 
     // Logging
     implementation(libs.bundles.logging)
-}
-
-configurations.all {
-    resolutionStrategy.eachDependency {
-        if (requested.group == "org.jetbrains.skiko") {
-            // Update to new version to workaround crash
-            val skikoVersion = "0.7.7"
-            useVersion(skikoVersion)
-
-            // Use updated library name of new release
-            if (requested.name.startsWith("skiko-jvm-runtime")) {
-                val updatedName = requested.name.replace("jvm", "awt")
-                useTarget("${requested.group}:$updatedName:$skikoVersion")
-            }
-        }
-    }
 }
 
 tasks {
