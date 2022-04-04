@@ -81,7 +81,9 @@ import kotlin.math.roundToInt
 private val logger = KotlinLogging.logger {}
 
 val timetablePaddingStart = 20.dp
-const val TIMESLOT_SNAP_MINUTES = 10
+private const val DAYS_PER_WEEK = 7
+private const val DAYS_PER_WORKWEEK = 5
+private const val TIMESLOT_SNAP_MINUTES = 10
 
 @Composable
 fun TimetableScreenContent(filter: TimetableFilter) {
@@ -89,7 +91,7 @@ fun TimetableScreenContent(filter: TimetableFilter) {
     val dialogViewModel: DialogViewModel = get()
     val timetableViewModel: TimetableViewModel = get()
     val showWeekend by timetableViewModel.showWeekend
-    val numDays = if (showWeekend == ShowWeekend.FALSE) 5 else 7
+    val numDays = if (showWeekend == ShowWeekend.FALSE) DAYS_PER_WORKWEEK else DAYS_PER_WEEK
 
     val pointerOffset = remember { mutableStateOf(Offset.Zero) }
     val draggedEvent = remember { mutableStateOf<ScheduledEvent?>(null) }
@@ -259,7 +261,7 @@ private fun TimetablePane(
                         .align(Alignment.CenterStart)
                         .size(timeslotTextHeight, timetablePaddingStart)
                         .offset(-((timeslotTextHeight - timetablePaddingStart) / 2))
-                        .rotate(-90f)
+                        .rotate(@Suppress("MagicNumber") -90f)
                         .size(timetablePaddingStart, timeslotTextHeight)
                         .padding(4.dp),
                     text = "${formatTimeMinutesOfDay(timeslot.start_time)} - ${formatTimeMinutesOfDay(timeslot.end_time)}",

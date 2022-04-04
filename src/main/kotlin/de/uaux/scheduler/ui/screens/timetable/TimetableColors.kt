@@ -14,7 +14,7 @@ class TimetableColors(private val surfaceColor: Color) {
 
     @OptIn(ExperimentalGraphicsApi::class)
     private fun nextColor(): Color = Color.hsv(
-        hue = hue.updateAndGet { hue -> (hue + 47) % 360 }.toFloat(),
+        hue = hue.updateAndGet { hue -> (hue + HUE_SHIFT) % DEGREES_MAX }.toFloat(),
         saturation = 1f,
         value = 1f,
         alpha = 0.1f,
@@ -23,4 +23,9 @@ class TimetableColors(private val surfaceColor: Color) {
 
     operator fun get(event: Event): Color = colors.computeIfAbsent(event) { nextColor() }
     operator fun get(scheduledEvent: ScheduledEvent): Color = get(scheduledEvent.event)
+
+    private companion object {
+        private const val DEGREES_MAX = 360
+        private const val HUE_SHIFT = 47
+    }
 }

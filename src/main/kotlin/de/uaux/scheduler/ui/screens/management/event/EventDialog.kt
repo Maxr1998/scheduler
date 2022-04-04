@@ -47,6 +47,11 @@ import de.uaux.scheduler.viewmodel.TimetableViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
+/**
+ * Maximum participants of an event (sane upper limit)
+ */
+private const val MAX_PARTICIPANTS = 5000L
+
 @Composable
 fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()
@@ -68,7 +73,7 @@ fun EventDialog(event: Event?, onDismissRequest: () -> Unit) {
     val eventParticipants by derivedStateOf {
         parseNumberInput(
             eventParticipantsText.value.text,
-            1..100000L,
+            1..MAX_PARTICIPANTS,
             "input_error_invalid_participant_count",
         )
     }

@@ -46,6 +46,7 @@ import de.uaux.scheduler.util.formatTimeMinutesOfDay
 import java.time.format.TextStyle
 import java.util.Locale
 
+@Suppress("MagicNumber")
 @Composable
 fun ValidationInfo(
     validationState: ValidationState,

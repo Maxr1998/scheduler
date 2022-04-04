@@ -38,6 +38,10 @@ import de.uaux.scheduler.ui.util.l
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 
+// Used for input validation
+private const val SEMESTER_MIN = 1
+private const val SEMESTER_MAX = 10
+
 @Composable
 fun StudycourseEventDialog(
     studycourse: Studycourse,
@@ -53,7 +57,7 @@ fun StudycourseEventDialog(
     val semesterError = when {
         semesterText.value.text.isBlank() -> null
         semester == null -> l("input_error_only_numbers")
-        semester !in 1..10 -> l("input_error_invalid_semester")
+        semester !in SEMESTER_MIN..SEMESTER_MAX -> l("input_error_invalid_semester")
         else -> null
     }
 

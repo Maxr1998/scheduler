@@ -81,7 +81,7 @@ private fun StudycourseAndSemesterSelectionDropdownMenuContent(filter: Timetable
 
         val selectedBackground = Modifier.background(MaterialTheme.colors.primaryVariant.copy(alpha = 0.12f))
         Column(
-            modifier = Modifier.weight(5f)
+            modifier = Modifier.weight(@Suppress("MagicNumber") 5f)
         ) {
             LazyColumn(
                 modifier = FixUnsupportedIntrinsicMeasurementsLayoutModifier,

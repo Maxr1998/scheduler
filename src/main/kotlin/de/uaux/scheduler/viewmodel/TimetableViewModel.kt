@@ -269,7 +269,7 @@ class TimetableViewModel(
         validationJob = coroutineScope.launch {
             if (!now) {
                 _validationState.value = ValidationState.Outdated
-                delay(1000L)
+                delay(VALIDATION_DELAY)
             }
             validateInternal()
         }
@@ -310,9 +310,10 @@ class TimetableViewModel(
 
     companion object {
         const val MAX_MINUTES_IN_DAY = 1439
-        const val TIMETABLE_DEFAULT_START_OF_DAY = 420
-        const val TIMETABLE_DEFAULT_END_OF_DAY = 1200
+        private const val TIMETABLE_DEFAULT_START_OF_DAY = 420
+        private const val TIMETABLE_DEFAULT_END_OF_DAY = 1200
+        private const val VALIDATION_DELAY = 1000L
 
-        val unscheduledEventsComparator: Comparator<Event> = compareBy(Event::name, Event::id)
+        private val unscheduledEventsComparator: Comparator<Event> = compareBy(Event::name, Event::id)
     }
 }

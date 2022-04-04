@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package de.uaux.scheduler.ui
 
 import androidx.compose.foundation.LocalScrollbarStyle

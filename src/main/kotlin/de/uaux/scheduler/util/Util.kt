@@ -20,6 +20,10 @@ fun <T> MutableList<T>.binaryInsert(element: T, comparison: (T) -> Int) {
     add(binaryInsertIndex(comparison), element)
 }
 
-fun formatTimeMinutesOfDay(minutes: Int) = "%02d:%02d".format(minutes / 60, minutes % 60)
+private const val MINUTES_PER_HOUR = 60
 
-fun formatDurationMinutesOfDay(minutes: Int) = "%d:%02dh".format(minutes / 60, minutes % 60)
+fun formatTimeMinutesOfDay(minutes: Int): String =
+    "%02d:%02d".format(minutes / MINUTES_PER_HOUR, minutes % MINUTES_PER_HOUR)
+
+fun formatDurationMinutesOfDay(minutes: Int): String =
+    "%d:%02dh".format(minutes / MINUTES_PER_HOUR, minutes % MINUTES_PER_HOUR)
